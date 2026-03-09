@@ -1,11 +1,14 @@
 package com.valhala.optimacvspring.resume.service;
 
 import com.valhala.optimacvspring.resume.entites.Resume;
+import com.valhala.optimacvspring.resume.events.CvUploadedEvent;
 import com.valhala.optimacvspring.resume.repository.ResumeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import org.springframework.ai.document.Document;
@@ -18,8 +21,10 @@ import java.util.UUID;
 public class ResumeService {
 
     private final ResumeRepository resumeRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public String processAndSaveCv(MultipartFile file, UUID userId) throws IOException {
+    @Transactional
+    public Resume processAndSaveCv(MultipartFile file, UUID userId) throws IOException {
 
         ByteArrayResource resource = new ByteArrayResource(file.getBytes());
         PagePdfDocumentReader pdfReader = new PagePdfDocumentReader(resource);
@@ -35,8 +40,10 @@ public class ResumeService {
                 .userId(userId)
                 .build();
 
-        resumeRepository.save(resume);
-        return extractedText.toString();
+        eventPublisher.publishEvent(new CvUploadedEvent(resume.getId(), extractedText.toString()));
+        return resumeRepository.save(resume);
+
+
     }
 
 }
