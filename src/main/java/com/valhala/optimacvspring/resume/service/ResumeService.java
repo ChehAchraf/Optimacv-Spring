@@ -20,6 +20,7 @@ public class ResumeService {
     private final ResumeRepository resumeRepository;
 
     public String processAndSaveCv(MultipartFile file, UUID userId) throws IOException {
+
         ByteArrayResource resource = new ByteArrayResource(file.getBytes());
         PagePdfDocumentReader pdfReader = new PagePdfDocumentReader(resource);
         List<Document> documents = pdfReader.get();
