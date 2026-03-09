@@ -1,6 +1,9 @@
 package com.valhala.optimacvspring.resume.controller;
 
 
+import com.valhala.optimacvspring.resume.dto.ResumeResponseDTO;
+import com.valhala.optimacvspring.resume.entites.Resume;
+import com.valhala.optimacvspring.resume.mapper.ResumeMapper;
 import com.valhala.optimacvspring.resume.service.ResumeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,18 +21,21 @@ import java.util.UUID;
 public class ResumeController {
 
     private final ResumeService resumeService;
+    private final ResumeMapper resumeMapper;
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadResume(
+    public ResponseEntity<ResumeResponseDTO> uploadResume(
             @RequestParam("file") MultipartFile file,
             @RequestParam("userId") UUID userId) {
 
         try {
-            String extractedText = resumeService.processAndSaveCv(file, userId);
+            Resume savedResume = resumeService.processAndSaveCv(file, userId);
 
-            return ResponseEntity.ok(extractedText);
+            ResumeResponseDTO response = resumeMapper.toResponseDTO(savedResume);
+
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("وقع شي بلان فاش كنا كنقراو الـ CV: " + e.getMessage());
+            throw new RuntimeException("وقع شي بلان: " + e.getMessage());
         }
     }
 }
