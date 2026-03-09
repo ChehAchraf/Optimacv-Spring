@@ -1,4 +1,4 @@
-package com.valhala.optimacvspring.iam;
+package com.valhala.optimacvspring.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
