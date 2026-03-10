@@ -14,8 +14,10 @@ public class CvAnalysisService {
     
     private final ChatClient chatClient;
 
+
     public CvAnalysisService(ChatClient.Builder chatClientBuilder) {
         this.chatClient = chatClientBuilder.build();
+
     }
 
     @ApplicationModuleListener
