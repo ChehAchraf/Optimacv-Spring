@@ -16,5 +16,16 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  ai:
+    google:
+      genai:
+        api-key: AIzaSyBES8EPBKUqvMutrDENE8MbrNnEe4p01Sc
+        chat:
+          options:
+            model: models/gemini-2.5-flash
 server:
-  port: 8088
+  port: 8080
+
+springdoc:
+  swagger-ui:
+    path: /swagger
