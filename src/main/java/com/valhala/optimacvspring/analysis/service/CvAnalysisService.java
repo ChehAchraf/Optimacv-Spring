@@ -8,6 +8,8 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.modulith.events.ApplicationModuleListener;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @Slf4j
 public class CvAnalysisService {
@@ -69,4 +71,10 @@ public class CvAnalysisService {
                 .call()
                 .content();
     }
+
+    public CvAnalysisResult getAnalysisByResumeId(UUID resumeId) {
+        return repository.findByResumeId(resumeId)
+                .orElseThrow(() -> new RuntimeException("التحليل غير موجود أو مازال قيد المعالجة للـ CV رقم: " + resumeId));
+    }
+
 }
