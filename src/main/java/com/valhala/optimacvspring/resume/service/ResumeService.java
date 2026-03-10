@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class ResumeService {
+public class ResumeService  {
 
     private final ResumeRepository resumeRepository;
     private final ApplicationEventPublisher eventPublisher;
@@ -45,5 +45,6 @@ public class ResumeService {
 
 
     }
+
 
 }
