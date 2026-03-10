@@ -28,7 +28,12 @@ public class Resume {
     @Column(nullable = false)
     private UUID userId;
 
+    @Column(columnDefinition = "TEXT")
+    private String extractedText;
+
     private LocalDateTime uploadedAt;
+
+
 
     @PrePersist
     protected void onCreate() {
