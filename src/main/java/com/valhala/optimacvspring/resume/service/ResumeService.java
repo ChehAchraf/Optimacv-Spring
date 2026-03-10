@@ -38,10 +38,14 @@ public class ResumeService  {
                 .fileName(file.getOriginalFilename())
                 .fileUrl("temporarily-not-saved-locally")
                 .userId(userId)
+                .extractedText(extractedText.toString())
                 .build();
 
+        Resume savedResume = resumeRepository.saveAndFlush(resume);
+
         eventPublisher.publishEvent(new CvUploadedEvent(resume.getId(), extractedText.toString()));
-        return resumeRepository.save(resume);
+
+        return savedResume;
 
 
     }
