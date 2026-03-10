@@ -1,7 +1,8 @@
 package com.valhala.optimacvspring.analysis.service;
 
+import com.valhala.optimacvspring.analysis.entities.CvAnalysisResult;
+import com.valhala.optimacvspring.analysis.repository.CvAnalysisResultRepository;
 import com.valhala.optimacvspring.resume.events.CvUploadedEvent;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.modulith.events.ApplicationModuleListener;
@@ -10,14 +11,13 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class CvAnalysisService {
- 
-    
+
     private final ChatClient chatClient;
+    private final CvAnalysisResultRepository repository;
 
-
-    public CvAnalysisService(ChatClient.Builder chatClientBuilder) {
+    public CvAnalysisService(ChatClient.Builder chatClientBuilder, CvAnalysisResultRepository repository) {
         this.chatClient = chatClientBuilder.build();
-
+        this.repository = repository;
     }
 
     @ApplicationModuleListener
@@ -27,12 +27,19 @@ public class CvAnalysisService {
         try {
             String analysisResult = analyzeCv(event.extractedText());
 
-            log.info("AI Analysis Result: \n{}", analysisResult);
+            CvAnalysisResult result = CvAnalysisResult.builder()
+                    .resumeId(event.resumeId())
+                    .feedback(analysisResult)
+                    .build();
+
+            repository.save(result);
+
+            log.info("AI Analysis saved successfully for Resume ID: {}", event.resumeId());
+
         } catch (Exception e) {
             log.error("Failed to analyze CV for Resume ID: {}", event.resumeId(), e);
         }
     }
-
 
     public String analyzeCv(String cvText) {
         String systemPrompt = """
