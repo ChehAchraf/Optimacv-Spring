@@ -5,10 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="68751325-1e4d-4d90-820b-c95ad4cecf9f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front-end/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/front-end/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front-end/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/front-end/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front-end/src/app/app.html" beforeDir="false" afterPath="$PROJECT_DIR$/front-end/src/app/app.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front-end/src/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/front-end/src/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-end/src/app/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front-end/src/app/app.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +39,7 @@
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "master",
     "junie.onboarding.icon.badge.shown": "true",
@@ -50,6 +52,7 @@
     "nodejs_package_manager_path": "npm",
     "npm.Angular CLI Server (front-end).executor": "Run",
     "to.speed.mode.migration.done": "true",
+    "ts.external.directory.path": "C:\\Users\\shaor\\Desktop\\optimacv-spring\\front-end\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -75,7 +78,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773240921295</updated>
-      <workItem from="1773240925004" duration="741000" />
+      <workItem from="1773240925004" duration="1433000" />
     </task>
     <servers />
   </component>
