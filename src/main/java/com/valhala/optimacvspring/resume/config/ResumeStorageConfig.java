@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
+public class ResumeStorageConfig implements WebMvcConfigurer {
 
     @Value("${app.storage.upload-dir}")
     private String uploadDir;
