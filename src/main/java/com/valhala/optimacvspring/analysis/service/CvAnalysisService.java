@@ -2,6 +2,8 @@ package com.valhala.optimacvspring.analysis.service;
 
 import com.valhala.optimacvspring.analysis.entities.CvAnalysisResult;
 import com.valhala.optimacvspring.analysis.repository.CvAnalysisResultRepository;
+import com.valhala.optimacvspring.job.api.JobApi;
+import com.valhala.optimacvspring.job.dto.JobResponseDTO;
 import com.valhala.optimacvspring.resume.events.CvUploadedEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -16,10 +18,12 @@ public class CvAnalysisService {
 
     private final ChatClient chatClient;
     private final CvAnalysisResultRepository repository;
+    private final JobApi jobApi;
 
-    public CvAnalysisService(ChatClient.Builder chatClientBuilder, CvAnalysisResultRepository repository) {
+    public CvAnalysisService(ChatClient.Builder chatClientBuilder, CvAnalysisResultRepository repository, JobApi jobApi) {
         this.chatClient = chatClientBuilder.build();
         this.repository = repository;
+        this.jobApi = jobApi;
     }
 
     @ApplicationModuleListener
@@ -27,7 +31,15 @@ public class CvAnalysisService {
         log.info("Received event for Resume ID: {}", event.resumeId());
 
         try {
-            String analysisResult = analyzeCv(event.extractedText());
+            String analysisResult;
+
+            if (event.jobId() != null) {
+                log.info("Targeted analysis requested for Job ID: {}", event.jobId());
+                JobResponseDTO job = jobApi.getJobDetails(event.jobId());
+                analysisResult = analyzeTargetedCv(event.extractedText(), job);
+            } else {
+                analysisResult = analyzeCv(event.extractedText());
+            }
 
             CvAnalysisResult result = CvAnalysisResult.builder()
                     .resumeId(event.resumeId())
@@ -72,9 +84,44 @@ public class CvAnalysisService {
                 .content();
     }
 
-    public CvAnalysisResult getAnalysisByResumeId(UUID resumeId) {
-        return repository.findByResumeId(resumeId)
-                .orElseThrow(() -> new RuntimeException("التحليل غير موجود أو مازال قيد المعالجة للـ CV رقم: " + resumeId));
+    public String analyzeTargetedCv(String cvText, JobResponseDTO job) {
+        String systemPrompt = """
+            You are an Elite Tech Recruiter and a state-of-the-art Applicant Tracking System (ATS).
+            You have been given a candidate's resume and a specific job posting they want to apply for.
+            
+            **Target Job Information:**
+            - **Job Title:** %s
+            - **Company:** %s
+            - **Job Description:** %s
+            
+            Your task is to perform a rigorous, targeted analysis of the resume against this specific job.
+            
+            Please provide your analysis strictly in the following structured format, using Markdown:
+            
+            ### 1. Match Score & Verdict
+            Provide a percentage score (e.g., 85%%) of how well this CV fits the target job. Add a 2-sentence verdict explaining if the candidate is a Strong Match, Partial Match, or Weak Match.
+            
+            ### 2. Matching Skills
+            List the specific skills, technologies, and experiences from the CV that directly match the job requirements. Be precise and reference both the CV content and the job description.
+            
+            ### 3. Missing Keywords & Gaps
+            Identify crucial skills, qualifications, and keywords required by the job description that are completely missing or insufficiently represented in the CV. This is critical for ATS optimization.
+            
+            ### 4. Tailoring Advice
+            Provide 3 to 5 specific, actionable steps the candidate must take to tailor this exact CV for this exact role. Include concrete suggestions for rewording bullet points, adding missing keywords, and restructuring sections.
+            
+            Maintain a professional, objective, and highly analytical tone. Every piece of advice must be specific to this job-CV combination.
+            """.formatted(job.title(), job.company(), job.description());
+
+        return chatClient.prompt()
+                .system(systemPrompt)
+                .user(cvText)
+                .call()
+                .content();
     }
 
+    public CvAnalysisResult getAnalysisByResumeId(UUID resumeId) {
+        return repository.findByResumeId(resumeId)
+                .orElseThrow(() -> new RuntimeException("your cv is not analyzed yet " + resumeId));
+    }
 }
