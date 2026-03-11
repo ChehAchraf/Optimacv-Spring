@@ -11,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -29,5 +30,35 @@ public class JobController {
         UUID userId = iamApi.findUserIdByEmail(userDetails.getUsername());
         JobResponseDTO response = jobTargetService.createJob(request, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<JobResponseDTO>> getAllJobs(
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        UUID userId = iamApi.findUserIdByEmail(userDetails.getUsername());
+        List<JobResponseDTO> jobs = jobTargetService.getAllJobsForUser(userId);
+        return ResponseEntity.ok(jobs);
+    }
+
+    @PutMapping("/{jobId}")
+    public ResponseEntity<JobResponseDTO> updateJob(
+            @PathVariable UUID jobId,
+            @RequestBody JobRequestDTO request,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        UUID userId = iamApi.findUserIdByEmail(userDetails.getUsername());
+        JobResponseDTO response = jobTargetService.updateJob(jobId, request, userId);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{jobId}")
+    public ResponseEntity<Void> deleteJob(
+            @PathVariable UUID jobId,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        UUID userId = iamApi.findUserIdByEmail(userDetails.getUsername());
+        jobTargetService.deleteJob(jobId, userId);
+        return ResponseEntity.noContent().build();
     }
 }
