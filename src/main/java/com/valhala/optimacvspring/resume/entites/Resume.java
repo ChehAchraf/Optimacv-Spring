@@ -3,12 +3,16 @@ package com.valhala.optimacvspring.resume.entites;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "resumes")
+@SQLDelete(sql = "UPDATE resumes SET deleted = true WHERE id=?")
+@SQLRestriction("deleted = false")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -36,7 +40,8 @@ public class Resume {
 
     private LocalDateTime uploadedAt;
 
-
+    @Builder.Default
+    private boolean deleted = false;
 
     @PrePersist
     protected void onCreate() {
