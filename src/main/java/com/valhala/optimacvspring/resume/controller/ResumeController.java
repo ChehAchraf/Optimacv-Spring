@@ -1,12 +1,15 @@
 package com.valhala.optimacvspring.resume.controller;
 
 
+import com.valhala.optimacvspring.iam.api.IamApi;
 import com.valhala.optimacvspring.resume.dto.ResumeResponseDTO;
 import com.valhala.optimacvspring.resume.entites.Resume;
 import com.valhala.optimacvspring.resume.mapper.ResumeMapper;
 import com.valhala.optimacvspring.resume.service.ResumeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,13 +25,15 @@ public class ResumeController {
 
     private final ResumeService resumeService;
     private final ResumeMapper resumeMapper;
+    private final IamApi iamApi;
 
     @PostMapping("/upload")
     public ResponseEntity<ResumeResponseDTO> uploadResume(
             @RequestParam("file") MultipartFile file,
-            @RequestParam("userId") UUID userId) {
+            @AuthenticationPrincipal UserDetails userDetails) {
 
         try {
+            UUID userId = iamApi.findUserIdByEmail(userDetails.getUsername());
             Resume savedResume = resumeService.processAndSaveCv(file, userId);
 
             ResumeResponseDTO response = resumeMapper.toResponseDTO(savedResume);
