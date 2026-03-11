@@ -27,7 +27,7 @@ public class ResumeService  {
     @Transactional
     public Resume processAndSaveCv(MultipartFile file, UUID userId) throws IOException {
 
-        String fileUrl = fileStorageService.storeFile(file);
+        String fileUrl = fileStorageService.storeFile(file, userId);
 
         ByteArrayResource resource = new ByteArrayResource(file.getBytes());
         PagePdfDocumentReader pdfReader = new PagePdfDocumentReader(resource);

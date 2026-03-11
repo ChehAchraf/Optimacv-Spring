@@ -15,19 +15,21 @@ import java.util.UUID;
 @Service
 public class LocalFileStorageService implements FileStorageService {
 
-    private final Path uploadDir;
+    private final Path baseUploadDir;
 
     public LocalFileStorageService(@Value("${app.storage.upload-dir}") String uploadDir) {
-        this.uploadDir = Paths.get(uploadDir).toAbsolutePath().normalize();
-        try {
-            Files.createDirectories(this.uploadDir);
-        } catch (IOException e) {
-            throw new RuntimeException("Could not create upload directory: " + this.uploadDir, e);
-        }
+        this.baseUploadDir = Paths.get(uploadDir).toAbsolutePath().normalize();
     }
 
     @Override
-    public String storeFile(MultipartFile file) {
+    public String storeFile(MultipartFile file, UUID userId) {
+        Path userDir = baseUploadDir.resolve(userId.toString());
+        try {
+            Files.createDirectories(userDir);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not create user upload directory: " + userDir, e);
+        }
+
         String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
         String extension = "";
         int dotIndex = originalFilename.lastIndexOf('.');
@@ -36,7 +38,7 @@ public class LocalFileStorageService implements FileStorageService {
         }
 
         String uniqueFilename = UUID.randomUUID() + extension;
-        Path targetPath = uploadDir.resolve(uniqueFilename);
+        Path targetPath = userDir.resolve(uniqueFilename);
 
         try {
             Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
@@ -44,6 +46,6 @@ public class LocalFileStorageService implements FileStorageService {
             throw new RuntimeException("Failed to store file: " + uniqueFilename, e);
         }
 
-        return "/uploads/resumes/" + uniqueFilename;
+        return "/uploads/resumes/" + userId + "/" + uniqueFilename;
     }
 }
