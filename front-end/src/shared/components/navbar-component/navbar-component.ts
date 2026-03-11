@@ -22,7 +22,7 @@ import {
   styleUrl: './navbar-component.css',
 })
 export class NavbarComponent {
-  
+
   readonly MenuIcon = Menu;
   readonly LayoutDashboardIcon = LayoutDashboard;
   readonly FileTextIcon = FileText;
