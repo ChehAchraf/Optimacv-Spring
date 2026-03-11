@@ -33,3 +33,7 @@ jwt:
 springdoc:
   swagger-ui:
     path: /swagger
+
+app:
+  storage:
+    upload-dir: uploads/resumes/
