@@ -18,14 +18,14 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class ResumeService  {
+public class ResumeService {
 
     private final ResumeRepository resumeRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final FileStorageService fileStorageService;
 
     @Transactional
-    public Resume processAndSaveCv(MultipartFile file, UUID userId) throws IOException {
+    public Resume processAndSaveCv(MultipartFile file, UUID userId, UUID jobId) throws IOException {
 
         String fileUrl = fileStorageService.storeFile(file, userId);
 
@@ -41,17 +41,14 @@ public class ResumeService  {
                 .fileName(file.getOriginalFilename())
                 .fileUrl(fileUrl)
                 .userId(userId)
+                .jobId(jobId)
                 .extractedText(extractedText.toString())
                 .build();
 
         Resume savedResume = resumeRepository.saveAndFlush(resume);
 
-        eventPublisher.publishEvent(new CvUploadedEvent(resume.getId(), extractedText.toString()));
+        eventPublisher.publishEvent(new CvUploadedEvent(resume.getId(), extractedText.toString(), jobId));
 
         return savedResume;
-
-
     }
-
-
 }
