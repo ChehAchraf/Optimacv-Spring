@@ -31,6 +31,9 @@ public class Resume {
     @Column(columnDefinition = "TEXT")
     private String extractedText;
 
+    @Column(name = "job_id")
+    private UUID jobId;
+
     private LocalDateTime uploadedAt;
 
 

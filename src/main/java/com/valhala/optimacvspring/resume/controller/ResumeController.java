@@ -30,11 +30,12 @@ public class ResumeController {
     @PostMapping("/upload")
     public ResponseEntity<ResumeResponseDTO> uploadResume(
             @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "jobId", required = false) UUID jobId,
             @AuthenticationPrincipal UserDetails userDetails) {
 
         try {
             UUID userId = iamApi.findUserIdByEmail(userDetails.getUsername());
-            Resume savedResume = resumeService.processAndSaveCv(file, userId);
+            Resume savedResume = resumeService.processAndSaveCv(file, userId, jobId);
 
             ResumeResponseDTO response = resumeMapper.toResponseDTO(savedResume);
 
