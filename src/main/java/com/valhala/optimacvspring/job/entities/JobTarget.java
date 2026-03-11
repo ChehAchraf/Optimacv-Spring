@@ -2,12 +2,16 @@ package com.valhala.optimacvspring.job.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "job_targets")
+@SQLDelete(sql = "UPDATE job_targets SET deleted = true WHERE id=?")
+@SQLRestriction("deleted = false")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -32,6 +36,9 @@ public class JobTarget {
     private String description;
 
     private LocalDateTime createdAt;
+
+    @Builder.Default
+    private boolean deleted = false;
 
     @PrePersist
     protected void onCreate() {
