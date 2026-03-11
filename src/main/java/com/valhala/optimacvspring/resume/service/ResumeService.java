@@ -22,9 +22,12 @@ public class ResumeService  {
 
     private final ResumeRepository resumeRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final FileStorageService fileStorageService;
 
     @Transactional
     public Resume processAndSaveCv(MultipartFile file, UUID userId) throws IOException {
+
+        String fileUrl = fileStorageService.storeFile(file);
 
         ByteArrayResource resource = new ByteArrayResource(file.getBytes());
         PagePdfDocumentReader pdfReader = new PagePdfDocumentReader(resource);
@@ -36,7 +39,7 @@ public class ResumeService  {
         }
         Resume resume = Resume.builder()
                 .fileName(file.getOriginalFilename())
-                .fileUrl("temporarily-not-saved-locally")
+                .fileUrl(fileUrl)
                 .userId(userId)
                 .extractedText(extractedText.toString())
                 .build();
