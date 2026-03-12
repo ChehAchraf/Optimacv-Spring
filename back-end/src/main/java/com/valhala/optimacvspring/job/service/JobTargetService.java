@@ -64,6 +64,12 @@ public class JobTargetService implements JobApi {
         log.info("Job target soft-deleted: {} by user: {}", jobId, userId);
     }
 
+    public boolean checkIfJobExists(UUID jobId){
+
+        log.info("finding job with id : {} ",jobId);
+        return this.jobTargetRepository.existsById(jobId);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public JobResponseDTO getJobDetails(UUID jobId) {
@@ -80,4 +86,6 @@ public class JobTargetService implements JobApi {
         }
         return jobTarget;
     }
+
+
 }

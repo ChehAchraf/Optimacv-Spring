@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface JobTargetRepository extends JpaRepository<JobTarget, UUID> {
 
     List<JobTarget> findAllByUserId(UUID userId);
+
+
 }
