@@ -2,7 +2,7 @@ package com.valhala.optimacvspring.resume.service;
 
 import com.valhala.optimacvspring.common.exception.ResourceNotFoundException;
 import com.valhala.optimacvspring.resume.dto.ResumeResponseDTO;
-import com.valhala.optimacvspring.resume.dto.ResumeTextDTO;
+import com.valhala.optimacvspring.resume.api.ResumeTextDTO;
 import com.valhala.optimacvspring.resume.entites.Resume;
 import com.valhala.optimacvspring.resume.events.CvUploadedEvent;
 import com.valhala.optimacvspring.resume.mapper.ResumeMapper;

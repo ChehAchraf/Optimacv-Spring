@@ -1,4 +1,4 @@
-package com.valhala.optimacvspring.resume.dto;
+package com.valhala.optimacvspring.resume.api;
 
 import java.util.UUID;
 
