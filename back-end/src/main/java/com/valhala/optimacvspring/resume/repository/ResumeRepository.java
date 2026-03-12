@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface ResumeRepository extends JpaRepository<Resume, UUID> {
 
     List<Resume> findAllByUserId(UUID userId);
+
+    List<Resume> findAllByIdIn(List<UUID> ids);
 }
