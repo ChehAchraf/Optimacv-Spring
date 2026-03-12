@@ -28,7 +28,7 @@ public class ResumeController {
     @PostMapping("/upload")
     public ResponseEntity<ResumeResponseDTO> uploadResume(
             @RequestParam("file") MultipartFile file,
-            @RequestParam(value = "jobId", required = false) UUID jobId,
+            @RequestParam("jobId") UUID jobId,
             @AuthenticationPrincipal UserDetails userDetails) {
 
         try {
