@@ -2,6 +2,7 @@ package com.valhala.optimacvspring.resume.service;
 
 import com.valhala.optimacvspring.common.exception.ResourceNotFoundException;
 import com.valhala.optimacvspring.resume.dto.ResumeResponseDTO;
+import com.valhala.optimacvspring.resume.dto.ResumeTextDTO;
 import com.valhala.optimacvspring.resume.entites.Resume;
 import com.valhala.optimacvspring.resume.events.CvUploadedEvent;
 import com.valhala.optimacvspring.resume.mapper.ResumeMapper;
@@ -90,5 +91,13 @@ public class ResumeService {
             throw new AccessDeniedException("You do not own this resume");
         }
         return resume;
+    }
+
+    public List<ResumeTextDTO> getResumesText(List<UUID> resumeIds) {
+        List<Resume> resumes = resumeRepository.findAllByIdIn(resumeIds);
+
+        return resumes.stream()
+                .map(resume -> new ResumeTextDTO(resume.getId(), resume.getExtractedText()))
+                .toList();
     }
 }
