@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="68751325-1e4d-4d90-820b-c95ad4cecf9f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/front-end/src/shared/components/navbar-component/navbar-component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front-end/src/shared/components/navbar-component/navbar-component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-end/src/app/app.routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front-end/src/app/app.routes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-end/src/layouts/main-layout/main-layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/front-end/src/layouts/main-layout/main-layout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front-end/src/layouts/main-layout/main-layout.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front-end/src/layouts/main-layout/main-layout.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,6 +61,13 @@
     <configuration name="Angular Application (front-end)" type="JavascriptDebugType" uri="http://localhost:4200">
       <method v="2" />
     </configuration>
+    <configuration name="OptimacvSpringApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="optimacv-spring" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.valhala.optimacvspring.OptimacvSpringApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Angular CLI Server (front-end)" type="js.build_tools.npm">
       <package-json value="$PROJECT_DIR$/front-end/package.json" />
       <command value="run" />
@@ -74,7 +86,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1773240921295</updated>
-      <workItem from="1773240925004" duration="1699000" />
+      <workItem from="1773240925004" duration="4828000" />
     </task>
     <servers />
   </component>

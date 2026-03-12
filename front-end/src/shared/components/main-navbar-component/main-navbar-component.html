@@ -1,0 +1,134 @@
+<header class="sticky top-0 z-50 w-full bg-base-100/80 backdrop-blur-md border-b border-base-200/50 transition-all duration-300 shadow-sm">
+  <div class="navbar container mx-auto px-4 sm:px-6 lg:px-8 h-16 max-w-7xl">
+
+    <!-- Navbar Start: Brand & Mobile Menu -->
+    <div class="navbar-start">
+      <!-- Mobile Menu Dropdown -->
+      <div class="dropdown">
+        <div tabindex="0" role="button" class="btn btn-ghost lg:hidden -ml-2 mr-1 rounded-lg">
+          <i-lucide [img]="MenuIcon" class="w-5 h-5 text-base-content"></i-lucide>
+        </div>
+        <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-xl bg-base-100/95 backdrop-blur-xl rounded-box w-56 border border-base-200/50">
+          <li class="mb-1">
+            <a class="text-base-content/80 hover:text-base-content hover:bg-base-200/50 font-medium py-2.5 rounded-lg transition-colors">
+              <i-lucide [img]="LayoutDashboardIcon" class="w-4 h-4 mr-2"></i-lucide>
+              Home
+            </a>
+          </li>
+          <li class="mb-1">
+            <a class="text-base-content/80 hover:text-base-content hover:bg-base-200/50 font-medium py-2.5 rounded-lg transition-colors">
+              <i-lucide [img]="FileTextIcon" class="w-4 h-4 mr-2"></i-lucide>
+              services
+            </a>
+          </li>
+          <li class="mb-2">
+            <a class="text-base-content/80 hover:text-base-content hover:bg-base-200/50 font-medium py-2.5 rounded-lg transition-colors">
+              <i-lucide [img]="TargetIcon" class="w-4 h-4 mr-2"></i-lucide>
+              about us
+            </a>
+          </li>
+          <!-- Mobile Only Upload CV CTA -->
+          <li class="border-t border-base-200/50 pt-2 sm:hidden">
+            <a class="text-primary hover:text-primary-focus hover:bg-primary/10 font-bold py-2.5 rounded-lg transition-colors flex items-center justify-center">
+              <i-lucide [img]="UploadIcon" class="w-4 h-4 mr-2"></i-lucide>
+              Get started
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Brand Logo -->
+      <a href="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer text-base-content ring-offset-base-100 focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-lg">
+        <div class="bg-primary/10 text-primary p-1.5 rounded-lg flex items-center justify-center">
+          <i-lucide [img]="SparklesIcon" class="w-5 h-5"></i-lucide>
+        </div>
+        <span class="text-xl font-bold tracking-tight">OptimaCV</span>
+      </a>
+    </div>
+
+    <!-- Navbar Center: Desktop Links -->
+    <div class="navbar-center hidden lg:flex">
+      <ul class="flex items-center gap-2 px-1">
+        <li>
+          <a class="px-4 py-2 text-sm font-medium text-base-content/70 hover:text-base-content relative group transition-colors cursor-pointer rounded-md hover:bg-base-content/5">
+            Home
+            <span class="absolute inset-x-0 bottom-0 h-0.5 bg-primary/70 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left rounded-full"></span>
+          </a>
+        </li>
+        <li>
+          <a class="px-4 py-2 text-sm font-medium text-base-content/70 hover:text-base-content relative group transition-colors cursor-pointer rounded-md hover:bg-base-content/5">
+            Services
+            <span class="absolute inset-x-0 bottom-0 h-0.5 bg-primary/70 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left rounded-full"></span>
+          </a>
+        </li>
+        <li>
+          <a class="px-4 py-2 text-sm font-medium text-base-content/70 hover:text-base-content relative group transition-colors cursor-pointer rounded-md hover:bg-base-content/5">
+            About us
+            <span class="absolute inset-x-0 bottom-0 h-0.5 bg-primary/70 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left rounded-full"></span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Navbar End: Actions -->
+    <div class="navbar-end gap-1.5 sm:gap-2">
+
+      <!-- Theme Controller -->
+      <label class="swap swap-rotate btn btn-ghost btn-circle btn-sm text-base-content/70 hover:text-base-content hover:bg-base-content/10 transition-colors tooltip tooltip-bottom" data-tip="Toggle Theme">
+        <input type="checkbox" class="theme-controller" value="dark" />
+        <i-lucide [img]="SunIcon" class="swap-on w-4 h-4"></i-lucide>
+        <i-lucide [img]="MoonIcon" class="swap-off w-4 h-4"></i-lucide>
+      </label>
+
+      <!-- Language Switcher -->
+      <button class="btn btn-ghost btn-circle btn-sm text-base-content/70 hover:text-base-content hover:bg-base-content/10 transition-colors tooltip tooltip-bottom" data-tip="Switch Language">
+        <span class="text-xs font-semibold tracking-wider">EN</span>
+      </button>
+
+      <!-- Divider -->
+      <div class="hidden sm:block w-px h-5 bg-base-200/80 mx-1"></div>
+
+      <!-- Upload CV CTA (Desktop) -->
+      <button class="btn btn-primary btn-sm rounded-lg font-medium shadow-sm hover:shadow-md transition-all hidden sm:flex items-center gap-1.5 border-none bg-gradient-to-r from-primary to-primary-focus hover:brightness-110 px-4">
+        <i-lucide [img]="UploadIcon" class="w-4 h-4 mr-0.5"></i-lucide>
+        Get started
+      </button>
+
+      <!-- User Profile Dropdown
+      <div class="dropdown dropdown-end ml-1">
+        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar hover:ring-2 hover:ring-primary/20 transition-all rounded-full p-0 h-8 w-8">
+          <div class="w-8 rounded-full ring-1 ring-base-200/50 shadow-sm bg-base-200 flex items-center justify-center text-base-content/50">
+            <img alt="User avatar" src="https://i.pravatar.cc/150?u=a042581f4e29026024d" class="object-cover" />
+          </div>
+        </div>
+        <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-xl bg-base-100/95 backdrop-blur-xl rounded-box w-56 border border-base-200/50">
+          <li class="px-4 py-3 mb-1 border-b border-base-200/50 pointer-events-none">
+            <div class="flex flex-col gap-0.5">
+              <span class="text-sm font-semibold text-base-content">Alex Johnson</span>
+              <span class="text-xs text-base-content/60 truncate">alex@optimacv.com</span>
+            </div>
+          </li>
+          <li>
+            <a class="flex items-center gap-2 py-2 text-base-content/80 hover:text-base-content hover:bg-base-200/50 transition-colors rounded-lg mt-1 font-medium">
+              <i-lucide [img]="UserIcon" class="w-4 h-4"></i-lucide>
+              Profile Settings
+            </a>
+          </li>
+          <li>
+            <a class="flex items-center gap-2 py-2 text-base-content/80 hover:text-base-content hover:bg-base-200/50 transition-colors rounded-lg font-medium">
+              <i-lucide [img]="SettingsIcon" class="w-4 h-4"></i-lucide>
+              Account Preferences
+            </a>
+          </li>
+          <li class="mt-1 border-t border-base-200/50 pt-1">
+            <a class="flex items-center gap-2 py-2 text-error/80 hover:text-error hover:bg-error/10 transition-colors rounded-lg font-medium">
+              <i-lucide [img]="LogOutIcon" class="w-4 h-4"></i-lucide>
+              Log out
+            </a>
+          </li>
+        </ul>
+      </div>
+      -->
+    </div>
+  </div>
+</header>
