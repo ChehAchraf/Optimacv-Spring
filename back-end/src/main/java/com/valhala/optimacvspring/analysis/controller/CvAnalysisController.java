@@ -7,10 +7,8 @@ import com.valhala.optimacvspring.analysis.mapper.CvAnalysisMapper;
 import com.valhala.optimacvspring.analysis.service.CvAnalysisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -30,6 +28,15 @@ public class CvAnalysisController {
 
         return ResponseEntity.ok(analysisMapper.toResponseDTO(result));
 
+    }
+
+    @PreAuthorize("hasRole('COMPANY')")
+    @PostMapping("/bulk-rank")
+    public ResponseEntity<String> bulkRankResumes(@RequestBody BulkRankingRequestDTO request) {
+
+        String rankingResult = analysisService.rankMultipleResumes(request);
+
+        return ResponseEntity.ok(rankingResult);
     }
 
 }
