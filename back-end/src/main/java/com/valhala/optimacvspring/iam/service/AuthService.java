@@ -32,9 +32,15 @@ public class AuthService {
             throw new EmailAlreadyExistsException(request.email());
         }
 
+
         AppUser user = authMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(request.password()));
-        user.setRole(Role.ROLE_USER);
+
+        if(request.role() != null && request.role().equalsIgnoreCase("ROLE_COMPANY")){
+            user.setRole(Role.ROLE_COMPANY);
+        }else {
+            user.setRole(Role.ROLE_USER);
+        }
 
         AppUser savedUser = userRepository.save(user);
 
