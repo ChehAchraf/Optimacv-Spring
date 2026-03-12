@@ -1,6 +1,7 @@
 package com.valhala.optimacvspring.analysis.controller;
 
 
+import com.valhala.optimacvspring.analysis.dto.BulkRankingRequestDTO;
 import com.valhala.optimacvspring.analysis.dto.CvAnalysisResponseDTO;
 import com.valhala.optimacvspring.analysis.entities.CvAnalysisResult;
 import com.valhala.optimacvspring.analysis.mapper.CvAnalysisMapper;
