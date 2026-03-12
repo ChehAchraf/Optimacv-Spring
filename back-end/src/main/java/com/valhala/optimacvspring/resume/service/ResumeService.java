@@ -1,14 +1,10 @@
 package com.valhala.optimacvspring.resume.service;
 
-import com.valhala.optimacvspring.common.exception.ResourceNotFoundException;
-import com.valhala.optimacvspring.resume.dto.ResumeResponseDTO;
-import com.valhala.optimacvspring.resume.api.ResumeTextDTO;
-import com.valhala.optimacvspring.resume.entites.Resume;
-import com.valhala.optimacvspring.resume.events.CvUploadedEvent;
-import com.valhala.optimacvspring.resume.mapper.ResumeMapper;
-import com.valhala.optimacvspring.resume.repository.ResumeRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.io.ByteArrayResource;
@@ -17,15 +13,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import org.springframework.ai.document.Document;
-import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
+import com.valhala.optimacvspring.common.exception.ResourceNotFoundException;
+import com.valhala.optimacvspring.resume.api.ResumeApi;
+import com.valhala.optimacvspring.resume.api.ResumeTextDTO;
+import com.valhala.optimacvspring.resume.dto.ResumeResponseDTO;
+import com.valhala.optimacvspring.resume.entites.Resume;
+import com.valhala.optimacvspring.resume.events.CvUploadedEvent;
+import com.valhala.optimacvspring.resume.mapper.ResumeMapper;
+import com.valhala.optimacvspring.resume.repository.ResumeRepository;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ResumeService {
+public class ResumeService implements ResumeApi {
 
     private final ResumeRepository resumeRepository;
     private final ApplicationEventPublisher eventPublisher;
@@ -49,13 +52,17 @@ public class ResumeService {
                 .fileName(file.getOriginalFilename())
                 .fileUrl(fileUrl)
                 .userId(userId)
-                .jobId(jobId)
                 .extractedText(extractedText.toString())
                 .build();
 
         Resume savedResume = resumeRepository.saveAndFlush(resume);
 
-        eventPublisher.publishEvent(new CvUploadedEvent(resume.getId(), extractedText.toString(), jobId));
+        if (jobId != null) {
+            log.info("Publishing CvUploadedEvent for immediate analysis against job: {}", jobId);
+            eventPublisher.publishEvent(new CvUploadedEvent(savedResume.getId(), extractedText.toString(), jobId));
+        }
+
+        eventPublisher.publishEvent(new CvUploadedEvent(savedResume.getId(), extractedText.toString(), jobId));
 
         return savedResume;
     }
@@ -70,7 +77,10 @@ public class ResumeService {
     @Transactional
     public ResumeResponseDTO updateResume(UUID resumeId, UUID jobId, UUID userId) {
         Resume resume = findAndVerifyOwnership(resumeId, userId);
-        resume.setJobId(jobId);
+
+        if (jobId != null) {
+            eventPublisher.publishEvent(new CvUploadedEvent(resumeId, resume.getExtractedText(), jobId));
+        }
 
         Resume saved = resumeRepository.save(resume);
         log.info("Resume updated: {} by user: {}", resumeId, userId);
@@ -93,6 +103,7 @@ public class ResumeService {
         return resume;
     }
 
+    @Override
     public List<ResumeTextDTO> getResumesText(List<UUID> resumeIds) {
         List<Resume> resumes = resumeRepository.findAllByIdIn(resumeIds);
 
@@ -100,4 +111,5 @@ public class ResumeService {
                 .map(resume -> new ResumeTextDTO(resume.getId(), resume.getExtractedText()))
                 .toList();
     }
+
 }

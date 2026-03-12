@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ResumeMapper {
 
-    @Mapping(target = "statusMessage", constant = "your cv has been uploaded successfully, we are analyzing it now")
+    @Mapping(target = "statusMessage", constant = "your cv has been uploaded successfully, you can analyze it after selecting a job.")
     ResumeResponseDTO toResponseDTO(Resume resume);
 
 }
