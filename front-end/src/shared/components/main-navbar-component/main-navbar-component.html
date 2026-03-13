@@ -50,7 +50,7 @@
     <div class="navbar-center hidden lg:flex">
       <ul class="flex items-center gap-2 px-1">
         <li>
-          <a class="px-4 py-2 text-sm font-medium text-base-content/70 hover:text-base-content relative group transition-colors cursor-pointer rounded-md hover:bg-base-content/5">
+          <a routerLink="/" class="px-4 py-2 text-sm font-medium text-base-content/70 hover:text-base-content relative group transition-colors cursor-pointer rounded-md hover:bg-base-content/5">
             Home
             <span class="absolute inset-x-0 bottom-0 h-0.5 bg-primary/70 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left rounded-full"></span>
           </a>
@@ -89,7 +89,7 @@
       <div class="hidden sm:block w-px h-5 bg-base-200/80 mx-1"></div>
 
       <!-- Upload CV CTA (Desktop) -->
-      <button class="btn btn-primary btn-sm rounded-lg font-medium shadow-sm hover:shadow-md transition-all hidden sm:flex items-center gap-1.5 border-none bg-gradient-to-r from-primary to-primary-focus hover:brightness-110 px-4">
+      <button routerLink="/register" class="btn btn-primary btn-sm rounded-lg font-medium shadow-sm hover:shadow-md transition-all hidden sm:flex items-center gap-1.5 border-none bg-gradient-to-r from-primary to-primary-focus hover:brightness-110 px-4">
         <i-lucide [img]="UploadIcon" class="w-4 h-4 mr-0.5"></i-lucide>
         Get started
       </button>

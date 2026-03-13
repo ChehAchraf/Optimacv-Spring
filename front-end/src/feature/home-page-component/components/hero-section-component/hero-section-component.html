@@ -1,1 +1,37 @@
-hero section
+<section class="relative w-[calc(100%-48px)] mx-auto my-6 h-120 rounded-3xl overflow-hidden">
+
+  <!-- Background image -->
+  <div class="absolute inset-0 bg-[url('/images/layout/banner.jpg')] bg-center bg-cover"></div>
+
+  <!-- Black gradient overlay -->
+  <div class="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/20"></div>
+
+  <!-- Left content -->
+  <div class="relative z-10 flex flex-col justify-center items-start h-full px-16 max-w-xl">
+
+    <span class="border border-white/60 text-white text-[10px] font-bold tracking-widest uppercase px-4 py-1.5 rounded-full mb-5">
+      AI-POWERED RESUME BUILDER, TRY NOW
+    </span>
+
+    <h1 class="text-5xl font-extrabold text-white leading-tight mb-5">
+      Build Your Perfect<br>Resume With AI
+    </h1>
+
+    <p class="text-sm text-white/80 leading-relaxed mb-8 max-w-sm">
+      Create a standout resume tailored to any job. Let our AI optimize
+      your experience and help you land interviews faster.
+    </p>
+
+    <button class="btn bg-white text-gray-900 border-0 rounded-full px-8 font-semibold hover:bg-gray-100">
+      Get Started <span class="text-base">&#8599;</span>
+    </button>
+
+  </div>
+
+  <!-- Dot indicators -->
+  <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 z-10">
+    <span class="w-2 h-2 rounded-full bg-white/40"></span>
+    <span class="w-6 h-2 rounded-full bg-white"></span>
+  </div>
+
+</section>
