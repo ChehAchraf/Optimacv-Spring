@@ -165,6 +165,7 @@ public class CvAnalysisService {
         prompt.append("[\n");
         prompt.append("  {\n");
         prompt.append("    \"resumeId\": \"<exact_candidate_id_from_above>\",\n");
+        prompt.append("    \"candidateName\": \"<extract_the_candidate_full_name_from_the_resume_text>\",\n"); // <--- هاد السطر هو اللي زدنا
         prompt.append("    \"rank\": <integer_rank_starting_from_1>,\n");
         prompt.append("    \"matchScore\": <percentage_number_out_of_100>,\n");
         prompt.append("    \"reason\": \"<brief_explanation_of_why_they_got_this_rank>\",\n");
