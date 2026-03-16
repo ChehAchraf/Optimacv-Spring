@@ -12,16 +12,28 @@ import {
   Inbox,
 } from 'lucide-angular';
 import { AuthStore } from '../../../../core/store/auth.store';
+import {JobStore} from '../../../../core/store/job.store';
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {on} from '@ngrx/signals/events';
+import {email} from '@angular/forms/signals';
 
 @Component({
   selector: 'app-job-targets-page',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule, ReactiveFormsModule],
   templateUrl: './job-targets-page.html',
   styleUrl: './job-targets-page.css',
 })
 export class JobTargetsPage {
   protected readonly authStore = inject(AuthStore);
+  protected readonly jobStore = inject(JobStore);
+  private fb = inject(FormBuilder);
+
+  createJobFrom = this.fb.group({
+    title : ['',[Validators.required,Validators.minLength(3)]],
+    company : ['',[Validators.required,Validators.minLength(3)]],
+    description : ['', [Validators.required, Validators.minLength(10)]]
+  })
 
   readonly BriefcaseIcon = Briefcase;
   readonly PlusIcon = Plus;
@@ -31,6 +43,7 @@ export class JobTargetsPage {
   readonly ClockIcon = Clock;
   readonly FileTextIcon = FileText;
   readonly InboxIcon = Inbox;
+  protected readonly on = on;
 
   readonly totalTargets = 0;
   readonly jobTargets: Array<{
@@ -40,4 +53,31 @@ export class JobTargetsPage {
     description: string;
     createdAt: string;
   }> = [];
+
+  onSubmit(){
+    console.log(this.createJobFrom.value)
+    if (this.createJobFrom.valid){
+      this.jobStore.createJob({
+        title : this.createJobFrom.value.title!,
+        company : this.createJobFrom.value.company!,
+        description : this.createJobFrom.value.description!
+      })
+    }
+  }
+
+
+  // getters for the form
+  get title(){
+    return this.createJobFrom.get('title')
+  }
+
+  get company (){
+    return this.createJobFrom.get('company')
+  }
+
+  get description(){
+    return this.createJobFrom.get('description')
+  }
+
+  protected readonly email = email;
 }
