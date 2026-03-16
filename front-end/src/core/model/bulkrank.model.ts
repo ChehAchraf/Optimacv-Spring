@@ -1,6 +1,6 @@
 export interface IBulkRankRequest {
   jobId : string;
-  resumeIds : string
+  resumeIds : string[]
 }
 
 export interface IBulkRankingResponse {
@@ -9,5 +9,6 @@ export interface IBulkRankingResponse {
   rank : number,
   matchScore : number ,
   reason : string,
-  missingSkills : any[]
+  missingSkills : string[]
 }
+
