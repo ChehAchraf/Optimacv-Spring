@@ -1,0 +1,267 @@
+<section class="space-y-6 m-4">
+  <!-- Header -->
+  <header
+    class="flex flex-col gap-4 rounded-3xl bg-base-100 p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6 lg:p-8"
+  >
+    <div class="flex items-start gap-3 sm:items-center">
+      <div
+        class="flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary"
+        aria-hidden="true"
+      >
+        <i-lucide [img]="BriefcaseIcon" class="size-6"></i-lucide>
+      </div>
+      <div class="space-y-1">
+        <div class="flex flex-wrap items-center gap-2">
+          <h1 class="text-xl font-semibold tracking-tight text-base-content sm:text-2xl">
+            Job Targets
+          </h1>
+          <span class="badge badge-neutral badge-sm rounded-full">
+            {{ totalTargets }} total
+          </span>
+        </div>
+        <p class="max-w-xl text-sm text-base-content/70">
+          Manage the roles you are targeting and keep your hiring or applications organized.
+        </p>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-3">
+      <button
+        type="button"
+        class="btn btn-outline btn-sm gap-2 rounded-full sm:btn-md"
+      >
+        <i-lucide [img]="TargetIcon" class="size-4"></i-lucide>
+        <span class="hidden sm:inline">Focus mode</span>
+        <span class="sm:hidden">Focus</span>
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-primary gap-2 rounded-full shadow-md shadow-primary/20"
+        (click)="jobModal.showModal()"
+      >
+        <i-lucide [img]="PlusIcon" class="size-4"></i-lucide>
+        <span>New Job Target</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main content card -->
+  <div class="rounded-3xl bg-base-100 p-4 shadow-sm sm:p-6 lg:p-8">
+    <!-- Empty state -->
+    @if (jobTargets.length === 0) {
+      <div
+        class="flex flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-base-300 bg-base-100 px-6 py-12 text-center sm:px-10"
+      >
+        <div
+          class="flex size-16 items-center justify-center rounded-2xl bg-base-200 text-base-content/80"
+          aria-hidden="true"
+        >
+          <i-lucide [img]="InboxIcon" class="size-7"></i-lucide>
+        </div>
+        <div class="space-y-2">
+          <h2 class="text-lg font-semibold tracking-tight text-base-content">
+            No job targets found
+          </h2>
+          <p class="max-w-md text-sm text-base-content/70">
+            Start by creating a job target to keep track of which roles you or your company are
+            actively pursuing.
+          </p>
+        </div>
+        <button
+          type="button"
+          class="btn btn-primary gap-2 rounded-full shadow-md shadow-primary/20"
+          (click)="jobModal.showModal()"
+        >
+          <i-lucide [img]="PlusIcon" class="size-4"></i-lucide>
+          <span>Create your first job target</span>
+        </button>
+      </div>
+    } @else {
+      <!-- Table wrapper -->
+      <div class="overflow-x-auto">
+        <table class="table table-zebra w-full rounded-2xl bg-base-100 shadow-lg">
+          <thead>
+            <tr class="text-xs uppercase tracking-wide text-base-content/60">
+              <th class="bg-base-100/80">Target role</th>
+              <th class="bg-base-100/80">Requirements</th>
+              <th class="bg-base-100/80">Date added</th>
+              <th class="bg-base-100/80 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (job of jobTargets; track job.id) {
+              <tr class="align-top">
+                <!-- Target role -->
+                <td class="max-w-xs">
+                  <div class="flex items-start gap-3">
+                    <div
+                      class="mt-1 flex size-9 items-center justify-center rounded-2xl bg-primary/10 text-primary"
+                      aria-hidden="true"
+                    >
+                      <i-lucide [img]="BriefcaseIcon" class="size-4"></i-lucide>
+                    </div>
+                    <div class="space-y-1">
+                      <div class="flex flex-wrap items-center gap-2">
+                        <p class="font-medium text-base-content">
+                          {{ job.title }}
+                        </p>
+                        <span
+                          class="badge badge-xs rounded-full"
+                          [ngClass]="{
+                            'badge-success badge-outline': job.status === 'Open',
+                            'badge-neutral': job.status === 'Draft',
+                            'badge-error badge-outline': job.status === 'Closed'
+                          }"
+                        >
+                          {{ job.status }}
+                        </span>
+                      </div>
+                      <div class="flex items-center gap-1.5 text-xs text-base-content/60">
+                        <i-lucide [img]="TargetIcon" class="size-3.5"></i-lucide>
+                        <span>Job target</span>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+
+                <!-- Requirements -->
+                <td class="max-w-xl">
+                  <p class="line-clamp-2 text-sm text-base-content/70">
+                    {{ job.description }}
+                  </p>
+                </td>
+
+                <!-- Date added -->
+                <td class="whitespace-nowrap text-sm text-base-content/70">
+                  <div class="flex items-center gap-2">
+                    <i-lucide [img]="ClockIcon" class="size-3.5 text-base-content/50"></i-lucide>
+                    <span>{{ job.createdAt }}</span>
+                  </div>
+                </td>
+
+                <!-- Actions -->
+                <td class="whitespace-nowrap text-right">
+                  <div class="flex items-center justify-end gap-1.5">
+                    <button
+                      type="button"
+                      class="btn btn-ghost btn-xs gap-1 rounded-full text-base-content/80"
+                    >
+                      <i-lucide [img]="PencilIcon" class="size-3.5"></i-lucide>
+                      <span class="hidden sm:inline text-xs">Edit</span>
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-ghost btn-xs gap-1 rounded-full text-error hover:bg-error/10"
+                    >
+                      <i-lucide [img]="TrashIcon" class="size-3.5"></i-lucide>
+                      <span class="hidden sm:inline text-xs">Delete</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- Add / Edit Job Target Modal -->
+<dialog #jobModal id="job_modal" class="modal">
+  <div class="modal-box max-w-2xl rounded-3xl bg-base-100 p-6 sm:p-7 lg:p-8">
+    <div class="mb-5 flex items-start justify-between gap-4">
+      <div class="space-y-1">
+        <div class="flex items-center gap-2">
+          <div
+            class="flex size-9 items-center justify-center rounded-2xl bg-primary/10 text-primary"
+            aria-hidden="true"
+          >
+            <i-lucide [img]="FileTextIcon" class="size-5"></i-lucide>
+          </div>
+          <h3 class="text-lg font-semibold tracking-tight text-base-content">
+            Job Target
+          </h3>
+        </div>
+        <p class="max-w-md text-sm text-base-content/70">
+          Capture the full context of the role so you can quickly match candidates or tailor your
+          applications.
+        </p>
+      </div>
+      <form method="dialog">
+        <button
+          type="submit"
+          class="btn btn-ghost btn-sm btn-circle"
+          aria-label="Close dialog"
+        >
+          ✕
+        </button>
+      </form>
+    </div>
+
+    <form class="space-y-5">
+      <!-- Job title -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text font-medium text-base-content">Job title</span>
+        </label>
+        <label class="input input-bordered flex items-center gap-2 rounded-2xl focus-within:border-primary">
+          <i-lucide [img]="BriefcaseIcon" class="size-4 text-base-content/50"></i-lucide>
+          <input
+            type="text"
+            class="grow bg-transparent text-sm outline-none"
+            placeholder="e.g. Senior Angular Developer"
+          />
+        </label>
+      </div>
+
+      <!-- Job description -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text font-medium text-base-content">Job description</span>
+        </label>
+        <div class="relative">
+          <textarea
+            class="textarea textarea-bordered h-40 w-full resize-none rounded-2xl bg-base-100 text-sm leading-relaxed focus:border-primary focus:outline-none"
+            placeholder="Paste the full job requirements here..."
+          ></textarea>
+          <div
+            class="pointer-events-none absolute bottom-3 right-3 flex items-center gap-2 rounded-full bg-base-100/90 px-3 py-1 text-[11px] text-base-content/50 shadow-sm"
+          >
+            <i-lucide [img]="ClockIcon" class="size-3.5"></i-lucide>
+            <span>Tip: include must-have skills and responsibilities</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal actions -->
+      <div class="mt-6 flex flex-col gap-3 border-t border-base-200 pt-4 sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex items-center gap-2 text-xs text-base-content/60">
+          <span class="size-1.5 rounded-full bg-success"></span>
+          <span>Changes are saved instantly after you create the target.</span>
+        </div>
+        <div class="flex justify-end gap-2">
+          <button
+            type="button"
+            class="btn btn-ghost btn-outline rounded-full"
+            (click)="jobModal.close()"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary gap-2 rounded-full shadow-md shadow-primary/20"
+          >
+            <i-lucide [img]="TargetIcon" class="size-4"></i-lucide>
+            <span>Save target</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <form method="dialog" class="modal-backdrop">
+    <button type="submit" aria-label="Close">close</button>
+  </form>
+</dialog>
