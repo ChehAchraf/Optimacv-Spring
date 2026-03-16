@@ -1,0 +1,120 @@
+<section
+  class="bg-base-200/50 px-4 py-20 sm:px-6 sm:py-24 lg:px-8 lg:py-28"
+  aria-labelledby="features-heading"
+>
+  <div class="mx-auto max-w-6xl">
+    <!-- Section header -->
+    <header class="text-center">
+      <span
+        class="badge badge-ghost badge-sm mb-4 border border-base-300/80 px-4 py-2 text-xs font-medium uppercase tracking-wider text-base-content/70"
+      >
+        Features
+      </span>
+      <h2
+        id="features-heading"
+        class="text-3xl font-bold tracking-tight text-base-content sm:text-4xl md:text-5xl"
+      >
+        Everything you need to land the interview
+      </h2>
+      <p class="mx-auto mt-4 max-w-2xl text-base text-base-content/70 sm:text-lg">
+        From AI analysis to ATS optimization—one platform built for candidates and recruiters.
+      </p>
+    </header>
+
+    <!-- Bento grid -->
+    <div
+      class="mt-14 grid grid-cols-1 gap-6 sm:mt-16 md:grid-cols-3 lg:mt-20"
+    >
+      <!-- Card 1: AI-Powered Analysis (spans 2 cols) -->
+      <article
+        class="group flex flex-col rounded-3xl border border-base-content/5 bg-base-100 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg sm:p-8 md:col-span-2"
+      >
+        <div class="flex items-start gap-4">
+          <span
+            class="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary"
+            aria-hidden="true"
+          >
+            <i-lucide [img]="BotIcon" class="size-6"></i-lucide>
+          </span>
+          <div class="min-w-0 flex-1">
+            <h3 class="text-xl font-semibold tracking-tight text-base-content sm:text-2xl">
+              AI-Powered Analysis
+            </h3>
+            <p class="mt-2 text-base text-base-content/70 sm:mt-3">
+              Our model reads the job description and your resume, then scores fit and suggests precise improvements—so you send applications that get noticed.
+            </p>
+          </div>
+        </div>
+        <!-- Match score UI element -->
+        <div class="mt-6 rounded-2xl bg-base-200/60 p-4 sm:mt-8 sm:p-5">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-sm font-medium text-base-content/80">Match Score</span>
+            <span class="font-mono text-sm font-semibold tabular-nums text-primary">92%</span>
+          </div>
+          <div class="mt-2 h-2 w-full overflow-hidden rounded-full bg-base-300">
+            <div
+              class="h-full rounded-full bg-primary transition-all duration-500 ease-out"
+              style="width: 92%"
+            ></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2: Identify Missing Skills (standard) -->
+      <article
+        class="group flex flex-col rounded-3xl border border-base-content/5 bg-base-100 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg sm:p-8"
+      >
+        <span
+          class="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-secondary/10 text-secondary"
+          aria-hidden="true"
+        >
+          <i-lucide [img]="TargetIcon" class="size-6"></i-lucide>
+        </span>
+        <h3 class="mt-4 text-lg font-semibold tracking-tight text-base-content sm:text-xl">
+          Identify Missing Skills
+        </h3>
+        <p class="mt-2 text-sm text-base-content/70 sm:mt-3">
+          See exactly which skills the role expects and where your resume falls short—then add the right keywords and bullet points.
+        </p>
+      </article>
+
+      <!-- Card 4: ATS-Friendly Optimization (spans 2 cols) -->
+      <article
+        class="group flex flex-col rounded-3xl border border-base-content/5 bg-base-100 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg sm:flex-row sm:items-center sm:gap-6 sm:p-8 md:col-span-2"
+      >
+        <span
+          class="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-accent/10 text-accent sm:size-14"
+          aria-hidden="true"
+        >
+          <i-lucide [img]="FileCheck2Icon" class="size-6 sm:size-7"></i-lucide>
+        </span>
+        <div class="min-w-0 flex-1 sm:mt-0">
+          <h3 class="text-xl font-semibold tracking-tight text-base-content sm:text-2xl">
+            ATS-Friendly Optimization
+          </h3>
+          <p class="mt-2 text-base text-base-content/70 sm:mt-3">
+            Format and wording tuned for applicant tracking systems. Get past the bots and in front of recruiters—without guessing.
+          </p>
+        </div>
+      </article>
+
+      <!-- Card 3: Bulk Ranking (standard) -->
+      <article
+        class="group flex flex-col rounded-3xl border border-base-content/5 bg-base-100 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg sm:p-8"
+      >
+        <span
+          class="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-info/10 text-info"
+          aria-hidden="true"
+        >
+          <i-lucide [img]="UsersIcon" class="size-6"></i-lucide>
+        </span>
+        <h3 class="mt-4 text-lg font-semibold tracking-tight text-base-content sm:text-xl">
+          For Companies: Bulk Ranking
+        </h3>
+        <p class="mt-2 text-sm text-base-content/70 sm:mt-3">
+          Upload multiple CVs and rank them against a job description in one go. Save time and shortlist the best fits faster.
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
