@@ -1,37 +1,83 @@
-<section class="relative w-[calc(100%-48px)] mx-auto my-6 h-120 rounded-3xl overflow-hidden">
+<section
+  class="relative mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-28"
+  aria-labelledby="hero-heading"
+>
+  <div class="flex flex-col items-center text-center">
+    <!-- Badge -->
+    <a
+      href="#"
+      class="btn btn-ghost btn-sm mb-8 inline-flex items-center gap-2 rounded-full border border-base-200/80 bg-base-100/80 px-4 py-2 text-sm font-medium text-base-content/80 shadow-sm transition-colors hover:border-base-300 hover:bg-base-200/50 hover:text-base-content"
+      aria-label="OptimaCV 2.0 release"
+    >
+      <i-lucide [img]="SparklesIcon" class="size-4" aria-hidden="true"></i-lucide>
+      <span>OptimaCV 2.0 is now live</span>
+    </a>
 
-  <!-- Background image -->
-  <div class="absolute inset-0 bg-[url('/images/layout/banner.jpg')] bg-center bg-cover"></div>
-
-  <!-- Black gradient overlay -->
-  <div class="absolute inset-0 bg-gradient-to-r from-black/85 via-black/60 to-black/20"></div>
-
-  <!-- Left content -->
-  <div class="relative z-10 flex flex-col justify-center items-start h-full px-16 max-w-xl">
-
-    <span class="border border-white/60 text-white text-[10px] font-bold tracking-widest uppercase px-4 py-1.5 rounded-full mb-5">
-      AI-POWERED RESUME BUILDER, TRY NOW
-    </span>
-
-    <h1 class="text-5xl font-extrabold text-white leading-tight mb-5">
-      Build Your Perfect<br>Resume With AI
+    <!-- Headline -->
+    <h1
+      id="hero-heading"
+      class="max-w-4xl text-4xl font-bold leading-[1.1] tracking-tight text-base-content sm:text-5xl md:text-6xl lg:text-7xl"
+    >
+      Land your dream job.
+      <span class="block">Let AI tailor your resume.</span>
     </h1>
 
-    <p class="text-sm text-white/80 leading-relaxed mb-8 max-w-sm">
-      Create a standout resume tailored to any job. Let our AI optimize
-      your experience and help you land interviews faster.
+    <!-- Subheadline -->
+    <p
+      class="mt-6 max-w-2xl text-base text-base-content/70 sm:text-lg md:mt-8"
+    >
+      Optimize every application with AI-powered analysis. Get actionable
+      feedback and tailor your resume to each role in minutes—not hours.
     </p>
 
-    <button class="btn bg-white text-gray-900 border-0 rounded-full px-8 font-semibold hover:bg-gray-100">
-      Get Started <span class="text-base">&#8599;</span>
-    </button>
+    <!-- CTAs -->
+    <div
+      class="mt-10 flex flex-wrap items-center justify-center gap-4 sm:mt-12"
+    >
+      <a
+        routerLink="/register"
+        class="btn btn-primary inline-flex items-center gap-2 rounded-full px-6 py-3 text-base font-semibold shadow-lg transition-all hover:shadow-xl"
+      >
+        Get started free
+        <i-lucide [img]="ArrowRightIcon" class="size-5" aria-hidden="true"></i-lucide>
+      </a>
+      <button
+        type="button"
+        class="btn btn-ghost inline-flex items-center gap-2 rounded-full border border-base-200/80 px-6 py-3 text-base font-medium text-base-content/80 transition-colors hover:border-base-300 hover:bg-base-200/40 hover:text-base-content"
+        aria-label="Watch product demo"
+      >
+        <i-lucide [img]="PlayCircleIcon" class="size-5" aria-hidden="true"></i-lucide>
+        Watch Demo
+      </button>
+    </div>
 
+    <!-- Dashboard image container -->
+    <div class="mt-16 w-full sm:mt-20 lg:mt-24">
+      <div
+        class="relative mx-auto max-w-5xl overflow-hidden rounded-2xl border border-base-200/50 bg-base-200/30 shadow-2xl ring-1 ring-base-content/5"
+      >
+        <!-- Subtle background glow -->
+        <div
+          class="pointer-events-none absolute -inset-px rounded-2xl bg-gradient-to-b from-base-content/5 to-transparent"
+          aria-hidden="true"
+        ></div>
+        <div
+          class="absolute -inset-4 -z-10 rounded-3xl bg-base-content/5 blur-2xl"
+          aria-hidden="true"
+        ></div>
+
+        <div class="relative p-1.5 sm:p-2">
+          <img
+            src="/images/layout/dahsboard-banner.png"
+            alt="OptimaCV Dashboard — AI-powered resume analysis and optimization"
+            class="w-full rounded-xl object-cover object-top shadow-inner"
+            width="1200"
+            height="720"
+            loading="eager"
+            fetchpriority="high"
+          />
+        </div>
+      </div>
+    </div>
   </div>
-
-  <!-- Dot indicators -->
-  <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 z-10">
-    <span class="w-2 h-2 rounded-full bg-white/40"></span>
-    <span class="w-6 h-2 rounded-full bg-white"></span>
-  </div>
-
 </section>
