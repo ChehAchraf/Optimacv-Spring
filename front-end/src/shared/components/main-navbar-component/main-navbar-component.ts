@@ -13,12 +13,14 @@ import {
   Settings,
   LogOut
 } from 'lucide-angular';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-main-navbar-component',
-    imports: [
-        LucideAngularModule
-    ],
+  imports: [
+    LucideAngularModule,
+    RouterLink
+  ],
   templateUrl: './main-navbar-component.html',
   styleUrl: './main-navbar-component.css',
 })
