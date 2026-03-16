@@ -41,7 +41,13 @@ export const routes: Routes = [
       { path: 'jobs', loadComponent: () => import('../feature/dashboard-component/pages/job-targets-page/job-targets-page')
         .then(c => c.JobTargetsPage)
       },
-      
+
+      {
+        path: 'bulk-rank',
+        loadComponent : ()=> import('../feature/dashboard-component/pages/bulk-rank-page/bulk-rank-page')
+          .then((c) => c.BulkRankPage)
+      }
+
     ]
   }
 ];
