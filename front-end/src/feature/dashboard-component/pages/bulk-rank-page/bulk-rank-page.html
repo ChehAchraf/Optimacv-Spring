@@ -1,1 +1,278 @@
-<p>bulk-rank-page works!</p>
+<div class="min-h-screen bg-base-200 px-4 py-6 sm:px-6 lg:px-8">
+  <!-- Page header -->
+  <header
+    class="mb-8 flex flex-col gap-3 rounded-2xl bg-base-100 p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6"
+  >
+    <div>
+      <h1 class="text-xl font-semibold tracking-tight sm:text-2xl">
+        Bulk Resume Ranking
+      </h1>
+      <p class="mt-1 text-sm text-base-content/60">
+        Upload multiple resumes, link them to a job target, and let AI surface
+        the strongest matches.
+      </p>
+    </div>
+
+    <div class="flex items-center gap-3 text-xs text-base-content/60">
+      <div class="hidden items-center gap-2 rounded-full bg-base-200 px-3 py-1 sm:flex">
+        <i-lucide [img]="UsersIcon" class="h-4 w-4 text-primary"></i-lucide>
+        <span>Optimized for batches of 50+ resumes</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Stepper -->
+  <section class="mb-8 rounded-2xl bg-base-100 p-4 shadow-sm sm:p-5">
+    <ul class="steps w-full text-xs sm:text-sm">
+      <li
+        class="step"
+        [class.step-primary]="step >= 1"
+      >
+        Select Job
+      </li>
+      <li
+        class="step"
+        [class.step-primary]="step >= 2"
+      >
+        Upload Resumes
+      </li>
+      <li
+        class="step"
+        [class.step-primary]="step >= 3"
+      >
+        Review Matches
+      </li>
+    </ul>
+  </section>
+
+  <!-- Main content -->
+  <section class="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1.6fr)]">
+    <!-- Left column: job selection + upload -->
+    <div class="space-y-6">
+      <!-- Step 1: Select Job Target -->
+      <div class="rounded-2xl bg-base-100 p-5 shadow-sm">
+        <div class="mb-3 flex items-center gap-2">
+          <div
+            class="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 text-primary"
+          >
+            <i-lucide [img]="BriefcaseIcon" class="h-4 w-4"></i-lucide>
+          </div>
+          <div>
+            <h2 class="text-sm font-semibold">1. Select job target</h2>
+            <p class="text-xs text-base-content/60">
+              Choose the role you want to rank these resumes against.
+            </p>
+          </div>
+        </div>
+
+        <div class="form-control mt-3">
+          <label class="label">
+            <span class="label-text text-xs font-medium text-base-content/80">
+              Job target
+            </span>
+          </label>
+          <select
+            class="select select-bordered w-full rounded-2xl"
+            [(ngModel)]="selectedJobTargetId"
+            name="jobTarget"
+          >
+            <option [ngValue]="null" disabled selected>
+              Select a job target
+            </option>
+            <option
+              *ngFor="let target of jobTargets"
+              [ngValue]="target.id"
+            >
+              {{ target.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Step 2: Multi-file upload -->
+      <div class="rounded-2xl bg-base-100 p-5 shadow-sm">
+        <div class="mb-3 flex items-center gap-2">
+          <div
+            class="flex h-8 w-8 items-center justify-center rounded-xl bg-secondary/10 text-secondary"
+          >
+            <i-lucide [img]="UploadIcon" class="h-4 w-4"></i-lucide>
+          </div>
+          <div>
+            <h2 class="text-sm font-semibold">2. Upload resumes</h2>
+            <p class="text-xs text-base-content/60">
+              Drag and drop PDF resumes or browse from your computer.
+            </p>
+          </div>
+        </div>
+
+        <label
+          for="fileInput"
+          class="mt-3 flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-base-300 bg-base-200/50 px-4 py-10 text-center transition-colors hover:border-primary/60 hover:bg-base-200"
+        >
+          <input
+            id="fileInput"
+            type="file"
+            class="hidden"
+            multiple
+            accept=".pdf"
+            (change)="onFileSelect($event)"
+          />
+          <div
+            class="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-base-100 text-primary shadow-sm"
+          >
+            <i-lucide [img]="UploadIcon" class="h-5 w-5"></i-lucide>
+          </div>
+          <p class="text-sm font-medium">
+            Drop PDF files here, or click to browse
+          </p>
+          <p class="mt-1 text-xs text-base-content/60">
+            We recommend batches of 10–50 resumes at a time.
+          </p>
+        </label>
+
+        <!-- Selected files list -->
+        <div *ngIf="selectedFiles.length" class="mt-4 space-y-2">
+          <div class="flex items-center justify-between text-xs text-base-content/60">
+            <span>{{ selectedFiles.length }} file(s) selected</span>
+          </div>
+          <ul class="divide-y divide-base-200 rounded-xl border border-base-200 bg-base-100">
+            <li
+              *ngFor="let file of selectedFiles; let i = index"
+              class="flex items-center justify-between gap-3 px-3 py-2.5 text-xs sm:text-sm"
+            >
+              <div class="flex min-w-0 items-center gap-3">
+                <div
+                  class="flex h-8 w-8 items-center justify-center rounded-lg bg-base-200 text-base-content/70"
+                >
+                  <i-lucide [img]="UsersIcon" class="h-4 w-4"></i-lucide>
+                </div>
+                <div class="min-w-0">
+                  <p class="truncate font-medium">
+                    {{ file.name }}
+                  </p>
+                  <p class="text-xs text-base-content/60">
+                    {{ (file.size / 1024) | number : '1.0-0' }} KB
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                class="btn btn-ghost btn-xs btn-square text-base-content/60 hover:text-error"
+                (click)="removeFile(i)"
+              >
+                <i-lucide [img]="TrashIcon" class="h-4 w-4"></i-lucide>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Primary action button -->
+      <div class="rounded-2xl bg-base-100 p-4 shadow-sm">
+        <button
+          type="button"
+          class="btn btn-primary w-full gap-2 rounded-xl"
+          [disabled]="!selectedJobTargetId || !selectedFiles.length || isAnalyzing"
+          (click)="startAnalysis()"
+        >
+          <span class="flex items-center gap-2">
+            <i-lucide [img]="BarChartIcon" class="h-4 w-4"></i-lucide>
+            <span>Run AI Ranking</span>
+          </span>
+          <span *ngIf="isAnalyzing" class="loading loading-spinner loading-sm"></span>
+        </button>
+        <p class="mt-2 text-xs text-base-content/60">
+          Ranking is simulated for now so you can validate the flow and layout
+          before connecting your API.
+        </p>
+      </div>
+    </div>
+
+    <!-- Right column: results leaderboard -->
+    <div class="space-y-4">
+      <div class="flex items-center justify-between gap-2">
+        <h2 class="text-sm font-medium text-base-content/70">
+          Leaderboard
+        </h2>
+        <div class="flex items-center gap-2 text-xs text-base-content/60">
+          <i-lucide [img]="BarChartIcon" class="h-4 w-4 text-success"></i-lucide>
+          <span>Top candidates ranked by match score</span>
+        </div>
+      </div>
+
+      @if (showResults) {
+        <div class="rounded-2xl bg-base-100 p-4 shadow-lg sm:p-5">
+          <div class="overflow-x-auto">
+            <table class="table table-zebra w-full">
+              <thead class="text-xs uppercase tracking-wide text-base-content/60">
+                <tr>
+                  <th class="w-[8%]">Rank</th>
+                  <th class="w-[25%]">Candidate</th>
+                  <th class="w-[15%]">Match</th>
+                  <th>Missing skills</th>
+                  <th class="w-[15%]" aria-label="Actions"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let candidate of rankedCandidates">
+                  <td class="align-middle">
+                    <span class="font-semibold text-base-content/80">
+                      #{{ candidate.rank }}
+                    </span>
+                  </td>
+                  <td class="align-middle">
+                    <div class="flex flex-col">
+                      <span class="text-sm font-medium">
+                        {{ candidate.name }}
+                      </span>
+                      <span class="text-xs text-base-content/60">
+                        From uploaded batch
+                      </span>
+                    </div>
+                  </td>
+                  <td class="align-middle">
+                    <span
+                      class="badge badge-sm font-medium"
+                      [ngClass]="getMatchBadgeClass(candidate.matchScore)"
+                    >
+                      {{ candidate.matchScore }}%
+                    </span>
+                  </td>
+                  <td class="align-middle">
+                    <p class="text-sm text-base-content/70">
+                      {{ candidate.missingSkills }}
+                    </p>
+                  </td>
+                  <td class="align-middle text-right">
+                    <button
+                      type="button"
+                      class="btn btn-ghost btn-xs sm:btn-sm rounded-full"
+                    >
+                      View details
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      } @else {
+        <div
+          class="flex min-h-[260px] flex-col items-center justify-center rounded-2xl bg-base-100 p-6 text-center shadow-sm"
+        >
+          <div
+            class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-base-200 text-base-content/70"
+          >
+            <i-lucide [img]="BarChartIcon" class="h-5 w-5"></i-lucide>
+          </div>
+          <h3 class="text-sm font-semibold">No ranking run yet</h3>
+          <p class="mt-1 max-w-sm text-xs text-base-content/60">
+            Select a job target, upload a batch of resumes, and run AI ranking
+            to see a live leaderboard of your strongest candidates.
+          </p>
+        </div>
+      }
+    </div>
+  </section>
+</div>
+
