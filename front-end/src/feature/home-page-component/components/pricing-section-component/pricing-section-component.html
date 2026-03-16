@@ -1,0 +1,185 @@
+<section
+  id="pricing"
+  class="bg-base-100 px-4 py-20 sm:px-6 sm:py-24 lg:px-8 lg:py-28"
+  aria-labelledby="pricing-heading"
+>
+  <div class="mx-auto max-w-4xl">
+    <!-- Section header -->
+    <header class="text-center">
+      <span
+        class="badge badge-ghost badge-sm mb-4 border border-base-200 px-4 py-2 text-xs font-medium uppercase tracking-wider text-base-content/70"
+      >
+        Pricing
+      </span>
+      <h2
+        id="pricing-heading"
+        class="text-3xl font-bold tracking-tight text-base-content sm:text-4xl md:text-5xl"
+      >
+        Simple, transparent pricing
+      </h2>
+      <p class="mx-auto mt-4 max-w-2xl text-base text-base-content/70 sm:text-lg">
+        Whether you're landing a job or building a team, we have a plan for you.
+      </p>
+    </header>
+
+    <!-- Billing toggle -->
+    <div class="mt-10 flex justify-center">
+      <div class="join border border-base-200 bg-base-200/30 p-1 rounded-2xl">
+        <button
+          type="button"
+          class="join-item btn btn-sm sm:btn-md rounded-xl px-6"
+          [class.btn-primary]="billingPeriod === 'monthly'"
+          [class.bg-base-100]="billingPeriod === 'monthly'"
+          [class.text-base-content]="billingPeriod === 'monthly'"
+          [class.btn-ghost]="billingPeriod !== 'monthly'"
+          [class.text-base-content/70]="billingPeriod !== 'monthly'"
+          (click)="billingPeriod = 'monthly'"
+        >
+          Monthly
+        </button>
+        <button
+          type="button"
+          class="join-item btn btn-sm sm:btn-md rounded-xl px-6"
+          [class.btn-primary]="billingPeriod === 'yearly'"
+          [class.bg-base-100]="billingPeriod === 'yearly'"
+          [class.text-base-content]="billingPeriod === 'yearly'"
+          [class.btn-ghost]="billingPeriod !== 'yearly'"
+          [class.text-base-content/70]="billingPeriod !== 'yearly'"
+          (click)="billingPeriod = 'yearly'"
+        >
+          Yearly
+        </button>
+      </div>
+    </div>
+
+    <!-- Pricing cards grid -->
+    <div
+      class="mt-14 grid grid-cols-1 gap-8 md:grid-cols-2 md:mt-16 lg:mt-20"
+    >
+      <!-- Card 1: Job Seeker (Free) -->
+      <article
+        class="relative flex flex-col rounded-3xl border border-base-200 bg-base-100 p-8 shadow-sm transition-all duration-300 hover:shadow-md"
+      >
+        <h3 class="text-xl font-semibold tracking-tight text-base-content">
+          Basic
+        </h3>
+        <p class="mt-1 text-sm text-base-content/70">
+          Perfect for optimizing your next application.
+        </p>
+        <div class="mt-6 flex items-baseline gap-1">
+          <span class="text-4xl font-bold tracking-tight text-base-content"
+            >$0</span
+          >
+        </div>
+        <ul class="mt-6 flex-1 space-y-4" role="list">
+          <li class="flex items-start gap-3 text-sm text-base-content/80">
+            <i-lucide
+              [img]="CheckIcon"
+              class="mt-0.5 size-5 shrink-0 text-success"
+              aria-hidden="true"
+            ></i-lucide>
+            <span>1 Resume Analysis per day</span>
+          </li>
+          <li class="flex items-start gap-3 text-sm text-base-content/80">
+            <i-lucide
+              [img]="CheckIcon"
+              class="mt-0.5 size-5 shrink-0 text-success"
+              aria-hidden="true"
+            ></i-lucide>
+            <span>AI Match Score</span>
+          </li>
+          <li class="flex items-start gap-3 text-sm text-base-content/80">
+            <i-lucide
+              [img]="CheckIcon"
+              class="mt-0.5 size-5 shrink-0 text-success"
+              aria-hidden="true"
+            ></i-lucide>
+            <span>Identify Missing Skills</span>
+          </li>
+        </ul>
+        <a
+          routerLink="/register"
+          class="btn btn-outline btn-block mt-8 rounded-xl border-base-300"
+          >Get Started</a
+        >
+      </article>
+
+      <!-- Card 2: Pro Recruiter (Highlighted) -->
+      <article
+        class="relative flex flex-col rounded-3xl border-2 border-primary bg-base-100 p-8 shadow-lg shadow-primary/5 ring-1 ring-primary/10 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10"
+      >
+        <span
+          class="absolute right-6 top-6 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-content"
+        >
+          Most Popular
+        </span>
+        <h3 class="text-xl font-semibold tracking-tight text-base-content">
+          Pro Recruiter
+        </h3>
+        <p class="mt-1 text-sm text-base-content/70">
+          For HR teams hiring top talent faster.
+        </p>
+        <div class="mt-6 flex items-baseline gap-1">
+          <span class="text-4xl font-bold tracking-tight text-base-content"
+            >$49</span
+          ><span class="text-base font-medium text-base-content/60">/mo</span>
+        </div>
+        <ul class="mt-6 flex-1 space-y-4" role="list">
+          <li class="flex items-start gap-3 text-sm text-base-content/80">
+            <i-lucide
+              [img]="CheckIcon"
+              class="mt-0.5 size-5 shrink-0 text-success"
+              aria-hidden="true"
+            ></i-lucide>
+            <span>1 Resume Analysis per day</span>
+          </li>
+          <li class="flex items-start gap-3 text-sm text-base-content/80">
+            <i-lucide
+              [img]="CheckIcon"
+              class="mt-0.5 size-5 shrink-0 text-success"
+              aria-hidden="true"
+            ></i-lucide>
+            <span>AI Match Score</span>
+          </li>
+          <li class="flex items-start gap-3 text-sm text-base-content/80">
+            <i-lucide
+              [img]="CheckIcon"
+              class="mt-0.5 size-5 shrink-0 text-success"
+              aria-hidden="true"
+            ></i-lucide>
+            <span>Identify Missing Skills</span>
+          </li>
+          <li class="flex items-start gap-3 text-sm text-base-content/80">
+            <i-lucide
+              [img]="CheckIcon"
+              class="mt-0.5 size-5 shrink-0 text-success"
+              aria-hidden="true"
+            ></i-lucide>
+            <span>Unlimited Bulk Resume Ranking</span>
+          </li>
+          <li class="flex items-start gap-3 text-sm text-base-content/80">
+            <i-lucide
+              [img]="CheckIcon"
+              class="mt-0.5 size-5 shrink-0 text-success"
+              aria-hidden="true"
+            ></i-lucide>
+            <span>Match multiple job descriptions</span>
+          </li>
+          <li class="flex items-start gap-3 text-sm text-base-content/80">
+            <i-lucide
+              [img]="CheckIcon"
+              class="mt-0.5 size-5 shrink-0 text-success"
+              aria-hidden="true"
+            ></i-lucide>
+            <span>Export AI detailed reports</span>
+          </li>
+        </ul>
+        <a
+          routerLink="/register"
+          class="btn btn-primary btn-block mt-8 rounded-xl"
+          >Start Free Trial</a
+        >
+      </article>
+    </div>
+  </div>
+</section>
