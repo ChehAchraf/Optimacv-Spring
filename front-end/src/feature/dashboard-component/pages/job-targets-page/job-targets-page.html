@@ -16,7 +16,7 @@
             Job Targets
           </h1>
           <span class="badge badge-neutral badge-sm rounded-full">
-            {{ totalTargets }} total
+
           </span>
         </div>
         <p class="max-w-xl text-sm text-base-content/70">
@@ -189,7 +189,7 @@
           applications.
         </p>
       </div>
-      <form method="dialog">
+      <form  method="dialog">
         <button
           type="submit"
           class="btn btn-ghost btn-sm btn-circle"
@@ -200,7 +200,7 @@
       </form>
     </div>
 
-    <form class="space-y-5">
+    <form [formGroup]="createJobFrom" (ngSubmit)="onSubmit()" class="space-y-5">
       <!-- Job title -->
       <div class="form-control">
         <label class="label">
@@ -209,11 +209,40 @@
         <label class="input input-bordered flex items-center gap-2 rounded-2xl focus-within:border-primary">
           <i-lucide [img]="BriefcaseIcon" class="size-4 text-base-content/50"></i-lucide>
           <input
+            formControlName="title"
             type="text"
             class="grow bg-transparent text-sm outline-none"
             placeholder="e.g. Senior Angular Developer"
           />
         </label>
+        @if (title?.touched && title?.invalid){
+          <p class="text-red-500 text-sm my-2 pl-2">title is required !</p>
+        } @else if (title?.hasError('minlength')){
+          <p class="text-red-500 text-sm my-2 pl-2">at least enter a 3 charachters !</p>
+        }
+      </div>
+
+      <!-- company name -->
+
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text font-medium text-base-content">company name</span>
+        </label>
+        <label class="input input-bordered flex items-center gap-2 rounded-2xl focus-within:border-primary">
+          <i-lucide [img]="BriefcaseIcon" class="size-4 text-base-content/50"></i-lucide>
+          <input
+            formControlName="company"
+            type="text"
+            class="grow bg-transparent text-sm outline-none"
+            placeholder="e.g. Meta"
+          />
+        </label>
+        @if (company?.touched && company?.invalid){
+          <p class="text-red-500 text-sm my-2 pl-2">company name is required</p>
+        } @else if (company?.hasError('minlength')){
+          <p class="text-red-500 text-sm my-2 pl-2">at least enter a 3 charachters !</p>
+        }
+
       </div>
 
       <!-- Job description -->
@@ -223,6 +252,7 @@
         </label>
         <div class="relative">
           <textarea
+            formControlName="description"
             class="textarea textarea-bordered h-40 w-full resize-none rounded-2xl bg-base-100 text-sm leading-relaxed focus:border-primary focus:outline-none"
             placeholder="Paste the full job requirements here..."
           ></textarea>
@@ -233,6 +263,11 @@
             <span>Tip: include must-have skills and responsibilities</span>
           </div>
         </div>
+        @if (description?.touched && description?.invalid){
+          <p class="text-red-500 text-sm my-2 pl-2">Job description is required</p>
+        } @else if (description?.hasError('minlength')){
+          <p class="text-red-500 text-sm my-2 pl-2">zid ktab</p>
+        }
       </div>
 
       <!-- Modal actions -->
