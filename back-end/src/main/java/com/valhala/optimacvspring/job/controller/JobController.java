@@ -1,16 +1,19 @@
 package com.valhala.optimacvspring.job.controller;
 
 import com.valhala.optimacvspring.iam.api.IamApi;
+import com.valhala.optimacvspring.iam.service.CustomUserDetailsService;
 import com.valhala.optimacvspring.job.dto.JobRequestDTO;
 import com.valhala.optimacvspring.job.dto.JobResponseDTO;
 import com.valhala.optimacvspring.job.service.JobTargetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,6 +42,17 @@ public class JobController {
         UUID userId = iamApi.findUserIdByEmail(userDetails.getUsername());
         List<JobResponseDTO> jobs = jobTargetService.getAllJobsForUser(userId);
         return ResponseEntity.ok(jobs);
+    }
+
+    @GetMapping("/my-jobs")
+    public ResponseEntity<List<JobResponseDTO>> getMyJobs(Principal principal ){
+
+        String userEmail = principal.getName();
+
+
+        List<JobResponseDTO> myJobs = jobTargetService.getMyJobs(userEmail);
+
+        return ResponseEntity.ok(myJobs);
     }
 
     @PutMapping("/{jobId}")

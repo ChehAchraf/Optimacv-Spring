@@ -1,6 +1,7 @@
 package com.valhala.optimacvspring.job.service;
 
 import com.valhala.optimacvspring.common.exception.ResourceNotFoundException;
+import com.valhala.optimacvspring.iam.api.IamApi;
 import com.valhala.optimacvspring.job.api.JobApi;
 import com.valhala.optimacvspring.job.dto.JobRequestDTO;
 import com.valhala.optimacvspring.job.dto.JobResponseDTO;
@@ -23,6 +24,7 @@ public class JobTargetService implements JobApi {
 
     private final JobTargetRepository jobTargetRepository;
     private final JobMapper jobMapper;
+    private final IamApi iamApi;
 
     @Transactional
     public JobResponseDTO createJob(JobRequestDTO request, UUID userId) {
@@ -36,6 +38,16 @@ public class JobTargetService implements JobApi {
         JobTarget saved = jobTargetRepository.save(jobTarget);
         log.info("Job target created: {} for user: {}", saved.getId(), userId);
         return jobMapper.toResponseDTO(saved);
+    }
+
+    @Transactional(readOnly = true)
+    public List<JobResponseDTO> getMyJobs(String email){
+
+        UUID userId = iamApi.findUserIdByEmail(email);
+        log.info("user id {}" , userId);
+        return jobTargetRepository.findAllByUserId(userId).stream()
+                .map(jobMapper::toResponseDTO)
+                .toList();
     }
 
     @Transactional(readOnly = true)
