@@ -6,12 +6,13 @@ import {provideHttpClient, withFetch, withInterceptors} from '@angular/common/ht
 import { provideLottieOptions } from 'ngx-lottie';
 import player from 'lottie-web';
 import {loadingInterceptorInterceptor} from '../core/interceptor/loading-interceptor-interceptor';
+import {authInterceptor} from '../core/interceptor/auth-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideHttpClient(withFetch(), withInterceptors([loadingInterceptorInterceptor])),
+    provideHttpClient(withFetch(), withInterceptors([loadingInterceptorInterceptor,authInterceptor])),
     provideLottieOptions({
       player: () => player,
     }),
