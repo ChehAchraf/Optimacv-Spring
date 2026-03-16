@@ -1,0 +1,77 @@
+<!-- Mobile overlay: close sidebar when tapping outside -->
+<div
+  class="fixed inset-0 z-40 bg-base-content/20 transition-opacity lg:hidden"
+  [class.invisible]="!isOpen()"
+  [class.pointer-events-none]="!isOpen()"
+  [class.opacity-0]="!isOpen()"
+  [class.opacity-100]="isOpen()"
+  (click)="onClose()"
+  aria-hidden="true"
+></div>
+
+<aside
+  class="fixed left-0 top-0 z-50 flex h-full w-64 flex-col border-r border-base-200 bg-base-100 transition-transform duration-200 ease-out -translate-x-full lg:translate-x-0"
+  [class.translate-x-0]="isOpen()"
+  role="navigation"
+  aria-label="Dashboard navigation"
+>
+  <!-- Logo -->
+  <div class="flex h-16 shrink-0 items-center gap-2 border-b border-base-200 px-5">
+    <span
+      class="flex size-9 items-center justify-center rounded-lg bg-primary/10 text-primary"
+      aria-hidden="true"
+    >
+      <i-lucide [img]="SparklesIcon" class="size-5"></i-lucide>
+    </span>
+    <span class="text-lg font-semibold tracking-tight text-base-content">OptimaCV</span>
+  </div>
+
+  <!-- Close button (mobile only) -->
+  <button
+    type="button"
+    class="btn btn-ghost btn-sm btn-square absolute right-2 top-4 lg:hidden"
+    aria-label="Close menu"
+    (click)="onClose()"
+  >
+    <i-lucide [img]="XIcon" class="size-5"></i-lucide>
+  </button>
+
+  <!-- Nav links -->
+  <nav class="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-4">
+    <a
+      routerLink="/dashboard"
+      routerLinkActive="bg-base-200 text-base-content font-medium"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-base-content/80 transition-colors hover:bg-base-200/80 hover:text-base-content"
+    >
+      <i-lucide [img]="LayoutDashboardIcon" class="size-5 shrink-0"></i-lucide>
+      <span>Home</span>
+    </a>
+    @if (authStore.isCompany()){
+      <a
+        routerLink="/dashboard/bulk-rank"
+        routerLinkActive="bg-base-200 text-base-content font-medium"
+        class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-base-content/80 transition-colors hover:bg-base-200/80 hover:text-base-content"
+      >
+        <i-lucide [img]="UsersIcon" class="size-5 shrink-0"></i-lucide>
+        <span>Bulk Rank</span>
+      </a>
+    }
+    <a
+      routerLink="/dashboard/history"
+      routerLinkActive="bg-base-200 text-base-content font-medium"
+      class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-base-content/80 transition-colors hover:bg-base-200/80 hover:text-base-content"
+    >
+      <i-lucide [img]="HistoryIcon" class="size-5 shrink-0"></i-lucide>
+      <span>History</span>
+    </a>
+    <a
+      routerLink="/dashboard/settings"
+      routerLinkActive="bg-base-200 text-base-content font-medium"
+      class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-base-content/80 transition-colors hover:bg-base-200/80 hover:text-base-content"
+    >
+      <i-lucide [img]="SettingsIcon" class="size-5 shrink-0"></i-lucide>
+      <span>Settings</span>
+    </a>
+  </nav>
+</aside>
