@@ -97,7 +97,7 @@
 
 
       <!-- Registration Form -->
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-4">
 
         <!-- Email -->
         <div class="form-control">
@@ -108,9 +108,9 @@
             class="input input-bordered w-full rounded-lg focus:input-primary" />
         </div>
 
-        @if(loginForm.get("email")?.touched && loginForm.get("email")?.hasError("required") ){
+        @if(registerForm.get("email")?.touched && registerForm.get("email")?.hasError("required") ){
         <p class="text-red-500 text-xs">please the email is required!</p>
-        }@else if (loginForm.get("email")?.touched && loginForm.get("email")?.hasError("email")) {
+        }@else if (registerForm.get("email")?.touched && registerForm.get("email")?.hasError("email")) {
         <p class="text-red-500 text-xs">please enter a valid email address!</p>
         }
 
@@ -122,9 +122,9 @@
           </label>
           <input formControlName="password" type="password" placeholder="Enter your password"
             class="input input-bordered w-full rounded-lg focus:input-primary" />
-          @if(loginForm.get('password')?.touched && loginForm.get('password')?.hasError('required') ){
+          @if(registerForm.get('password')?.touched && registerForm.get('password')?.hasError('required') ){
           <p class="text-red-500 text-xs my-4">password is required!</p>
-          }@else if (loginForm.get('password')?.touched && loginForm.get('password')?.hasError("minlength")) {
+          }@else if (registerForm.get('password')?.touched && registerForm.get('password')?.hasError("minlength")) {
           <p class="text-red-500 text-xs my-4">password must contain at least 8 characters!</p>
           }
           <label class="label">
@@ -144,7 +144,7 @@
         </div>
 
         <!-- Submit Button -->
-        <button [disabled]="this.loginForm.invalid" type="submit"
+        <button [disabled]="this.registerForm.invalid" type="submit"
           class="btn btn-primary w-full rounded-lg text-sm font-semibold shadow-sm hover:shadow-md transition-shadow">
           Sign In
         </button>

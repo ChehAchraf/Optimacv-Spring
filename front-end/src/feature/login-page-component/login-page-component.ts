@@ -1,9 +1,11 @@
 import {Component, inject, signal} from '@angular/core';
 import { RouterLink } from "@angular/router";
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import {AuthService} from '../../core/service/auth-service';
+import {AuthService} from '../../core/service/auth/auth-service';
 import { ILoginRequest } from '../../core/model/user.model';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ToasterService } from '../../core/service/toast/toaster-service';
+import {AuthStore} from '../../core/store/auth.store';
 
 @Component({
   selector: 'app-login-page-component',
@@ -12,8 +14,10 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrl: './login-page-component.css',
 })
 export class LoginPageComponent {
-  private readonly authService = inject(AuthService)
+  private readonly authStore = inject(AuthStore)
   private readonly fb = inject(FormBuilder)
+  private readonly toast = inject(ToasterService)
+
 
   loginError = signal<string>('');
 
@@ -24,22 +28,11 @@ export class LoginPageComponent {
   })
 
   onSubmit() : void{
-    if (this.loginForm.valid) {
-      const formValue = this.loginForm.value;
-      
-      const request: ILoginRequest = {
-        email: formValue.email ?? '',
-        password: formValue.password ?? ''
-      };
-
-      this.authService.login(request).subscribe({
-        next : (data) =>{
-          console.log(data)
-        },
-        error : (error : HttpErrorResponse) =>{
-          this.loginError.set('password or email incorrect')
-        }
-      })
+      if(this.loginForm.valid){
+        this.authStore.login({
+          email : this.loginForm.value.email!,
+          password : this.loginForm.value.password!
+        })
     }
   }
 
