@@ -1,0 +1,111 @@
+<section
+  class="bg-base-200/50 px-4 py-20 sm:px-6 sm:py-24 lg:px-8 lg:py-28"
+  aria-labelledby="testimonials-heading"
+>
+  <div class="mx-auto max-w-6xl">
+    <header class="text-center">
+      <span
+        class="badge badge-ghost badge-sm mb-4 border border-base-300/80 px-4 py-2 text-xs font-medium uppercase tracking-wider text-base-content/70"
+      >
+        Wall of Love
+      </span>
+      <h2
+        id="testimonials-heading"
+        class="text-3xl font-bold tracking-tight text-base-content sm:text-4xl md:text-5xl"
+      >
+        Loved by job seekers and HR teams
+      </h2>
+    </header>
+
+    <div
+      class="mt-14 grid grid-cols-1 gap-6 md:grid-cols-3 md:mt-16 lg:mt-20"
+    >
+      <!-- Card 1: Job Seeker -->
+      <article
+        class="flex flex-col rounded-3xl border border-base-200/50 bg-base-100 p-8 shadow-sm transition-all duration-300 hover:shadow-md"
+      >
+        <div class="flex gap-1 text-warning" aria-label="5 out of 5 stars">
+          @for (i of [1,2,3,4,5]; track i) {
+            <i-lucide [img]="StarIcon" class="size-5 fill-current" aria-hidden="true"></i-lucide>
+          }
+        </div>
+        <blockquote class="mt-4 flex-1 text-base text-base-content/90">
+          OptimaCV's AI pointed out exactly why I wasn't getting interviews.
+          Fixed my skills gap and got hired in 2 weeks.
+        </blockquote>
+        <footer class="mt-6 flex items-center gap-3">
+          <div
+            class="avatar placeholder"
+            aria-hidden="true"
+          >
+            <div class="size-12 rounded-full bg-primary/10 text-primary">
+              <span class="text-lg font-semibold">JD</span>
+            </div>
+          </div>
+          <div>
+            <cite class="not-italic font-semibold text-base-content"
+              >Jane Doe</cite
+            >
+            <p class="text-sm text-base-content/60">Job Seeker</p>
+          </div>
+        </footer>
+      </article>
+
+      <!-- Card 2: Recruiter -->
+      <article
+        class="flex flex-col rounded-3xl border border-base-200/50 bg-base-100 p-8 shadow-sm transition-all duration-300 hover:shadow-md"
+      >
+        <div class="flex gap-1 text-warning" aria-label="5 out of 5 stars">
+          @for (i of [1,2,3,4,5]; track i) {
+            <i-lucide [img]="StarIcon" class="size-5 fill-current" aria-hidden="true"></i-lucide>
+          }
+        </div>
+        <blockquote class="mt-4 flex-1 text-base text-base-content/90">
+          The Bulk Rank feature is magic. I uploaded 50 resumes, and the AI
+          ranked the top 5 instantly. Saved me days of work.
+        </blockquote>
+        <footer class="mt-6 flex items-center gap-3">
+          <div class="avatar placeholder" aria-hidden="true">
+            <div class="size-12 rounded-full bg-primary/10 text-primary">
+              <span class="text-lg font-semibold">MK</span>
+            </div>
+          </div>
+          <div>
+            <cite class="not-italic font-semibold text-base-content"
+              >Mike Kim</cite
+            >
+            <p class="text-sm text-base-content/60">HR Director</p>
+          </div>
+        </footer>
+      </article>
+
+      <!-- Card 3: Career Coach -->
+      <article
+        class="flex flex-col rounded-3xl border border-base-200/50 bg-base-100 p-8 shadow-sm transition-all duration-300 hover:shadow-md"
+      >
+        <div class="flex gap-1 text-warning" aria-label="5 out of 5 stars">
+          @for (i of [1,2,3,4,5]; track i) {
+            <i-lucide [img]="StarIcon" class="size-5 fill-current" aria-hidden="true"></i-lucide>
+          }
+        </div>
+        <blockquote class="mt-4 flex-1 text-base text-base-content/90">
+          I recommend this to all my clients. The ATS-friendly optimization is
+          the best I've seen in the market.
+        </blockquote>
+        <footer class="mt-6 flex items-center gap-3">
+          <div class="avatar placeholder" aria-hidden="true">
+            <div class="size-12 rounded-full bg-primary/10 text-primary">
+              <span class="text-lg font-semibold">SL</span>
+            </div>
+          </div>
+          <div>
+            <cite class="not-italic font-semibold text-base-content"
+              >Sarah Lee</cite
+            >
+            <p class="text-sm text-base-content/60">Career Coach</p>
+          </div>
+        </footer>
+      </article>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,11 @@
+@if (toast.toastState().show) {
+  <div class="toast toast-buttom toast-end z-50 transition-all duration-300">
+    <div class="alert shadow-lg" [ngClass]="{
+          'alert-success text-white': toast.toastState().type === 'success',
+          'alert-error text-white': toast.toastState().type === 'error',
+          'alert-warning': toast.toastState().type === 'warning'
+        }">
+      <span>{{ toast.toastState().message }}</span>
+    </div>
+  </div>
+}
