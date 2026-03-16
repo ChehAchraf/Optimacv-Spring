@@ -1,1 +1,219 @@
-hello compaing
+<div class="min-h-screen bg-base-200 px-4 py-6 sm:px-6 lg:px-8">
+  <!-- Header -->
+  <header
+    class="mb-8 flex flex-col gap-3 rounded-2xl bg-base-100 p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6"
+  >
+    <div>
+      <h1 class="text-xl font-semibold tracking-tight sm:text-2xl">
+        Welcome back, Team!
+      </h1>
+      <p class="mt-1 text-sm text-base-content/60">
+        Here is what is happening with your recruitment today.
+      </p>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <div
+        class="hidden items-center gap-2 rounded-full bg-base-200 px-3 py-1 text-xs text-base-content/70 sm:flex"
+      >
+        <i-lucide [img]="TrendingUpIcon" class="h-4 w-4 text-success"></i-lucide>
+        <span>Pipeline is trending up</span>
+      </div>
+      <button
+        type="button"
+        class="btn btn-primary gap-2 rounded-full px-4 sm:px-6"
+        routerLink="/dashboard/job-targets"
+      >
+        <i-lucide [img]="PlusIcon" class="h-4 w-4"></i-lucide>
+        <span class="hidden sm:inline">New Job Target</span>
+        <span class="sm:hidden">New</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Stats row -->
+  <section class="mb-8 grid gap-4 md:grid-cols-3">
+    <div class="stats shadow w-full rounded-2xl bg-base-100">
+      <div class="stat">
+        <div class="stat-figure text-primary">
+          <i-lucide [img]="BriefcaseIcon" class="h-6 w-6"></i-lucide>
+        </div>
+        <div class="stat-title text-xs text-base-content/60">
+          Active Job Targets
+        </div>
+        <div class="stat-value text-2xl font-semibold">
+          {{ activeJobTargets }}
+        </div>
+        <div class="stat-desc text-xs text-base-content/60">
+          Roles currently open for candidates
+        </div>
+      </div>
+    </div>
+
+    <div class="stats shadow w-full rounded-2xl bg-base-100">
+      <div class="stat">
+        <div class="stat-figure text-secondary">
+          <i-lucide [img]="UsersIcon" class="h-6 w-6"></i-lucide>
+        </div>
+        <div class="stat-title text-xs text-base-content/60">
+          Resumes Analyzed
+        </div>
+        <div class="stat-value text-2xl font-semibold">
+          {{ resumesAnalyzed }}
+        </div>
+        <div class="stat-desc text-xs text-base-content/60">
+          Across all bulk ranking runs
+        </div>
+      </div>
+    </div>
+
+    <div class="stats shadow w-full rounded-2xl bg-base-100">
+      <div class="stat">
+        <div class="stat-figure text-accent">
+          <i-lucide [img]="BarChartIcon" class="h-6 w-6"></i-lucide>
+        </div>
+        <div class="stat-title text-xs text-base-content/60">
+          Average Match Rate
+        </div>
+        <div class="stat-value text-2xl font-semibold">
+          {{ averageMatchRate }}%
+        </div>
+        <div class="stat-desc text-xs text-base-content/60">
+          For top candidates matched to roles
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick actions + Recent top candidates -->
+  <section class="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1.8fr)]">
+    <!-- Quick actions -->
+    <div class="space-y-4">
+      <h2 class="text-sm font-medium text-base-content/70">
+        Quick actions
+      </h2>
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        <!-- Create Job Target -->
+        <article
+          class="card cursor-pointer border border-base-200 bg-base-100 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+          routerLink="/dashboard/job-targets"
+        >
+          <div class="card-body gap-3">
+            <div class="flex items-center gap-2">
+              <span
+                class="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 text-primary"
+              >
+                <i-lucide [img]="BriefcaseIcon" class="h-4 w-4"></i-lucide>
+              </span>
+              <h3 class="text-sm font-semibold">Create Job Target</h3>
+            </div>
+            <p class="text-xs text-base-content/60">
+              Define a new role, paste requirements, and prepare it for bulk
+              ranking.
+            </p>
+            <div class="mt-1">
+              <button
+                type="button"
+                class="btn btn-primary btn-sm gap-2 rounded-full"
+              >
+                <i-lucide [img]="PlusIcon" class="h-4 w-4"></i-lucide>
+                <span>Create target</span>
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Run Bulk Rank -->
+        <article
+          class="card cursor-pointer border border-base-200 bg-base-100 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+          routerLink="/dashboard/bulk-rank"
+        >
+          <div class="card-body gap-3">
+            <div class="flex items-center gap-2">
+              <span
+                class="flex h-8 w-8 items-center justify-center rounded-xl bg-secondary/10 text-secondary"
+              >
+                <i-lucide [img]="UsersIcon" class="h-4 w-4"></i-lucide>
+              </span>
+              <h3 class="text-sm font-semibold">Run Bulk Rank</h3>
+            </div>
+            <p class="text-xs text-base-content/60">
+              Upload resumes and instantly see which candidates best match your
+              job targets.
+            </p>
+            <div class="mt-1">
+              <button
+                type="button"
+                class="btn btn-secondary btn-sm gap-2 rounded-full"
+              >
+                <i-lucide [img]="FileTextIcon" class="h-4 w-4"></i-lucide>
+                <span>Start bulk rank</span>
+              </button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <!-- Recent top candidates -->
+    <div class="space-y-4">
+      <div class="flex items-center justify-between gap-2">
+        <h2 class="text-sm font-medium text-base-content/70">
+          Recent top matches
+        </h2>
+        <div class="flex items-center gap-2 text-xs text-base-content/60">
+          <i-lucide [img]="AwardIcon" class="h-4 w-4 text-warning"></i-lucide>
+          <span>Highest ranked candidates from recent runs</span>
+        </div>
+      </div>
+
+      <div class="rounded-2xl bg-base-100 p-4 shadow-sm sm:p-5">
+        <div class="overflow-x-auto">
+          <table class="table table-zebra w-full">
+            <thead class="text-xs uppercase tracking-wide text-base-content/60">
+              <tr>
+                <th>Candidate</th>
+                <th>Applied for</th>
+                <th>Match score</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let candidate of topCandidates">
+                <td class="align-middle">
+                  <div class="flex flex-col">
+                    <span class="text-sm font-medium">
+                      {{ candidate.name }}
+                    </span>
+                    <span class="text-xs text-base-content/60">
+                      Added via bulk ranking
+                    </span>
+                  </div>
+                </td>
+                <td class="align-middle">
+                  <span class="text-sm">
+                    {{ candidate.appliedFor }}
+                  </span>
+                </td>
+                <td class="align-middle">
+                  <span
+                    class="badge badge-sm font-medium {{ candidate.matchBadgeClass }}"
+                  >
+                    {{ candidate.matchScore }}%
+                  </span>
+                </td>
+                <td class="align-middle">
+                  <span class="text-sm text-base-content/70">
+                    {{ candidate.date }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
