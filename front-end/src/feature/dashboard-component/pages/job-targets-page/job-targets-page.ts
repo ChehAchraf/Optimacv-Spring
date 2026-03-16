@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import {Component, effect, inject, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   LucideAngularModule,
@@ -24,10 +24,17 @@ import {email} from '@angular/forms/signals';
   templateUrl: './job-targets-page.html',
   styleUrl: './job-targets-page.css',
 })
-export class JobTargetsPage {
+export class JobTargetsPage implements OnInit{
+
   protected readonly authStore = inject(AuthStore);
-  protected readonly jobStore = inject(JobStore);
-  private fb = inject(FormBuilder);
+  protected readonly store = inject(JobStore);
+  private readonly fb = inject(FormBuilder);
+
+  constructor() {
+    effect(() => {
+      console.log(this.store.Jobs())
+    });
+  }
 
   createJobFrom = this.fb.group({
     title : ['',[Validators.required,Validators.minLength(3)]],
@@ -45,6 +52,7 @@ export class JobTargetsPage {
   readonly InboxIcon = Inbox;
   protected readonly on = on;
 
+
   readonly totalTargets = 0;
   readonly jobTargets: Array<{
     id: number;
@@ -57,13 +65,18 @@ export class JobTargetsPage {
   onSubmit(){
     console.log(this.createJobFrom.value)
     if (this.createJobFrom.valid){
-      this.jobStore.createJob({
+      this.store.createJob({
         title : this.createJobFrom.value.title!,
         company : this.createJobFrom.value.company!,
         description : this.createJobFrom.value.description!
       })
     }
   }
+
+  ngOnInit(): void {
+    this.store.getMyJobs()
+  }
+
 
 
   // getters for the form

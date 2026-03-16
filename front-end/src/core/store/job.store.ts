@@ -3,7 +3,7 @@ import {IJobRequest, IJobResponse} from '../model/job.model';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
 import {inject} from '@angular/core';
 import {JobService} from '../service/job/job-service';
-import {exhaustMap, tap} from 'rxjs';
+import {exhaustMap, switchMap, tap} from 'rxjs';
 import {tapResponse} from '@ngrx/operators';
 import {HttpErrorResponse} from '@angular/common/http';
 import {toast} from 'ngx-sonner';
@@ -48,6 +48,32 @@ export const JobStore = signalStore(
                 }
               })
             );
+          })
+        )
+      }),
+
+      getMyJobs : rxMethod<void>((data$)=>{
+        return data$.pipe(
+          tap(()=>patchState(store, {isLoading:true,error:null})),
+
+          switchMap((data)=>{
+            return jobService.loadMyJobs().pipe(
+              tapResponse({
+                next : (response) => {
+                  patchState(store,{
+                    Jobs : response,
+                    isLoading:false,
+                  })
+                },
+                error : (error : HttpErrorResponse)=>{
+                  patchState(store,{
+                    isLoading : false,
+                    error : error.message
+                  })
+                  toast.error("there must be an error")
+                }
+              })
+            )
           })
         )
       })

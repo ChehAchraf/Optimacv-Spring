@@ -17,6 +17,8 @@ export class JobService {
     return this.http.post<IJobResponse>(`${this.apiUrl}/v1/jobs`,request)
   }
 
-
+  loadMyJobs() : Observable<IJobResponse[]>{
+    return this.http.get<IJobResponse[]>(`${this.apiUrl}/v1/jobs/my-jobs`)
+  }
 
 }
