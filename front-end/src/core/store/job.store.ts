@@ -1,7 +1,7 @@
-import {patchState, signalStore, withMethods, withState} from '@ngrx/signals';
+import {patchState, signalStore, withComputed, withMethods, withState} from '@ngrx/signals';
 import {IJobRequest, IJobResponse} from '../model/job.model';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
-import {inject} from '@angular/core';
+import {computed, inject} from '@angular/core';
 import {JobService} from '../service/job/job-service';
 import {exhaustMap, switchMap, tap} from 'rxjs';
 import {tapResponse} from '@ngrx/operators';
@@ -78,5 +78,9 @@ export const JobStore = signalStore(
         )
       })
     }
-  })
+  }),
+
+  withComputed((store)=>({
+    jobTotal : computed(()=>store.Jobs().length)
+  }))
 )

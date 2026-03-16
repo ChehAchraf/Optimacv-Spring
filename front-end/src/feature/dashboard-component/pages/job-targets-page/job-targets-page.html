@@ -16,7 +16,7 @@
             Job Targets
           </h1>
           <span class="badge badge-neutral badge-sm rounded-full">
-
+            {{store.jobTotal()}}
           </span>
         </div>
         <p class="max-w-xl text-sm text-base-content/70">
@@ -48,8 +48,11 @@
 
   <!-- Main content card -->
   <div class="rounded-3xl bg-base-100 p-4 shadow-sm sm:p-6 lg:p-8">
+    @if (store.isLoading()) {
+      <p>data is loading ...</p>
+    }
     <!-- Empty state -->
-    @if (jobTargets.length === 0) {
+    @if (store.Jobs().length === 0) {
       <div
         class="flex flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-base-300 bg-base-100 px-6 py-12 text-center sm:px-10"
       >
@@ -90,7 +93,7 @@
             </tr>
           </thead>
           <tbody>
-            @for (job of jobTargets; track job.id) {
+            @for (job of store.Jobs(); track job.id) {
               <tr class="align-top">
                 <!-- Target role -->
                 <td class="max-w-xs">
@@ -106,16 +109,9 @@
                         <p class="font-medium text-base-content">
                           {{ job.title }}
                         </p>
-                        <span
-                          class="badge badge-xs rounded-full"
-                          [ngClass]="{
-                            'badge-success badge-outline': job.status === 'Open',
-                            'badge-neutral': job.status === 'Draft',
-                            'badge-error badge-outline': job.status === 'Closed'
-                          }"
-                        >
-                          {{ job.status }}
-                        </span>
+                        <-- -->
+
+                        <!-- -->
                       </div>
                       <div class="flex items-center gap-1.5 text-xs text-base-content/60">
                         <i-lucide [img]="TargetIcon" class="size-3.5"></i-lucide>
