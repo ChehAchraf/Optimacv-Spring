@@ -7,7 +7,7 @@ import {
   History,
   Settings,
   X,
-  Sparkles,
+  Sparkles, BriefcaseIcon,
 } from 'lucide-angular';
 import {AuthStore} from '../../../../core/store/auth.store';
 
@@ -33,4 +33,6 @@ export class SideBarComponent {
   onClose(): void {
     this.close.emit();
   }
+
+  protected readonly BriefcaseIcon = BriefcaseIcon;
 }
