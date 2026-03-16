@@ -1,1 +1,15 @@
-<p>overview-page works!</p>
+@if (authStore.isCompany()) {
+
+  <app-comapny-overview-component/>
+
+} @else if (authStore.isUser()) {
+
+  <app-user-overview-component/>
+
+} @else {
+
+  <div class="flex justify-center items-center h-64">
+    <span class="loading loading-spinner text-primary loading-lg"></span>
+  </div>
+
+}
