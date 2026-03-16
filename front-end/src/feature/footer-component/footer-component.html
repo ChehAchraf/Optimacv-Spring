@@ -1,0 +1,100 @@
+<footer class="bg-base-200/50 border-t border-base-200" role="contentinfo">
+  <!-- 4-column layout -->
+  <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+    <div class="grid grid-cols-2 gap-8 md:grid-cols-4">
+      <!-- Logo & Description -->
+      <div class="col-span-2 md:col-span-1">
+        <a routerLink="/" class="text-xl font-bold tracking-tight text-base-content">
+          OptimaCV
+        </a>
+        <p class="mt-3 text-sm text-base-content/60 max-w-xs">
+          AI-powered resume analysis for job seekers and HR teams. Land interviews and hire faster.
+        </p>
+        <div class="mt-4 flex gap-3" aria-label="Social links">
+          <a
+            href="https://twitter.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-base-content/60 hover:text-base-content transition-colors"
+            aria-label="Twitter"
+          >
+            <i-lucide [img]="TwitterIcon" class="size-5"></i-lucide>
+          </a>
+          <a
+            href="https://github.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-base-content/60 hover:text-base-content transition-colors"
+            aria-label="GitHub"
+          >
+            <i-lucide [img]="GithubIcon" class="size-5"></i-lucide>
+          </a>
+          <a
+            href="https://linkedin.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-base-content/60 hover:text-base-content transition-colors"
+            aria-label="LinkedIn"
+          >
+            <i-lucide [img]="LinkedinIcon" class="size-5"></i-lucide>
+          </a>
+        </div>
+      </div>
+
+      <!-- Product -->
+      <div>
+        <h3 class="text-sm font-semibold uppercase tracking-wider text-base-content/80">
+          Product
+        </h3>
+        <ul class="mt-4 space-y-2">
+          <li>
+            <a routerLink="/" fragment="features" class="text-sm text-base-content/60 hover:text-base-content transition-colors">Features</a>
+          </li>
+          <li>
+            <a routerLink="/" fragment="pricing" class="text-sm text-base-content/60 hover:text-base-content transition-colors">Pricing</a>
+          </li>
+          <li>
+            <a routerLink="/register" class="text-sm text-base-content/60 hover:text-base-content transition-colors">Sign up</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div>
+        <h3 class="text-sm font-semibold uppercase tracking-wider text-base-content/80">
+          Company
+        </h3>
+        <ul class="mt-4 space-y-2">
+          <li>
+            <a href="#" class="text-sm text-base-content/60 hover:text-base-content transition-colors">About</a>
+          </li>
+          <li>
+            <a href="#" class="text-sm text-base-content/60 hover:text-base-content transition-colors">Blog</a>
+          </li>
+          <li>
+            <a href="#" class="text-sm text-base-content/60 hover:text-base-content transition-colors">Contact</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Legal -->
+      <div>
+        <h3 class="text-sm font-semibold uppercase tracking-wider text-base-content/80">
+          Legal
+        </h3>
+        <ul class="mt-4 space-y-2">
+          <li>
+            <a href="#" class="text-sm text-base-content/60 hover:text-base-content transition-colors">Privacy</a>
+          </li>
+          <li>
+            <a href="#" class="text-sm text-base-content/60 hover:text-base-content transition-colors">Terms</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="mt-12 border-t border-base-200 pt-8 text-center text-sm text-base-content/60">
+      &copy; {{ currentYear }} OptimaCV. All rights reserved.
+    </p>
+  </div>
+</footer>

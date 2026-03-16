@@ -1,0 +1,79 @@
+<header
+  class="sticky top-0 z-40 flex h-16 shrink-0 items-center justify-between gap-4 border-b border-base-200 bg-base-100 px-4 shadow-sm sm:px-6"
+  role="banner"
+>
+  <div class="flex items-center gap-4">
+    <!-- Mobile menu button -->
+    <button
+      type="button"
+      class="btn btn-ghost btn-square lg:hidden"
+      aria-label="Open menu"
+      (click)="onMenuClick()"
+    >
+      <i-lucide [img]="MenuIcon" class="size-5"></i-lucide>
+    </button>
+    <!-- Spacer so content aligns when sidebar is visible on desktop -->
+    <div class="hidden lg:block lg:w-64" aria-hidden="true"></div>
+  </div>
+
+  <!-- User dropdown -->
+  <div class="relative z-50">
+    <button
+      type="button"
+      class="btn btn-ghost btn-sm gap-2 rounded-full px-2 py-1.5"
+      aria-expanded="isDropdownOpen"
+      aria-haspopup="true"
+      aria-label="User menu"
+      (click)="toggleDropdown($event)"
+    >
+      <div
+        class="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary"
+        aria-hidden="true"
+      >
+        <i-lucide [img]="UserIcon" class="size-4"></i-lucide>
+      </div>
+      <span class="hidden max-w-[120px] truncate text-sm font-medium text-base-content sm:inline">Account</span>
+      <i-lucide [img]="ChevronDownIcon" class="size-4 shrink-0 text-base-content/60"></i-lucide>
+    </button>
+
+    <!-- Dropdown panel -->
+    @if (isDropdownOpen) {
+      <div
+        class="absolute right-0 top-full z-50 mt-2 w-56 origin-top-right rounded-xl border border-base-200 bg-base-100 py-1 shadow-lg"
+        role="menu"
+        (click)="$event.stopPropagation()"
+      >
+        <a
+          routerLink="/dashboard/settings"
+          routerLinkActive=""
+          class="flex items-center gap-3 px-4 py-2.5 text-sm text-base-content/90 hover:bg-base-200"
+          role="menuitem"
+          (click)="closeDropdown()"
+        >
+          <i-lucide [img]="UserIcon" class="size-4 shrink-0 text-base-content/60"></i-lucide>
+          Profile
+        </a>
+        <a
+          routerLink="/dashboard/settings"
+          class="flex items-center gap-3 px-4 py-2.5 text-sm text-base-content/90 hover:bg-base-200"
+          role="menuitem"
+          (click)="closeDropdown()"
+        >
+          <i-lucide [img]="SettingsIcon" class="size-4 shrink-0 text-base-content/60"></i-lucide>
+          Settings
+        </a>
+        <div class="my-1 border-t border-base-200"></div>
+        <button
+          type="button"
+          class="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-error hover:bg-base-200"
+          role="menuitem"
+          (click)="closeDropdown()"
+        >
+          <i-lucide [img]="LogOutIcon" class="size-4 shrink-0"></i-lucide>
+          Logout
+        </button>
+      </div>
+    }
+  </div>
+</header>
+
