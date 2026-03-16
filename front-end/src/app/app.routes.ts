@@ -34,7 +34,9 @@ export const routes: Routes = [
       { path: '', loadComponent: () => import('../feature/dashboard-component/components/overview-component/overview-component')
           .then(c => c.OverviewComponent)
       },
-
+      { path: 'jobs', loadComponent: () => import('../feature/dashboard-component/pages/job-targets-page/job-targets-page')
+        .then(c => c.JobTargetsPage)
+      }
     ]
   }
 ];
