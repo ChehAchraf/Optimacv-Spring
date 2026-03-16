@@ -1,4 +1,4 @@
-import { Component, output, OnDestroy } from '@angular/core';
+import {Component, output, OnDestroy, inject} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   LucideAngularModule,
@@ -8,6 +8,7 @@ import {
   LogOut,
   ChevronDown,
 } from 'lucide-angular';
+import {AuthStore} from '../../../../core/store/auth.store';
 
 @Component({
   selector: 'app-topbar-component',
@@ -17,9 +18,8 @@ import {
   styleUrl: './topbar-component.css',
 })
 export class TopbarComponent implements OnDestroy {
-  /** Emitted when the mobile menu (hamburger) button is clicked. */
   menuClick = output<void>();
-
+  protected authStore = inject(AuthStore)
   readonly MenuIcon = Menu;
   readonly UserIcon = User;
   readonly SettingsIcon = Settings;
