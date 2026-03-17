@@ -1,1 +1,57 @@
-<p>analyze-resume-page works!</p>
+<div class="min-h-screen bg-base-200 px-4 py-6 sm:px-6 lg:px-8">
+  <!-- Page header -->
+  <header
+    class="mb-8 flex flex-col gap-3 rounded-2xl bg-base-100 p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6"
+  >
+    <div>
+      <h1 class="text-xl font-semibold tracking-tight sm:text-2xl">
+        My Resumes
+      </h1>
+      <p class="mt-1 text-sm text-base-content/60">
+        Keep your CVs organized and ready for instant analysis with OptimaCV.
+      </p>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-3">
+      <button
+        type="button"
+        class="btn btn-primary gap-2 rounded-full px-5"
+      >
+        Upload New CV
+      </button>
+      <button
+        type="button"
+        class="btn btn-ghost rounded-full border border-base-300 px-5 text-xs sm:text-sm"
+      >
+        View analysis history
+      </button>
+    </div>
+  </header>
+
+  <main class="space-y-8">
+    <!-- Upload + job target selector -->
+    <section class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <app-cv-upload-zone-component></app-cv-upload-zone-component>
+      <app-job-target-selector-component></app-job-target-selector-component>
+    </section>
+
+    <!-- Recent CV cards -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between gap-2">
+        <h2 class="text-sm font-semibold text-base-content">
+          Recent CVs
+        </h2>
+        <span class="text-xs text-base-content/60">
+          These are some of your latest resumes, ready to be analyzed.
+        </span>
+      </div>
+
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <app-cv-card-component></app-cv-card-component>
+        <app-cv-card-component></app-cv-card-component>
+        <app-cv-card-component></app-cv-card-component>
+      </div>
+    </section>
+  </main>
+</div>
+

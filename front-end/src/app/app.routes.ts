@@ -46,6 +46,12 @@ export const routes: Routes = [
         path: 'bulk-rank',
         loadComponent : ()=> import('../feature/dashboard-component/pages/bulk-rank-page/bulk-rank-page')
           .then((c) => c.BulkRankPage)
+      },
+
+      {
+        path: 'resumes',
+        loadComponent : ()=> import('../feature/dashboard-component/pages/analyze-resume-page/analyze-resume-page')
+          .then((c) => c.AnalyzeResumePage)
       }
 
     ]

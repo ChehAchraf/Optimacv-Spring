@@ -7,7 +7,7 @@ import {
   History,
   Settings,
   X,
-  Sparkles, BriefcaseIcon,
+  Sparkles, BriefcaseIcon, FileText,
 } from 'lucide-angular';
 import {AuthStore} from '../../../../core/store/auth.store';
 
@@ -29,6 +29,7 @@ export class SideBarComponent {
   readonly SettingsIcon = Settings;
   readonly XIcon = X;
   readonly SparklesIcon = Sparkles;
+  readonly FileTextIcon = FileText;
 
   onClose(): void {
     this.close.emit();
