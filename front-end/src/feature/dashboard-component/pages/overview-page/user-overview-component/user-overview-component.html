@@ -1,1 +1,255 @@
-useeeeeeeeeeeeer
+<div class="min-h-screen bg-base-200 px-4 py-6 sm:px-6 lg:px-8">
+    <!-- Top stats / KPIs -->
+    <section class="mb-8">
+      <div class="mb-3 flex items-center justify-between gap-3">
+        <div>
+          <h1 class="text-xl font-semibold tracking-tight sm:text-2xl">
+            OptimaCV Overview
+          </h1>
+          <p class="mt-1 text-sm text-base-content/60">
+            A quick snapshot of your job targets and CV analyses.
+          </p>
+        </div>
+        <div
+          class="hidden items-center gap-2 rounded-full bg-base-100 px-3 py-1 text-xs text-base-content/60 shadow-sm sm:flex"
+        >
+          <i-lucide [img]="ActivityIcon" class="h-4 w-4 text-success"></i-lucide>
+          <span>Everything is running smoothly</span>
+        </div>
+      </div>
+
+      <div class="stats shadow w-full rounded-2xl bg-base-100">
+        <!-- KPI 1 -->
+        <div class="stat">
+          <div class="stat-figure text-primary">
+            <i-lucide [img]="TargetIcon" class="h-6 w-6"></i-lucide>
+          </div>
+          <div class="stat-title text-xs text-base-content/60">
+            Total Job Targets
+          </div>
+          <div class="stat-value text-2xl font-semibold">{{this.store.overview()?.totalTargets}}</div>
+          <div class="stat-desc text-xs text-base-content/60">
+            2 new targets added this week
+          </div>
+        </div>
+
+        <!-- KPI 2 -->
+        <div class="stat">
+          <div class="stat-figure text-secondary">
+            <i-lucide [img]="FileTextIcon" class="h-6 w-6"></i-lucide>
+          </div>
+          <div class="stat-title text-xs text-base-content/60">
+            Analyses Done
+          </div>
+          <div class="stat-value text-2xl font-semibold">{{this.store.overview()?.analysesDone}}</div>
+          <div class="stat-desc text-xs text-base-content/60">
+            10 CVs analyzed in the last 24 hours
+          </div>
+        </div>
+
+        <!-- KPI 3 -->
+        <div class="stat">
+          <div class="stat-figure text-accent">
+            <i-lucide [img]="LayoutDashboardIcon" class="h-6 w-6"></i-lucide>
+          </div>
+          <div class="stat-title text-xs text-base-content/60">
+            Average Match Quality
+          </div>
+          <div class="stat-value text-2xl font-semibold">{{this.store.overview()?.averageScore}}%</div>
+          <div class="stat-desc text-xs text-base-content/60">
+            Based on your last 5 job targets
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA area -->
+    <section
+      class="mb-8 rounded-2xl bg-base-100 p-5 shadow-sm sm:flex sm:items-center sm:justify-between sm:gap-6 sm:p-6"
+    >
+      <div class="mb-4 sm:mb-0">
+        <h2 class="text-sm font-semibold text-base-content">
+          Move closer to your next opportunity
+        </h2>
+        <p class="mt-1 text-xs text-base-content/60 sm:text-sm">
+          Add a new job target or run a fresh CV analysis to get tailored
+          recommendations.
+        </p>
+        <div class="mt-3 flex flex-wrap gap-2 text-xs text-base-content/60">
+          <span class="badge badge-outline badge-sm">Smart matching</span>
+          <span class="badge badge-outline badge-sm">ATS-friendly insights</span>
+          <span class="badge badge-outline badge-sm">Role-specific feedback</span>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          class="btn btn-primary gap-2 rounded-full px-5"
+        >
+          <i-lucide [img]="PlusIcon" class="h-4 w-4"></i-lucide>
+          <span>Add New Job Target</span>
+        </button>
+        <button
+          type="button"
+          class="btn btn-ghost gap-2 rounded-full border border-base-300 px-5"
+        >
+          <i-lucide [img]="SearchIcon" class="h-4 w-4"></i-lucide>
+          <span>Analyze a CV</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Recent activity -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between gap-2">
+        <h2 class="text-sm font-semibold text-base-content">
+          Recent Job Targets
+        </h2>
+        <span class="text-xs text-base-content/60">
+          Showing your 3 most recent targets
+        </span>
+      </div>
+
+      <div class="rounded-2xl bg-base-100 p-4 shadow-sm sm:p-5">
+        <div class="overflow-x-auto">
+          @if (isEmpty()){
+            <div
+  class="flex flex-col items-center justify-center rounded-2xl bg-base-100 p-8 text-center shadow-sm"
+>
+  <div
+    class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-base-200 text-primary"
+  >
+    <i-lucide [img]="LayoutDashboardIcon" class="h-6 w-6"></i-lucide>
+  </div>
+  <h3 class="text-base font-semibold text-base-content">
+    No job targets yet
+  </h3>
+  <p class="mt-1 max-w-sm text-sm text-base-content/60">
+    Start by creating a job target so OptimaCV can analyze your CVs and surface
+    tailored recommendations.
+  </p>
+  <div class="mt-4 flex flex-wrap justify-center gap-3">
+    <button
+      type="button"
+      class="btn btn-primary btn-sm gap-2 rounded-full px-5"
+    >
+      <i-lucide [img]="PlusIcon" class="h-4 w-4"></i-lucide>
+      <span>Add New Job Target</span>
+    </button>
+    <button
+      type="button"
+      class="btn btn-ghost btn-sm gap-2 rounded-full border border-base-300 px-5"
+    >
+      <i-lucide [img]="SearchIcon" class="h-4 w-4"></i-lucide>
+      <span>Analyze a CV</span>
+    </button>
+  </div>
+  <div class="mt-4 flex flex-wrap justify-center gap-2 text-[11px] text-base-content/50">
+    <span class="badge badge-outline badge-xs">Guided suggestions</span>
+    <span class="badge badge-outline badge-xs">Role-based scoring</span>
+    <span class="badge badge-outline badge-xs">ATS-ready feedback</span>
+  </div>
+</div>
+          } @else {
+            <table class="table table-zebra w-full">
+              <thead class="text-xs uppercase tracking-wide text-base-content/60">
+              <tr>
+                <th>Title</th>
+                <th>Company</th>
+                <th>Date added</th>
+                <th class="text-right">Action</th>
+              </tr>
+              </thead>
+              <tbody>
+              <!-- Row 1 -->
+              <tr>
+                <td>
+                  <div class="flex flex-col">
+                    <span class="text-sm font-medium">
+                      Senior Angular Developer
+                    </span>
+                    <span class="text-xs text-base-content/60">
+                      Frontend-focused role with TypeScript and design systems
+                    </span>
+                  </div>
+                </td>
+                <td class="align-middle">
+                  <span class="text-sm">BrightStack Labs</span>
+                </td>
+                <td class="align-middle">
+                  <span class="text-sm text-base-content/70">Mar 12, 2026</span>
+                </td>
+                <td class="align-middle text-right">
+                  <button
+                    type="button"
+                    class="btn btn-ghost btn-xs rounded-full"
+                  >
+                    Analyze
+                  </button>
+                </td>
+              </tr>
+
+              <!-- Row 2 -->
+              <tr>
+                <td>
+                  <div class="flex flex-col">
+                    <span class="text-sm font-medium">
+                      Frontend Tech Lead
+                    </span>
+                    <span class="text-xs text-base-content/60">
+                      Leading a small team on a modern SaaS product
+                    </span>
+                  </div>
+                </td>
+                <td class="align-middle">
+                  <span class="text-sm">Nimbus Cloud Studio</span>
+                </td>
+                <td class="align-middle">
+                  <span class="text-sm text-base-content/70">Mar 10, 2026</span>
+                </td>
+                <td class="align-middle text-right">
+                  <button
+                    type="button"
+                    class="btn btn-ghost btn-xs rounded-full"
+                  >
+                    Analyze
+                  </button>
+                </td>
+              </tr>
+
+              <!-- Row 3 -->
+              <tr>
+                <td>
+                  <div class="flex flex-col">
+                    <span class="text-sm font-medium">
+                      Product Designer (UX/UI)
+                    </span>
+                    <span class="text-xs text-base-content/60">
+                      Hybrid UX and visual design role for B2B tooling
+                    </span>
+                  </div>
+                </td>
+                <td class="align-middle">
+                  <span class="text-sm">OptimaCV Labs</span>
+                </td>
+                <td class="align-middle">
+                  <span class="text-sm text-base-content/70">Mar 7, 2026</span>
+                </td>
+                <td class="align-middle text-right">
+                  <button
+                    type="button"
+                    class="btn btn-ghost btn-xs rounded-full"
+                  >
+                    Analyze
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          }
+
+        </div>
+      </div>
+    </section>
+  </div>
