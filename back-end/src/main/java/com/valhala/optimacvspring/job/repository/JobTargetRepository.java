@@ -12,5 +12,7 @@ public interface JobTargetRepository extends JpaRepository<JobTarget, UUID> {
 
     List<JobTarget> findAllByUserId(UUID userId);
 
+    List<JobTarget> findTop3ByUserIdOrderByCreatedAtDesc(UUID userId);
 
+    long countByUserId(UUID userId);
 }
