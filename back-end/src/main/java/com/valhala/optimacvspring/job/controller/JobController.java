@@ -2,9 +2,11 @@ package com.valhala.optimacvspring.job.controller;
 
 import com.valhala.optimacvspring.iam.api.IamApi;
 import com.valhala.optimacvspring.iam.service.CustomUserDetailsService;
+import com.valhala.optimacvspring.job.dto.DashboardOverviewResponse;
 import com.valhala.optimacvspring.job.dto.JobRequestDTO;
 import com.valhala.optimacvspring.job.dto.JobResponseDTO;
 import com.valhala.optimacvspring.job.service.JobTargetService;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +55,14 @@ public class JobController {
         List<JobResponseDTO> myJobs = jobTargetService.getMyJobs(userEmail);
 
         return ResponseEntity.ok(myJobs);
+    }
+
+    @GetMapping("/overview")
+    public ResponseEntity<DashboardOverviewResponse> getOverview(
+            @Parameter(hidden = true) Principal principal) {
+
+        DashboardOverviewResponse overview = jobTargetService.getDashboardOverview(principal.getName());
+        return ResponseEntity.ok(overview);
     }
 
     @PutMapping("/{jobId}")

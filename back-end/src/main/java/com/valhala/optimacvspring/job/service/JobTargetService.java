@@ -3,6 +3,7 @@ package com.valhala.optimacvspring.job.service;
 import com.valhala.optimacvspring.common.exception.ResourceNotFoundException;
 import com.valhala.optimacvspring.iam.api.IamApi;
 import com.valhala.optimacvspring.job.api.JobApi;
+import com.valhala.optimacvspring.job.dto.DashboardOverviewResponse;
 import com.valhala.optimacvspring.job.dto.JobRequestDTO;
 import com.valhala.optimacvspring.job.dto.JobResponseDTO;
 import com.valhala.optimacvspring.job.entities.JobTarget;
@@ -55,6 +56,26 @@ public class JobTargetService implements JobApi {
         return jobTargetRepository.findAllByUserId(userId).stream()
                 .map(jobMapper::toResponseDTO)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public DashboardOverviewResponse getDashboardOverview(String userEmail){
+        UUID userId = iamApi.findUserIdByEmail(userEmail);
+
+        long total = jobTargetRepository.countByUserId(userId);
+
+        List<DashboardOverviewResponse.RecentJobTarget> recentJobs = jobTargetRepository.findTop3ByUserIdOrderByCreatedAtDesc(userId)
+                .stream()
+                .map(job -> new DashboardOverviewResponse.RecentJobTarget(
+                        job.getId(),
+                        job.getTitle(),
+                        job.getCompany(),
+                        job.getCreatedAt()
+                ))
+                .toList();
+
+        return new DashboardOverviewResponse(total, recentJobs);
+
     }
 
     @Transactional
