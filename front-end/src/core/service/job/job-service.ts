@@ -21,4 +21,8 @@ export class JobService {
     return this.http.get<IJobResponse[]>(`${this.apiUrl}/v1/jobs/my-jobs`)
   }
 
+  deleteMyJob(jobId : string) : Observable<void>{
+    return this.http.delete<void>(`${this.apiUrl}/v1/jobs/${jobId}`)
+  }
+
 }

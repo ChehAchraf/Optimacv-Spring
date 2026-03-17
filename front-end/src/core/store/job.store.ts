@@ -3,7 +3,7 @@ import {IJobRequest, IJobResponse} from '../model/job.model';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
 import {computed, inject} from '@angular/core';
 import {JobService} from '../service/job/job-service';
-import {exhaustMap, switchMap, tap} from 'rxjs';
+import {distinctUntilChanged, exhaustMap, switchMap, tap} from 'rxjs';
 import {tapResponse} from '@ngrx/operators';
 import {HttpErrorResponse} from '@angular/common/http';
 import {toast} from 'ngx-sonner';
@@ -76,7 +76,35 @@ export const JobStore = signalStore(
             )
           })
         )
+      }),
+
+
+      deleteMyJob: rxMethod<string>((jobId$) => {
+        return jobId$.pipe(
+          distinctUntilChanged(),
+          tap(() => patchState(store, { isLoading: true, error: null })),
+          exhaustMap((jobId) => {
+            return jobService.deleteMyJob(jobId).pipe(
+              tapResponse({
+                next: () => {
+                  console.log("Job deleted!");
+                  toast.success("The job target has been deleted!");
+                  patchState(store, (state) => ({
+                    isLoading: false,
+                    Jobs: state.Jobs.filter((job) => job.id.toString() !== jobId)
+                  }));
+                },
+                error: (error: HttpErrorResponse) => {
+                  console.error(error.message);
+                  toast.error("Error deleting job, please try again.");
+                  patchState(store, { isLoading: false, error: error.message });
+                }
+              })
+            );
+          })
+        );
       })
+
     }
   }),
 

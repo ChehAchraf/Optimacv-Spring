@@ -73,6 +73,10 @@ export class JobTargetsPage implements OnInit{
     }
   }
 
+  deleteJob(jobId : string ){
+    this.store.deleteMyJob(jobId);
+  }
+
   ngOnInit(): void {
     this.store.getMyJobs()
   }
