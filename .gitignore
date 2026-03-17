@@ -2,3 +2,5 @@ uploads/
 .uploads
 .idea/
 .idea
+front-end/src/environments/environment.development.ts
+back-end/pom.xml
