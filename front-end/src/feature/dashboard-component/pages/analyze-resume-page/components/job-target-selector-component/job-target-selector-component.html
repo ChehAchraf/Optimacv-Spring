@@ -1,0 +1,104 @@
+<section class="rounded-2xl bg-base-100 p-6 shadow-sm h-full">
+  <div class="mb-4 flex items-start gap-3">
+    <div
+      class="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary/10 text-secondary"
+    >
+      <i-lucide [img]="TargetIcon" class="h-5 w-5"></i-lucide>
+    </div>
+    <div>
+      <h2 class="text-sm font-semibold text-base-content">
+        Select Job Target
+      </h2>
+      <p class="mt-1 text-xs text-base-content/60">
+        Choose the role you want to match this CV against.
+      </p>
+    </div>
+  </div>
+
+  <div class="space-y-3">
+    <!-- Card 1 -->
+    <button
+      type="button"
+      class="flex w-full items-center gap-3 rounded-2xl border border-base-200 bg-base-100 px-4 py-3 text-left text-sm shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-md"
+    >
+      <div
+        class="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary"
+      >
+        <i-lucide [img]="BriefcaseIcon" class="h-4 w-4"></i-lucide>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="truncate font-semibold">
+          Frontend Developer
+        </p>
+        <p class="mt-0.5 text-xs text-base-content/60">
+          Google • Web Platform Experience • Hybrid
+        </p>
+      </div>
+      <div
+        class="flex h-5 w-5 items-center justify-center rounded-full border border-base-300"
+      >
+        <span class="h-2.5 w-2.5 rounded-full bg-transparent"></span>
+      </div>
+    </button>
+
+    <!-- Card 2 -->
+    <button
+      type="button"
+      class="flex w-full items-center gap-3 rounded-2xl border border-base-200 bg-base-100 px-4 py-3 text-left text-sm shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-md"
+    >
+      <div
+        class="flex h-9 w-9 items-center justify-center rounded-xl bg-base-200 text-base-content/80"
+      >
+        <i-lucide [img]="BuildingIcon" class="h-4 w-4"></i-lucide>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="truncate font-semibold">
+          Software Engineer
+        </p>
+        <p class="mt-0.5 text-xs text-base-content/60">
+          Amazon • Distributed Systems • Remote
+        </p>
+      </div>
+      <div
+        class="flex h-5 w-5 items-center justify-center rounded-full border border-base-300"
+      >
+        <span class="h-2.5 w-2.5 rounded-full bg-transparent"></span>
+      </div>
+    </button>
+
+    <!-- Card 3 -->
+    <button
+      type="button"
+      class="flex w-full items-center gap-3 rounded-2xl border border-base-200 bg-base-100 px-4 py-3 text-left text-sm shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-md"
+    >
+      <div
+        class="flex h-9 w-9 items-center justify-center rounded-xl bg-base-200 text-base-content/80"
+      >
+        <i-lucide [img]="BriefcaseIcon" class="h-4 w-4"></i-lucide>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="truncate font-semibold">
+          Product Designer
+        </p>
+        <p class="mt-0.5 text-xs text-base-content/60">
+          OptimaCV • Design Systems • On-site
+        </p>
+      </div>
+      <div
+        class="flex h-5 w-5 items-center justify-center rounded-full border border-base-300"
+      >
+        <span class="h-2.5 w-2.5 rounded-full bg-transparent"></span>
+      </div>
+    </button>
+  </div>
+
+  <div class="mt-6">
+    <button
+      type="button"
+      class="btn btn-primary w-full rounded-full"
+    >
+      Start Analysis 🚀
+    </button>
+  </div>
+</section>
+
