@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Service
 @Slf4j
-public class CvAnalysisService {
+public class CvAnalysisService  {
 
     private final ChatClient chatClient;
     private final CvAnalysisResultRepository repository;
@@ -184,4 +184,6 @@ public class CvAnalysisService {
 
         return response;
     }
+
+
 }

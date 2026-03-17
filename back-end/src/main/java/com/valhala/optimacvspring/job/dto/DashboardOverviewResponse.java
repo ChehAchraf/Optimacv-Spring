@@ -6,6 +6,8 @@ import java.util.UUID;
 
 public record DashboardOverviewResponse(
         long totalTargets,
+        long analysesDone,
+        double averageScore,
         List<RecentJobTarget> recentTargets
 ) {
     public record RecentJobTarget(
