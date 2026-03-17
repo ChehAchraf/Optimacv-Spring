@@ -4,3 +4,4 @@ uploads/
 .idea
 front-end/src/environments/environment.development.ts
 back-end/pom.xml
+back-end/src/main/resources/application.yml
