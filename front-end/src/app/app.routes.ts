@@ -56,7 +56,12 @@ export const routes: Routes = [
       {
         path: 'history',
         loadComponent : ()=> import('../feature/dashboard-component/pages/analysis-history-component/analysis-history-component')
-          .then((c) => c.AnalysisHistoryComponent)
+          .then((c) => c.AnalysisHistoryComponent),
+      },
+      {
+        path : 'history/:id', 
+        loadComponent : ()=> import('../feature/dashboard-component/pages/analysis-details-component/analysis-details-component')
+          .then((c) => c.AnalysisDetailsComponent)
       }
 
     ]

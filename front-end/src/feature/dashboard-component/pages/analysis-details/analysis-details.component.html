@@ -50,10 +50,9 @@
   </header>
 
   <main class="grid gap-6 lg:grid-cols-3">
-    <section class="space-y-4 space-x-4 lg:col-span-1">
+    <section class="space-y-4 lg:col-span-1">
       <app-score-card [score]="score()" [verdict]="verdict()" />
       <app-keywords-card
-
         [matchingSkills]="matchingSkills()"
         [missingKeywords]="missingKeywords()"
       />

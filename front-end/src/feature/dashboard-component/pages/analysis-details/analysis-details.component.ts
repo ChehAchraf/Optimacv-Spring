@@ -1,13 +1,11 @@
 import { CommonModule } from '@angular/common';
-import {Component, computed, effect, inject, OnInit, signal} from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LucideAngularModule, FileText } from 'lucide-angular';
-import {FullAnalysis, MockAnalysis} from '../../../../core/model/analysis.model';
-import {ScoreCardComponent} from './components/score-card/score-card-component';
-import {KeywordsCardComponent} from './components/keywords-card/keywords-card-component';
-import {ActionPlanCardComponent} from './components/action-plan-card/action-plan-card-component';
-import {AnalysisStore} from '../../../../core/store/analysis.store';
-
+import { ActionPlanCardComponent } from './components/action-plan-card/action-plan-card.component';
+import { KeywordsCardComponent } from './components/keywords-card/keywords-card.component';
+import { ScoreCardComponent } from './components/score-card/score-card.component';
+import { FullAnalysis, MockAnalysis } from './analysis-details.models';
 
 const mockAnalysis: MockAnalysis = {
   id: '123',
@@ -50,22 +48,10 @@ const mockAnalysis: MockAnalysis = {
     KeywordsCardComponent,
     ActionPlanCardComponent,
   ],
-  templateUrl: './analysis-details-component.html',
+  templateUrl: './analysis-details.component.html',
 })
-export class AnalysisDetailsComponent implements OnInit {
-
+export class AnalysisDetailsComponent {
   readonly analysis = signal<MockAnalysis>(mockAnalysis);
-  readonly analysisStore = inject(AnalysisStore)
-
-  constructor() {
-    effect(() => {
-      console.log(this.analysisStore.analyses())
-    });
-  }
-
-  ngOnInit(): void {
-    this.analysisStore.loadHistory(0)
-  }
 
   readonly score = computed(() => this.analysis().fullAnalysis.score);
   readonly verdict = computed(() => this.analysis().fullAnalysis.verdict);
@@ -74,11 +60,5 @@ export class AnalysisDetailsComponent implements OnInit {
   readonly actionPlan = computed(() => this.analysis().fullAnalysis.actionPlan);
 
   readonly FileTextIcon = FileText;
-
-  scoreBadgeClass(score: number): string {
-    if (score >= 80) return 'badge-success';
-    if (score >= 60) return 'badge-warning';
-    return 'badge-error';
-  }
 }
 
