@@ -5,7 +5,7 @@ import com.valhala.optimacvspring.common.exception.ResourceNotFoundException;
 import com.valhala.optimacvspring.iam.api.IamApi;
 import com.valhala.optimacvspring.job.dto.DashboardOverviewResponse;
 import com.valhala.optimacvspring.job.dto.JobRequestDTO;
-import com.valhala.optimacvspring.job.dto.JobResponseDTO;
+import com.valhala.optimacvspring.job.JobResponseDTO;
 import com.valhala.optimacvspring.job.entities.JobTarget;
 import com.valhala.optimacvspring.job.mapper.JobMapper;
 import com.valhala.optimacvspring.job.repository.JobTargetRepository;
@@ -119,6 +119,11 @@ public class JobTargetServiceImpl implements JobTargetService {
         return jobMapper.toResponseDTO(jobTarget);
     }
 
+    @Override
+    public void verifyJobOwnership(UUID jobId, UUID userId) {
+        findAndVerifyOwnership(jobId, userId);
+    }
+
     private JobTarget findAndVerifyOwnership(UUID jobId, UUID userId) {
         JobTarget jobTarget = jobTargetRepository.findById(jobId)
                 .orElseThrow(() -> new ResourceNotFoundException("Job not found with id: " + jobId));
@@ -126,6 +131,14 @@ public class JobTargetServiceImpl implements JobTargetService {
             throw new AccessDeniedException("You do not own this job target");
         }
         return jobTarget;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public String getJobTitle(UUID jobId) {
+        return jobTargetRepository.findById(jobId)
+                .map(JobTarget::getTitle)
+                .orElse("Unknown Job");
     }
 }
 

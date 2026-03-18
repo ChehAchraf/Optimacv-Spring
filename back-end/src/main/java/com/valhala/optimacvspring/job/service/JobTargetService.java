@@ -2,7 +2,7 @@ package com.valhala.optimacvspring.job.service;
 
 import com.valhala.optimacvspring.job.dto.DashboardOverviewResponse;
 import com.valhala.optimacvspring.job.dto.JobRequestDTO;
-import com.valhala.optimacvspring.job.dto.JobResponseDTO;
+import com.valhala.optimacvspring.job.JobResponseDTO;
 
 import java.util.List;
 
@@ -26,4 +26,8 @@ public interface JobTargetService {
     boolean checkIfJobExists(UUID jobId);
 
     JobResponseDTO getJobDetails(UUID jobId);
+
+    void verifyJobOwnership(UUID jobId, UUID userId);
+
+    String getJobTitle(UUID jobId);
 }

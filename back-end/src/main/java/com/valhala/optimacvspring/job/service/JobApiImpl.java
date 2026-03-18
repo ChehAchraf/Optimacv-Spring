@@ -1,7 +1,7 @@
 package com.valhala.optimacvspring.job.service;
 
 import com.valhala.optimacvspring.job.api.JobApi;
-import com.valhala.optimacvspring.job.dto.JobResponseDTO;
+import com.valhala.optimacvspring.job.JobResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +16,16 @@ public class JobApiImpl implements JobApi {
     @Override
     public JobResponseDTO getJobDetails(UUID jobId) {
         return jobTargetService.getJobDetails(jobId);
+    }
+
+    @Override
+    public void verifyJobOwnership(UUID jobId, UUID userId) {
+        jobTargetService.verifyJobOwnership(jobId, userId);
+    }
+
+    @Override
+    public String getJobTitle(UUID jobId) {
+        return jobTargetService.getJobTitle(jobId);
     }
 }
 

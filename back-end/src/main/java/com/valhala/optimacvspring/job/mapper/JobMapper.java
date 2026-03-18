@@ -1,6 +1,6 @@
 package com.valhala.optimacvspring.job.mapper;
 
-import com.valhala.optimacvspring.job.dto.JobResponseDTO;
+import com.valhala.optimacvspring.job.JobResponseDTO;
 import com.valhala.optimacvspring.job.entities.JobTarget;
 import org.mapstruct.Mapper;
 

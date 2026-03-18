@@ -1,4 +1,4 @@
-package com.valhala.optimacvspring.job.dto;
+package com.valhala.optimacvspring.job;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
