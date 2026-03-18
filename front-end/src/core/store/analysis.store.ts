@@ -3,10 +3,11 @@ import {IAnalyseRequest, IAnalysisHistory} from '../model/analyse.model';
 import {inject} from '@angular/core';
 import {AnalyseService} from '../service/analyse/analyse-service';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
-import {exhaustMap, tap} from 'rxjs';
+import {exhaustMap, switchMap, tap} from 'rxjs';
 import {tapResponse} from '@ngrx/operators';
 import {toast} from 'ngx-sonner';
 import {Router} from '@angular/router';
+import {HttpErrorResponse} from '@angular/common/http';
 
 const initialState = {
   analyses: [] as IAnalysisHistory[],
@@ -91,6 +92,46 @@ export const AnalysisStore = signalStore(
           })
         );
       }),
+      getAnalysisById : rxMethod<{ analysisId: string }>((request$)=>{
+        return request$.pipe(
+          switchMap((request)=>{
+            return analysisService.getanalysis(request.analysisId).pipe(
+              tapResponse({
+                next : (response)=>{
+                  let parsedData: any = null;
+                  let extractedScore = 0;
+
+                  try {
+                    parsedData = JSON.parse(response.feedback);
+                    extractedScore = parsedData.score || parsedData.matchScore || 0;
+                  } catch (e: any) {
+                    console.error("JSON Parsing error:", e);
+                  }
+
+                  const mappedAnalysis = {
+                    ...response,
+                    parsedScore: extractedScore,
+                    fullAnalysis: parsedData
+                  };
+
+                  patchState(store, (state) => {
+                    const exists = state.analyses.some((a) => a.id === mappedAnalysis.id);
+                    return {
+                      analyses: exists
+                        ? state.analyses.map((a) => a.id === mappedAnalysis.id ? mappedAnalysis : a)
+                        : [...state.analyses, mappedAnalysis],
+                      isLoading: false
+                    };
+                  });
+                },
+                error : (error : HttpErrorResponse)=>{
+
+                }
+              })
+            )
+          })
+        )
+      })
     }
   })
 )

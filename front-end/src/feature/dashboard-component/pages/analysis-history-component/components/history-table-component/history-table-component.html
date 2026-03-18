@@ -36,6 +36,7 @@
             </td>
             <td class="text-right">
               <button
+                [routerLink]="['/dashboard/history/', analysis.id]"
                 type="button"
                 class="btn btn-ghost btn-sm rounded-full"
                 (click)="onViewDetails(analysis.id)"

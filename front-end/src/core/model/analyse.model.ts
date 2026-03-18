@@ -4,6 +4,7 @@ export interface IAnalyseRequest {
 }
 
 export interface IAnalysisHistory {
+  id: string;
   analysisId: string;
   analyzedAt: string;
   resumeFileName: string;
