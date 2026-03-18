@@ -32,24 +32,113 @@
     <!-- Upload + job target selector -->
     <section class="grid grid-cols-1 gap-6 lg:grid-cols-2">
       <app-cv-upload-zone-component></app-cv-upload-zone-component>
-      <app-job-target-selector-component></app-job-target-selector-component>
+      <app-job-target-selector-component
+        [jobs]="jobStore.Jobs()"
+        (selectJob)="handleJobSelection($event)"
+      ></app-job-target-selector-component>
     </section>
 
-    <!-- Recent CV cards -->
-    <section class="space-y-4">
-      <div class="flex items-center justify-between gap-2">
+    <!-- Master CTA (ONLY button) -->
+    <section class="rounded-2xl bg-base-100 p-6 shadow-sm">
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 class="text-sm font-semibold text-base-content">
+            Ready to analyze?
+          </h2>
+          <p class="mt-1 text-xs text-base-content/60">
+            Select 1 CV and 1 Job target, then start the analysis.
+          </p>
+        </div>
+
+        <div class="flex flex-col items-start gap-2 sm:items-end">
+          <button
+            type="button"
+            class="btn btn-primary rounded-full px-8"
+            (click)="onStartAnalysis()"
+            [disabled]="!selectedResumeId() || !selectedJobId()"
+          >
+            Start Analysis 🚀
+          </button>
+          @if (!selectedResumeId() || !selectedJobId()) {
+            <p class="text-[11px] text-base-content/60">
+              Please select a CV and a Job to continue
+            </p>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- CV Library -->
+    <section class="rounded-2xl bg-base-100 p-6 shadow-sm space-y-4">
+      <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
         <h2 class="text-sm font-semibold text-base-content">
-          Recent CVs
+          Select a CV from your library
         </h2>
         <span class="text-xs text-base-content/60">
-          These are some of your latest resumes, ready to be analyzed.
+          Choose one resume to analyze against your selected job target.
         </span>
       </div>
 
-      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <app-cv-card-component></app-cv-card-component>
-        <app-cv-card-component></app-cv-card-component>
-        <app-cv-card-component></app-cv-card-component>
+      <!-- Search (UI only) -->
+      <div>
+        <label class="input input-bordered flex items-center gap-2 rounded-xl text-sm">
+          <span class="text-base-content/60 text-xs">Search</span>
+          <input
+            type="text"
+            class="grow text-sm bg-transparent outline-none"
+            placeholder="Search resumes..."
+          />
+        </label>
+      </div>
+
+      <!-- Selectable CV list -->
+      <div class="rounded-2xl border border-base-200 bg-base-100 p-2">
+        <div class="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
+          @for (resume of resumeStore.files(); track resume.id) {
+            <label
+              class="label cursor-pointer items-start gap-4 rounded-xl border p-4 text-sm shadow-sm transition-colors"
+              [class.border-primary]="selectedResumeId() === resume.id"
+              [class.bg-primary/5]="selectedResumeId() === resume.id"
+              [class.border-base-200]="selectedResumeId() !== resume.id"
+              [class.bg-base-100]="selectedResumeId() !== resume.id"
+              (click)="handleResumeSelection(resume.id)"
+            >
+              <input
+                type="radio"
+                name="selected_resume"
+                class="radio radio-primary mt-1"
+                [checked]="selectedResumeId() === resume.id"
+              />
+
+              <div class="min-w-0 flex-1">
+                <p class="truncate font-semibold">
+                  {{ resume.fileName }}
+                </p>
+                <p class="mt-1 text-[11px] text-base-content/60">
+                  {{ resume.statusMessage }}
+                </p>
+                <p class="mt-2 text-[11px] text-base-content/50">
+                  Uploaded: {{ resume.uploadedAt }}
+                </p>
+              </div>
+            </label>
+          }
+        </div>
+      </div>
+
+      <!-- Pagination (UI only) -->
+      <div class="flex items-center justify-center">
+        <div class="join">
+          <button type="button" class="btn btn-sm join-item" aria-label="Previous page">
+            «
+          </button>
+          <button type="button" class="btn btn-sm join-item btn-active">
+            Page 1
+          </button>
+          <button type="button" class="btn btn-sm join-item" aria-label="Next page">
+            »
+          </button>
+        </div>
       </div>
     </section>
   </main>

@@ -1,0 +1,17 @@
+<div class="min-h-screen bg-base-200 px-4 py-6 sm:px-6 lg:px-8">
+  <app-history-header (search)="onSearch($event)"></app-history-header>
+
+  <main class="space-y-4">
+    <app-history-table
+      [analyses]="analysisStore.analyses()"
+      (viewDetails)="onViewDetails($event)"
+    ></app-history-table>
+
+    <app-history-pagination
+      [totalItems]="totalItems()"
+      [pageSize]="pageSize()"
+      [currentPage]="currentPage()"
+      (pageChange)="onPageChange($event)"
+    ></app-history-pagination>
+  </main>
+</div>

@@ -1,0 +1,25 @@
+<header
+  class="mb-6 flex flex-col gap-4 rounded-2xl bg-base-100 p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6"
+>
+  <div class="min-w-0">
+    <h1 class="text-xl font-semibold tracking-tight sm:text-2xl">
+      Analysis History
+    </h1>
+    <p class="mt-1 text-sm text-base-content/60">
+      Review your past CV analyses and quickly revisit results.
+    </p>
+  </div>
+
+  <div class="w-full sm:w-auto">
+    <label class="input input-bordered flex items-center gap-2 rounded-xl text-sm">
+      <span class="text-base-content/60 text-xs">Search</span>
+      <input
+        type="text"
+        class="grow bg-transparent text-sm outline-none"
+        placeholder="Search resume, job, date..."
+        (input)="onSearchInput(($any($event.target)).value)"
+      />
+    </label>
+  </div>
+</header>
+

@@ -1,4 +1,4 @@
-<section class="rounded-2xl bg-base-100 p-6 shadow-sm h-full">
+<section class="rounded-2xl bg-base-100 p-6 shadow-sm h-full flex flex-col">
   <div class="mb-4 flex items-start gap-3">
     <div
       class="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary/10 text-secondary"
@@ -15,90 +15,67 @@
     </div>
   </div>
 
-  <div class="space-y-3">
-    <!-- Card 1 -->
-    <button
-      type="button"
-      class="flex w-full items-center gap-3 rounded-2xl border border-base-200 bg-base-100 px-4 py-3 text-left text-sm shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-md"
-    >
-      <div
-        class="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary"
-      >
-        <i-lucide [img]="BriefcaseIcon" class="h-4 w-4"></i-lucide>
-      </div>
-      <div class="flex-1 min-w-0">
-        <p class="truncate font-semibold">
-          Frontend Developer
-        </p>
-        <p class="mt-0.5 text-xs text-base-content/60">
-          Google • Web Platform Experience • Hybrid
-        </p>
-      </div>
-      <div
-        class="flex h-5 w-5 items-center justify-center rounded-full border border-base-300"
-      >
-        <span class="h-2.5 w-2.5 rounded-full bg-transparent"></span>
-      </div>
-    </button>
-
-    <!-- Card 2 -->
-    <button
-      type="button"
-      class="flex w-full items-center gap-3 rounded-2xl border border-base-200 bg-base-100 px-4 py-3 text-left text-sm shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-md"
-    >
-      <div
-        class="flex h-9 w-9 items-center justify-center rounded-xl bg-base-200 text-base-content/80"
-      >
-        <i-lucide [img]="BuildingIcon" class="h-4 w-4"></i-lucide>
-      </div>
-      <div class="flex-1 min-w-0">
-        <p class="truncate font-semibold">
-          Software Engineer
-        </p>
-        <p class="mt-0.5 text-xs text-base-content/60">
-          Amazon • Distributed Systems • Remote
-        </p>
-      </div>
-      <div
-        class="flex h-5 w-5 items-center justify-center rounded-full border border-base-300"
-      >
-        <span class="h-2.5 w-2.5 rounded-full bg-transparent"></span>
-      </div>
-    </button>
-
-    <!-- Card 3 -->
-    <button
-      type="button"
-      class="flex w-full items-center gap-3 rounded-2xl border border-base-200 bg-base-100 px-4 py-3 text-left text-sm shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-md"
-    >
-      <div
-        class="flex h-9 w-9 items-center justify-center rounded-xl bg-base-200 text-base-content/80"
-      >
-        <i-lucide [img]="BriefcaseIcon" class="h-4 w-4"></i-lucide>
-      </div>
-      <div class="flex-1 min-w-0">
-        <p class="truncate font-semibold">
-          Product Designer
-        </p>
-        <p class="mt-0.5 text-xs text-base-content/60">
-          OptimaCV • Design Systems • On-site
-        </p>
-      </div>
-      <div
-        class="flex h-5 w-5 items-center justify-center rounded-full border border-base-300"
-      >
-        <span class="h-2.5 w-2.5 rounded-full bg-transparent"></span>
-      </div>
-    </button>
+  <!-- Search bar -->
+  <div class="mb-4">
+    <label class="input input-bordered flex items-center gap-2 rounded-xl text-sm">
+      <span class="text-base-content/60 text-xs">Search targets</span>
+      <input
+        type="text"
+        class="grow text-sm bg-transparent outline-none"
+        placeholder="e.g. Frontend, Designer, Remote..."
+      />
+    </label>
   </div>
 
-  <div class="mt-6">
-    <button
-      type="button"
-      class="btn btn-primary w-full rounded-full"
-    >
-      Start Analysis 🚀
-    </button>
+  <!-- Scrollable list of job cards -->
+  <div class="flex-1 overflow-y-auto rounded-2xl border border-base-200 bg-base-100 p-2">
+    <div class="space-y-2">
+      <!-- Card 1 (checked by default) -->
+      @for (job of jobs(); track job.id){
+        <label
+          class="label cursor-pointer flex items-start gap-4 rounded-xl border border-base-200 bg-base-100 p-4 text-sm shadow-sm hover:bg-base-200/70 transition-colors"
+        >
+          <input
+            (click)="onJobClick(job.id)"
+            type="radio"
+            name="selected_job"
+            class="radio radio-primary mt-1"
+          />
+          <div class="flex items-start gap-3 flex-1 min-w-0">
+            <div
+              class="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary shrink-0"
+            >
+              <i-lucide [img]="BriefcaseIcon" class="h-4 w-4"></i-lucide>
+            </div>
+            <div class="min-w-0">
+              <p class="truncate font-semibold">
+                {{job.title}}
+              </p>
+              <div class="mt-2 flex flex-wrap gap-2 text-[11px] text-base-content/60">
+                <span class="badge badge-outline badge-xs">Angular</span>
+                <span class="badge badge-outline badge-xs">Design systems</span>
+                <span class="badge badge-outline badge-xs">5+ years</span>
+              </div>
+            </div>
+          </div>
+        </label>
+      }
+    </div>
+  </div>
+
+  <!-- Pagination (UI only) -->
+  <div class="mt-4 flex items-center justify-center">
+    <div class="join">
+      <button type="button" class="btn btn-sm join-item" aria-label="Previous page">
+        «
+      </button>
+      <button type="button" class="btn btn-sm join-item btn-active">
+        Page 1
+      </button>
+      <button type="button" class="btn btn-sm join-item" aria-label="Next page">
+        »
+      </button>
+    </div>
   </div>
 </section>
 

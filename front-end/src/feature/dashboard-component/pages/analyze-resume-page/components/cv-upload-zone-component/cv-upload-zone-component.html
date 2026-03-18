@@ -32,7 +32,7 @@
     <p class="mt-1 text-xs text-base-content/60">
       PDF files only. Up to 5 MB per document.
     </p>
-    <input type="file" class="hidden" />
+    <input accept=".pdf" (change)="onFileSelected($event)" type="file" class="hidden" />
   </label>
 
   <div class="mt-4 flex flex-wrap gap-2 text-[11px] text-base-content/50">

@@ -1,0 +1,35 @@
+<!-- Pagination -->
+<section
+  class="flex flex-col gap-3 rounded-2xl bg-base-100 p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between"
+>
+  <p class="text-xs text-base-content/60">
+    Showing <span class="font-medium text-base-content">{{ startItem() }}</span> to
+    <span class="font-medium text-base-content">{{ endItem() }}</span> of
+    <span class="font-medium text-base-content">{{ totalItems() }}</span> analyses
+  </p>
+
+  <div class="join">
+    <button
+      type="button"
+      class="btn btn-sm join-item"
+      aria-label="Previous page"
+      [disabled]="currentPage() <= 1"
+      (click)="goTo(currentPage() - 1)"
+    >
+      «
+    </button>
+    <button type="button" class="btn btn-sm join-item btn-active">
+      {{ currentPage() }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-sm join-item"
+      aria-label="Next page"
+      [disabled]="currentPage() >= totalPages()"
+      (click)="goTo(currentPage() + 1)"
+    >
+      »
+    </button>
+  </div>
+</section>
+

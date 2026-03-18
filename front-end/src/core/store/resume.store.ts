@@ -1,7 +1,7 @@
 import {patchState, signalStore, withMethods, withState} from '@ngrx/signals';
 import {IResumeRequest, IResumeResponse} from '../model/resume.model';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
-import {exhaustMap, tap} from 'rxjs';
+import {exhaustMap, switchMap, tap} from 'rxjs';
 import {inject} from '@angular/core';
 import {ResumeService} from '../service/resume/resume-service';
 import {tapResponse} from '@ngrx/operators';
@@ -12,13 +12,15 @@ export type ResumeState = {
   files : IResumeResponse[] ,
   isLoading : boolean,
   error : string | null,
-  selectedResume : number[] | null
+  selectedJob : string | null,
+  selectedResume : string | null
 }
 
 const initialState : ResumeState ={
   files : [],
   isLoading : false,
   error : null,
+  selectedJob : null,
   selectedResume : null
 }
 
@@ -51,7 +53,35 @@ export const resumeStore = signalStore(
             )
           })
         )
-      })
+      }),
+
+      getMyResumes : rxMethod<void>((response$)=>{
+        return response$.pipe(
+          switchMap((response)=>{
+            const resumesId = toast.loading("Resumes are loading...")
+            return resumeService.getMyResumes().pipe(
+              tapResponse({
+                next : (response) =>{
+                  toast.success("done!",{id:resumesId})
+                  patchState(store,{
+                    files : response
+                  })
+                },
+                error : (error : HttpErrorResponse)=>{
+                  toast.error("there must be an error, please try again later", {duration:3000,id:resumesId})
+                }
+              })
+            )
+          })
+        )
+      }),
+      setSelectdJob : (id : string)=>{
+        patchState(store , {selectedJob : id})
+      },
+
+      setSelectdResume: (id: string) => {
+        patchState(store, { selectedResume: id });
+      },
     }
   })
 )

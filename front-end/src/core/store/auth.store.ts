@@ -57,9 +57,9 @@ export const AuthStore = signalStore(
 
                 toast.success("seccessfully loged in")
               },
-              error: (err) => {
+              error: (err:HttpErrorResponse) => {
                 console.error('Login failed', err);
-                toast.error("there must be an error , please try again later")
+                toast.error(`${err.error.message}`)
               },
             })
           );
