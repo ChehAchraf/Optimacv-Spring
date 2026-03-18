@@ -19,8 +19,12 @@ public class CvAnalysisResult {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private UUID resumeId;
+
+    private UUID userId;
+
+    private UUID jobId;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String feedback;

@@ -16,7 +16,7 @@ public class AnalysisModuleApiImpl implements AnalysisModuleApi {
 
     @Override
     public long getTotalAnalysesByUser(UUID userId) {
-        return analysisRepository.countAnalysesByUserId(userId);
+        return analysisRepository.countByUserId(userId);
     }
 
     @Override
