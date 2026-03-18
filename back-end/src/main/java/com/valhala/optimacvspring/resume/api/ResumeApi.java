@@ -7,4 +7,8 @@ public interface ResumeApi {
 
     List<ResumeTextDTO> getResumesText(List<UUID> resumeIds);
 
+    void verifyResumeOwnership(UUID resumeId, UUID userId);
+
+    String getResumeFileName(UUID resumeId);
+
 }

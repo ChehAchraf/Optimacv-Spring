@@ -57,11 +57,6 @@ public class ResumeServiceImpl implements ResumeService {
 
         Resume savedResume = resumeRepository.saveAndFlush(resume);
 
-        if (jobId != null) {
-            log.info("Publishing CvUploadedEvent for immediate analysis against job: {}", jobId);
-            eventPublisher.publishEvent(new CvUploadedEvent(savedResume.getId(), extractedText.toString(), jobId));
-        }
-
         eventPublisher.publishEvent(new CvUploadedEvent(savedResume.getId(), extractedText.toString(), jobId));
 
         return savedResume;
@@ -97,15 +92,6 @@ public class ResumeServiceImpl implements ResumeService {
         log.info("Resume soft-deleted: {} by user: {}", resumeId, userId);
     }
 
-    private Resume findAndVerifyOwnership(UUID resumeId, UUID userId) {
-        Resume resume = resumeRepository.findById(resumeId)
-                .orElseThrow(() -> new ResourceNotFoundException("Resume not found with id: " + resumeId));
-        if (!resume.getUserId().equals(userId)) {
-            throw new AccessDeniedException("You do not own this resume");
-        }
-        return resume;
-    }
-
     @Override
     public List<ResumeTextDTO> getResumesText(List<UUID> resumeIds) {
         List<Resume> resumes = resumeRepository.findAllByIdIn(resumeIds);
@@ -114,5 +100,26 @@ public class ResumeServiceImpl implements ResumeService {
                 .map(resume -> new ResumeTextDTO(resume.getId(), resume.getExtractedText()))
                 .toList();
     }
-}
 
+    @Override
+    public void verifyResumeOwnership(UUID resumeId, UUID userId) {
+        findAndVerifyOwnership(resumeId, userId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public String getResumeFileName(UUID resumeId) {
+        return resumeRepository.findById(resumeId)
+                .map(Resume::getFileName)
+                .orElse("Unknown Resume");
+    }
+
+    private Resume findAndVerifyOwnership(UUID resumeId, UUID userId) {
+        Resume resume = resumeRepository.findById(resumeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Resume not found with id: " + resumeId));
+        if (!resume.getUserId().equals(userId)) {
+            throw new AccessDeniedException("You do not own this resume");
+        }
+        return resume;
+    }
+}

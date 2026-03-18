@@ -18,5 +18,14 @@ public class ResumeApiImpl implements ResumeApi {
     public List<ResumeTextDTO> getResumesText(List<UUID> resumeIds) {
         return resumeService.getResumesText(resumeIds);
     }
-}
 
+    @Override
+    public void verifyResumeOwnership(UUID resumeId, UUID userId) {
+        resumeService.verifyResumeOwnership(resumeId, userId);
+    }
+
+    @Override
+    public String getResumeFileName(UUID resumeId) {
+        return resumeService.getResumeFileName(resumeId);
+    }
+}

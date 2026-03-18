@@ -28,7 +28,7 @@ public class ResumeController {
     @PostMapping("/upload")
     public ResponseEntity<ResumeResponseDTO> uploadResume(
             @RequestParam("file") MultipartFile file,
-            @RequestParam("jobId") UUID jobId,
+            @RequestParam(value = "jobId", required = false) UUID jobId,
             @AuthenticationPrincipal UserDetails userDetails) {
 
         try {
@@ -45,6 +45,15 @@ public class ResumeController {
 
     @GetMapping
     public ResponseEntity<List<ResumeResponseDTO>> getAllResumes(
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        UUID userId = iamApi.findUserIdByEmail(userDetails.getUsername());
+        List<ResumeResponseDTO> resumes = resumeService.getAllResumesForUser(userId);
+        return ResponseEntity.ok(resumes);
+    }
+
+    @GetMapping("/my-resumes")
+    public ResponseEntity<List<ResumeResponseDTO>> getMyResumes(
             @AuthenticationPrincipal UserDetails userDetails) {
 
         UUID userId = iamApi.findUserIdByEmail(userDetails.getUsername());
