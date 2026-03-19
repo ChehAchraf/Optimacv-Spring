@@ -1,0 +1,37 @@
+<section class="rounded-3xl bg-base-100 p-5 shadow-sm lg:p-6">
+  <div class="flex items-start justify-between gap-4">
+    <div class="space-y-1">
+      <h2 class="text-sm font-semibold tracking-tight">Action Plan</h2>
+      <p class="text-xs text-base-content/60">
+        Prioritized improvements to raise your match score.
+      </p>
+    </div>
+
+    <div class="flex items-center gap-2 rounded-full bg-base-200 px-3 py-1 text-xs text-base-content/70">
+      <i-lucide [img]="ChecklistIcon" class="h-4 w-4 text-primary"></i-lucide>
+      <span>Next steps</span>
+    </div>
+  </div>
+
+  <div class="mt-5">
+    <ul class="steps steps-vertical text-sm">
+      @for (item of actionPlan(); track item.title) {
+        <li class="step step-primary">
+          <div class="space-y-1 text-left">
+            <p class="font-semibold leading-snug">{{ item.title }}</p>
+            <p class="text-sm leading-relaxed text-base-content/70">
+              {{ item.description }}
+            </p>
+          </div>
+        </li>
+      } @empty {
+        <li class="step">
+          <p class="text-sm text-base-content/60">
+            No action plan available for this analysis.
+          </p>
+        </li>
+      }
+    </ul>
+  </div>
+</section>
+

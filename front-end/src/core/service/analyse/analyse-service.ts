@@ -17,6 +17,10 @@ export class AnalyseService {
     return this.http.post<IAnalysisHistory>(`${this.apiUrl}/v1/analysis/start`,request)
   }
 
+  getanalysis(analysisId : string) : Observable<IAnalysisHistory>{
+    return this.http.get<IAnalysisHistory>(`${this.apiUrl}/v1/analysis/${analysisId}`)
+  }
+
   getHistory(page: number = 0, size: number = 10) {
     const params = new HttpParams()
       .set('page', page.toString())

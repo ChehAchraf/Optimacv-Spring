@@ -4,6 +4,7 @@ import { HistoryHeaderComponent } from './components/history-header-component/hi
 import { HistoryTableComponent } from './components/history-table-component/history-table-component';
 import { HistoryPaginationComponent } from './components/history-pagination-component/history-pagination-component';
 import {AnalysisStore} from '../../../../core/store/analysis.store';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-analysis-history-component',
@@ -19,10 +20,11 @@ import {AnalysisStore} from '../../../../core/store/analysis.store';
 export class AnalysisHistoryComponent implements OnInit{
 
   readonly analysisStore = inject(AnalysisStore)
+  private router = inject(Router);
 
   constructor() {
     effect(() => {
-      console.log(this.analysisStore.analyses())
+      console.log(this.analysisStore.analyses());
     });
   }
 

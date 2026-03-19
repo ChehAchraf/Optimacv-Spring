@@ -3,12 +3,24 @@ export interface IAnalyseRequest {
   jobId: string
 }
 
+export interface IAnalysisDetails {
+  score: number;
+  verdict: string;
+  matchingSkills: string[];
+  missingKeywords: string[];
+  resumeFileName?: string;
+  actionPlan: { title: string; description: string }[];
+}
+
 export interface IAnalysisHistory {
+  id: string;
   analysisId: string;
-  analyzedAt: string;
-  resumeFileName: string;
-  jobTitle: string;
+  analyzedAt?: string;
+  resumeFileName?: string;
+  jobTitle?: string;
   feedback: string;
+  fullAnalysis?: IAnalysisDetails;
+  parsedScore?: number;
 }
 
 export interface IPageResponse<T> {
