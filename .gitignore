@@ -1,7 +1,18 @@
-uploads/
-.uploads
+# الإعدادات ديال الإيديتور
 .idea/
-.idea
-front-end/src/environments/environment.development.ts
-back-end/pom.xml
-back-end/src/main/resources/application.yml
+*.iml
+*.iws
+.vscode/
+
+# الباكاند (Spring Boot)
+back-end/target/
+back-end/*.jar
+back-end/*.war
+
+# الفرونت اند (Angular)
+front-end/node_modules/
+front-end/.angular/
+front-end/dist/
+
+# مجلدات أخرى باينة عندك
+uploads/
