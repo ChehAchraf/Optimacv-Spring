@@ -26,10 +26,13 @@ export class ResumeService {
     return this.http.post<IResumeResponse>(`${this.apiUrl}/v1/resumes/upload`,formData);
   }
 
-  getMyResumes(page: number = 0, size: number = 10): Observable<Page<IResumeResponse>>{
+  getMyResumes(page: number = 0, size: number = 10, keyword?: string): Observable<Page<IResumeResponse>>{
     let params = new HttpParams()
         .set('page', page.toString())
         .set('size', size.toString());
+    if (keyword) {
+      params = params.set('keyword', keyword);
+    }
     return this.http.get<Page<IResumeResponse>>(`${this.apiUrl}/v1/resumes/my-resumes`, { params });
   }
 

@@ -66,7 +66,11 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ResumeResponseDTO> getAllResumesForUser(UUID userId, Pageable pageable) {
+    public Page<ResumeResponseDTO> getAllResumesForUser(UUID userId, String keyword, Pageable pageable) {
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            return resumeRepository.findAllByUserIdAndFileNameContainingIgnoreCase(userId, keyword, pageable)
+                    .map(resumeMapper::toResponseDTO);
+        }
         return resumeRepository.findAllByUserId(userId, pageable)
                 .map(resumeMapper::toResponseDTO);
     }

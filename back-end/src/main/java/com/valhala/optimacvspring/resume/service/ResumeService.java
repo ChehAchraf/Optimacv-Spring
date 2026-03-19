@@ -17,7 +17,7 @@ public interface ResumeService {
 
     Resume processAndSaveCv(MultipartFile file, UUID userId, UUID jobId) throws IOException;
 
-    Page<ResumeResponseDTO> getAllResumesForUser(UUID userId, Pageable pageable);
+    Page<ResumeResponseDTO> getAllResumesForUser(UUID userId, String keyword, Pageable pageable);
 
     ResumeResponseDTO updateResume(UUID resumeId, UUID jobId, UUID userId);
 

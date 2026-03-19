@@ -14,5 +14,7 @@ public interface ResumeRepository extends JpaRepository<Resume, UUID> {
 
     Page<Resume> findAllByUserId(UUID userId, Pageable pageable);
 
+    Page<Resume> findAllByUserIdAndFileNameContainingIgnoreCase(UUID userId, String fileName, Pageable pageable);
+
     List<Resume> findAllByIdIn(List<UUID> ids);
 }

@@ -16,6 +16,7 @@ export type ResumeState = {
   selectedResume : string | null,
   currentPage: number,
   totalPages: number,
+  searchQuery : string,
   totalElements: number
 }
 
@@ -27,6 +28,7 @@ const initialState : ResumeState ={
   selectedResume : null,
   currentPage: 1,
   totalPages: 0,
+  searchQuery : '',
   totalElements: 0
 }
 
@@ -61,11 +63,17 @@ export const resumeStore = signalStore(
         )
       }),
 
+      updateSearchQuery(query : string){
+        patchState(store , {searchQuery : query, currentPage: 1})
+        this.getMyResumes({ page: 1, size: 10 })
+      },
+
       getMyResumes : rxMethod<{page: number, size: number}>((request$)=>{
         return request$.pipe(
           switchMap(({page, size})=>{
+            const query = store.searchQuery();
             const resumesId = toast.loading("Resumes are loading...")
-            return resumeService.getMyResumes(page - 1, size).pipe(
+            return resumeService.getMyResumes(page - 1, size, query).pipe(
               tapResponse({
                 next : (response) =>{
                   toast.success("done!",{id:resumesId})

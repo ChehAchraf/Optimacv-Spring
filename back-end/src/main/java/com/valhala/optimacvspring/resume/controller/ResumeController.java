@@ -18,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -54,17 +53,18 @@ public class ResumeController {
             @AuthenticationPrincipal UserDetails userDetails) {
 
         UUID userId = iamApi.findUserIdByEmail(userDetails.getUsername());
-        Page<ResumeResponseDTO> resumes = resumeService.getAllResumesForUser(userId, pageable);
+        Page<ResumeResponseDTO> resumes = resumeService.getAllResumesForUser(userId, null, pageable);
         return ResponseEntity.ok(resumes);
     }
 
     @GetMapping("/my-resumes")
     public ResponseEntity<Page<ResumeResponseDTO>> getMyResumes(
+            @RequestParam(required = false) String keyword,
             @PageableDefault(size = 10, sort = "uploadedAt", direction = Sort.Direction.DESC) Pageable pageable,
             @AuthenticationPrincipal UserDetails userDetails) {
 
         UUID userId = iamApi.findUserIdByEmail(userDetails.getUsername());
-        Page<ResumeResponseDTO> resumes = resumeService.getAllResumesForUser(userId, pageable);
+        Page<ResumeResponseDTO> resumes = resumeService.getAllResumesForUser(userId, keyword, pageable);
         return ResponseEntity.ok(resumes);
     }
 

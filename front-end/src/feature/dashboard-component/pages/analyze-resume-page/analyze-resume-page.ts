@@ -1,5 +1,8 @@
 import {Component, inject, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { LucideAngularModule, FileText } from 'lucide-angular';
 import { CvUploadZoneComponent } from './components/cv-upload-zone-component/cv-upload-zone-component';
 import { CvCardComponent } from './components/cv-card-component/cv-card-component';
 import { JobTargetSelectorComponent } from './components/job-target-selector-component/job-target-selector-component';
@@ -11,7 +14,7 @@ import {toast} from 'ngx-sonner';
 @Component({
   selector: 'app-analyze-resume-page',
   standalone: true,
-  imports: [CommonModule, CvUploadZoneComponent, JobTargetSelectorComponent],
+  imports: [CommonModule, ReactiveFormsModule, LucideAngularModule, CvUploadZoneComponent, JobTargetSelectorComponent],
   templateUrl: './analyze-resume-page.html',
   styleUrl: './analyze-resume-page.css',
 })
@@ -21,9 +24,21 @@ export class AnalyzeResumePage implements OnInit {
   protected readonly jobStore = inject(JobStore);
   private readonly analysisStore = inject(AnalysisStore);
 
+  readonly FileTextIcon = FileText;
+  searchControl = new FormControl('');
+
   ngOnInit() {
     this.jobStore.getMyJobs({ page: 1, size: 5 });
     this.resumeStore.getMyResumes({ page: 1, size: 10 });
+
+    this.searchControl.valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged()
+      )
+      .subscribe(value => {
+        this.resumeStore.updateSearchQuery(value || '');
+      });
   }
 
   onResumePageChange(newPage: number) {

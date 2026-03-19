@@ -82,11 +82,12 @@
         </span>
       </div>
 
-      <!-- Search (UI only) -->
+      <!-- Search -->
       <div>
         <label class="input input-bordered flex items-center gap-2 rounded-xl text-sm">
           <span class="text-base-content/60 text-xs">Search</span>
           <input
+            [formControl]="searchControl"
             type="text"
             class="grow text-sm bg-transparent outline-none"
             placeholder="Search resumes..."
@@ -95,11 +96,11 @@
       </div>
 
       <!-- Selectable CV list -->
-      <div class="rounded-2xl border border-base-200 bg-base-100 p-2">
-        <div class="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
+      <div class="flex-1 overflow-y-auto rounded-2xl border border-base-200 bg-base-100 p-2">
+        <div class="flex flex-col space-y-2">
           @for (resume of resumeStore.files(); track resume.id) {
             <label
-              class="label cursor-pointer items-start gap-4 rounded-xl border p-4 text-sm shadow-sm transition-colors"
+              class="label cursor-pointer flex items-center gap-4 rounded-xl border p-4 text-sm shadow-sm hover:bg-base-200/70 transition-colors"
               [class.border-primary]="selectedResumeId() === resume.id"
               [class.bg-primary/5]="selectedResumeId() === resume.id"
               [class.border-base-200]="selectedResumeId() !== resume.id"
@@ -109,20 +110,26 @@
               <input
                 type="radio"
                 name="selected_resume"
-                class="radio radio-primary mt-1"
+                class="radio radio-primary shrink-0"
                 [checked]="selectedResumeId() === resume.id"
               />
 
-              <div class="min-w-0 flex-1">
-                <p class="truncate font-semibold">
-                  {{ resume.fileName }}
-                </p>
-                <p class="mt-1 text-[11px] text-base-content/60">
-                  {{ resume.statusMessage }}
-                </p>
-                <p class="mt-2 text-[11px] text-base-content/50">
-                  Uploaded: {{ resume.uploadedAt }}
-                </p>
+              <div class="flex items-start gap-3 flex-1 min-w-0">
+                <div
+                  class="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary shrink-0"
+                  aria-hidden="true"
+                >
+                  <i-lucide [img]="FileTextIcon" class="h-4 w-4"></i-lucide>
+                </div>
+                <div class="min-w-0 flex-1">
+                  <p class="truncate font-semibold">
+                    {{ resume.fileName }}
+                  </p>
+                  <div class="mt-1 flex flex-wrap gap-2 text-[11px] text-base-content/60">
+                    <span class="badge badge-outline badge-xs">{{ resume.statusMessage || 'Uploaded' }}</span>
+                    <span class="badge badge-ghost badge-xs">{{ resume.uploadedAt }}</span>
+                  </div>
+                </div>
               </div>
             </label>
           }
