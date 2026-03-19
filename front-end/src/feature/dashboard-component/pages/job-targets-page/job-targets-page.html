@@ -38,7 +38,7 @@
       <button
         type="button"
         class="btn btn-primary gap-2 rounded-full shadow-md shadow-primary/20"
-        (click)="jobModal.showModal()"
+        (click)="openCreateModal(jobModal)"
       >
         <i-lucide [img]="PlusIcon" class="size-4"></i-lucide>
         <span>New Job Target</span>
@@ -74,7 +74,7 @@
         <button
           type="button"
           class="btn btn-primary gap-2 rounded-full shadow-md shadow-primary/20"
-          (click)="jobModal.showModal()"
+          (click)="openCreateModal(jobModal)"
         >
           <i-lucide [img]="PlusIcon" class="size-4"></i-lucide>
           <span>Create your first job target</span>
@@ -140,6 +140,7 @@
                 <td class="whitespace-nowrap text-right">
                   <div class="flex items-center justify-end gap-1.5">
                     <button
+                      (click)="openEditModal(job, jobModal)"
                       type="button"
                       class="btn btn-ghost btn-xs gap-1 rounded-full text-base-content/80"
                     >
@@ -197,7 +198,7 @@
             <i-lucide [img]="FileTextIcon" class="size-5"></i-lucide>
           </div>
           <h3 class="text-lg font-semibold tracking-tight text-base-content">
-            Job Target
+            {{ editJobId ? 'Edit Job Target' : 'New Job Target' }}
           </h3>
         </div>
         <p class="max-w-md text-sm text-base-content/70">
@@ -305,7 +306,7 @@
             class="btn btn-primary gap-2 rounded-full shadow-md shadow-primary/20"
           >
             <i-lucide [img]="TargetIcon" class="size-4"></i-lucide>
-            <span>Save target</span>
+            <span>{{ editJobId ? 'Save Changes' : 'Create target' }}</span>
           </button>
         </div>
       </div>

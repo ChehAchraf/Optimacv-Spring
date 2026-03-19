@@ -20,6 +20,10 @@ export class JobService {
     return this.http.post<IJobResponse>(`${this.apiUrl}/v1/jobs`,request)
   }
 
+  updateJob(jobId : string, request : IJobRequest) : Observable<IJobResponse>{
+    return this.http.put<IJobResponse>(`${this.apiUrl}/v1/jobs/${jobId}`, request)
+  }
+
   loadMyJobs(page: number = 0, size: number = 5, keyword? : string) : Observable<Page<IJobResponse>>{
     let params = new HttpParams()
         .set('page', page.toString())

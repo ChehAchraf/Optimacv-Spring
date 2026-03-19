@@ -94,9 +94,9 @@ public class JobTargetServiceImpl implements JobTargetService {
     @Transactional
     public JobResponseDTO updateJob(UUID jobId, JobRequestDTO dto, UUID userId) {
         JobTarget jobTarget = findAndVerifyOwnership(jobId, userId);
-        jobTarget.setTitle(dto.title());
-        jobTarget.setCompany(dto.company());
-        jobTarget.setDescription(dto.description());
+        
+        // Use MapStruct for robust reactive entity updates from DTO
+        jobMapper.updateJobTargetFromDto(dto, jobTarget);
 
         JobTarget saved = jobTargetRepository.save(jobTarget);
         log.info("Job target updated: {} by user: {}", jobId, userId);

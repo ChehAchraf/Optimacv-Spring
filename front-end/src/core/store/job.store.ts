@@ -42,6 +42,30 @@ export const JobStore = signalStore(
         this.getMyJobs({ page: 1, size: 5 })
       },
 
+      updateJob : rxMethod<{id: string, request: IJobRequest}>((data$) => {
+        return data$.pipe(
+          tap(()=> patchState(store , {isLoading : true , error : null})),
+          exhaustMap(({id, request})=>{
+            return jobService.updateJob(id, request).pipe(
+              tapResponse({
+                next : (response)=>{
+                  toast.success("The job target has been updated successfully");
+                  patchState(store, (state) => ({
+                    isLoading : false,
+                    Jobs : state.Jobs.map(job => job.id.toString() === id.toString() ? response : job)
+                  }));
+                },
+                error : (error : HttpErrorResponse)=>{
+                  console.log(error.message);
+                  toast.error("There was an error updating the job. Please try again later.");
+                  patchState(store, {isLoading : false, error : error.message});
+                }
+              })
+            );
+          })
+        )
+      }),
+
       createJob : rxMethod<IJobRequest>((data$) => {
         return data$.pipe(
           tap(()=> patchState(store , {isLoading : true , error : null})),

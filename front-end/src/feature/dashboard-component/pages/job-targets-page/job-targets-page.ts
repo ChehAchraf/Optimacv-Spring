@@ -62,14 +62,36 @@ export class JobTargetsPage implements OnInit{
     createdAt: string;
   }> = [];
 
+  editJobId: string | null = null;
+
+  openEditModal(job: any, modal: any) {
+    this.editJobId = job.id.toString();
+    this.createJobFrom.patchValue({
+      title: job.title,
+      company: job.company,
+      description: job.description
+    });
+    modal.showModal();
+  }
+
+  openCreateModal(modal: any) {
+    this.editJobId = null;
+    this.createJobFrom.reset();
+    modal.showModal();
+  }
+
   onSubmit(){
-    console.log(this.createJobFrom.value)
     if (this.createJobFrom.valid){
-      this.store.createJob({
+      const request = {
         title : this.createJobFrom.value.title!,
         company : this.createJobFrom.value.company!,
         description : this.createJobFrom.value.description!
-      })
+      };
+      if (this.editJobId) {
+        this.store.updateJob({ id: this.editJobId, request });
+      } else {
+        this.store.createJob(request);
+      }
     }
   }
 
