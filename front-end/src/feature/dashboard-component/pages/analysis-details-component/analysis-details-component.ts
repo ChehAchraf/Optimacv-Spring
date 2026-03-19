@@ -9,35 +9,6 @@ import {ActionPlanCardComponent} from './components/action-plan-card/action-plan
 import {AnalysisStore} from '../../../../core/store/analysis.store';
 
 
-const mockAnalysis: MockAnalysis = {
-  id: '123',
-  resumeFileName: 'mon_cv.pdf',
-  jobTitle: 'Senior React/Java Developer',
-  analyzedAt: '2026-03-18T13:40:34.876Z',
-  fullAnalysis: {
-    score: 78,
-    verdict:
-      'The candidate presents a strong profile with demonstrated experience in React, Python, Java, PostgreSQL, Git, and Docker. The primary gap is the explicit mention of Typescript, which significantly impacts the overall match.',
-    matchingSkills: ['React', 'Java', 'Spring Boot', 'Python', 'PostgreSQL', 'Git', 'Docker'],
-    missingKeywords: ['Typescript', 'Golang', 'Remote Collaboration'],
-    actionPlan: [
-      {
-        title: 'Add Typescript Proficiency',
-        description:
-          "Explicitly add 'Typescript' to your 'Frontend & UI' skills section.",
-      },
-      {
-        title: 'Address Soft Skills',
-        description:
-          "Integrate a 'Soft Skills' section or weave into project descriptions how you demonstrate autonomy and teamwork.",
-      },
-      {
-        title: 'Clarify Internship Dates',
-        description: "The 'Mai 2025- Juillet 2025' internship dates are in the future. Clarify this.",
-      },
-    ],
-  } satisfies FullAnalysis,
-};
 
 @Component({
   selector: 'app-analysis-details-component',

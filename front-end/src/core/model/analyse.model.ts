@@ -16,7 +16,7 @@ export interface IAnalysisHistory {
   id: string;
   analysisId: string;
   analyzedAt?: string;
-  resumeFileName?: string;
+  resumeName?: string;
   jobTitle?: string;
   feedback: string;
   fullAnalysis?: IAnalysisDetails;

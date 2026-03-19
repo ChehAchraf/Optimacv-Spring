@@ -13,7 +13,7 @@ export type FullAnalysis = {
 
 export type MockAnalysis = {
   id: string;
-  resumeFileName: string;
+  resumeName?: string;
   jobTitle: string;
   analyzedAt: string;
   fullAnalysis: FullAnalysis;
