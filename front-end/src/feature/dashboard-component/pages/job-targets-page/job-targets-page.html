@@ -161,6 +161,25 @@
           </tbody>
         </table>
       </div>
+
+      <!-- Pagination UI -->
+      <div class="mt-6 flex items-center justify-center">
+        <div class="join">
+          <button type="button" class="btn btn-sm join-item" aria-label="Previous page"
+                  [disabled]="store.currentPage() === 1"
+                  (click)="onPageChange(store.currentPage() - 1)">
+            «
+          </button>
+          <button type="button" class="btn btn-sm join-item btn-active">
+            Page {{ store.currentPage() }} of {{ store.totalPages() || 1 }}
+          </button>
+          <button type="button" class="btn btn-sm join-item" aria-label="Next page"
+                  [disabled]="store.currentPage() === store.totalPages() || store.totalPages() === 0"
+                  (click)="onPageChange(store.currentPage() + 1)">
+            »
+          </button>
+        </div>
+      </div>
     }
   </div>
 </section>

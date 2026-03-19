@@ -8,13 +8,16 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.valhala.optimacvspring.resume.api.ResumeTextDTO;
 
 public interface ResumeService {
 
     Resume processAndSaveCv(MultipartFile file, UUID userId, UUID jobId) throws IOException;
 
-    List<ResumeResponseDTO> getAllResumesForUser(UUID userId);
+    Page<ResumeResponseDTO> getAllResumesForUser(UUID userId, Pageable pageable);
 
     ResumeResponseDTO updateResume(UUID resumeId, UUID jobId, UUID userId);
 

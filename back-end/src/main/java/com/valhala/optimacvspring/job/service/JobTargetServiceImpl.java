@@ -12,6 +12,8 @@ import com.valhala.optimacvspring.job.repository.JobTargetRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,20 +47,24 @@ public class JobTargetServiceImpl implements JobTargetService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<JobResponseDTO> getMyJobs(String email) {
+    public Page<JobResponseDTO> getMyJobs(String email,String keyword, Pageable pageable) {
         UUID userId = iamApi.findUserIdByEmail(email);
         log.info("user id {}", userId);
-        return jobTargetRepository.findAllByUserId(userId).stream()
-                .map(jobMapper::toResponseDTO)
-                .toList();
+        
+        if(keyword != null && !keyword.trim().isEmpty()){
+            return jobTargetRepository.findAllByUserIdAndTitleContainingIgnoreCase(userId, keyword, pageable)
+                    .map(jobMapper::toResponseDTO);
+        }
+        
+        return jobTargetRepository.findAllByUserId(userId, pageable)
+                .map(jobMapper::toResponseDTO);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<JobResponseDTO> getAllJobsForUser(UUID userId) {
-        return jobTargetRepository.findAllByUserId(userId).stream()
-                .map(jobMapper::toResponseDTO)
-                .toList();
+    public Page<JobResponseDTO> getAllJobsForUser(UUID userId, Pageable pageable) {
+        return jobTargetRepository.findAllByUserId(userId, pageable)
+                .map(jobMapper::toResponseDTO);
     }
 
     @Override

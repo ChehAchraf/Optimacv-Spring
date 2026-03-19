@@ -22,8 +22,20 @@ export class AnalyzeResumePage implements OnInit {
   private readonly analysisStore = inject(AnalysisStore);
 
   ngOnInit() {
-    this.jobStore.getMyJobs()
-    this.resumeStore.getMyResumes()
+    this.jobStore.getMyJobs({ page: 1, size: 5 });
+    this.resumeStore.getMyResumes({ page: 1, size: 10 });
+  }
+
+  onResumePageChange(newPage: number) {
+    if (newPage >= 1 && newPage <= this.resumeStore.totalPages()) {
+      this.resumeStore.getMyResumes({ page: newPage, size: 10 });
+    }
+  }
+
+  onJobPageChange(newPage: number) {
+    if (newPage >= 1 && newPage <= this.jobStore.totalPages()) {
+      this.jobStore.getMyJobs({ page: newPage, size: 5 });
+    }
   }
 
   onStartAnalysis(){

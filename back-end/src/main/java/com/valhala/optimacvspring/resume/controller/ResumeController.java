@@ -13,6 +13,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -44,20 +49,22 @@ public class ResumeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ResumeResponseDTO>> getAllResumes(
+    public ResponseEntity<Page<ResumeResponseDTO>> getAllResumes(
+            @PageableDefault(size = 10, sort = "uploadedAt", direction = Sort.Direction.DESC) Pageable pageable,
             @AuthenticationPrincipal UserDetails userDetails) {
 
         UUID userId = iamApi.findUserIdByEmail(userDetails.getUsername());
-        List<ResumeResponseDTO> resumes = resumeService.getAllResumesForUser(userId);
+        Page<ResumeResponseDTO> resumes = resumeService.getAllResumesForUser(userId, pageable);
         return ResponseEntity.ok(resumes);
     }
 
     @GetMapping("/my-resumes")
-    public ResponseEntity<List<ResumeResponseDTO>> getMyResumes(
+    public ResponseEntity<Page<ResumeResponseDTO>> getMyResumes(
+            @PageableDefault(size = 10, sort = "uploadedAt", direction = Sort.Direction.DESC) Pageable pageable,
             @AuthenticationPrincipal UserDetails userDetails) {
 
         UUID userId = iamApi.findUserIdByEmail(userDetails.getUsername());
-        List<ResumeResponseDTO> resumes = resumeService.getAllResumesForUser(userId);
+        Page<ResumeResponseDTO> resumes = resumeService.getAllResumesForUser(userId, pageable);
         return ResponseEntity.ok(resumes);
     }
 

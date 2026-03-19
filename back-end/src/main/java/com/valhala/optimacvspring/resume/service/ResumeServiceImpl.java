@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
 import org.springframework.context.ApplicationEventPublisher;
@@ -64,10 +66,9 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ResumeResponseDTO> getAllResumesForUser(UUID userId) {
-        return resumeRepository.findAllByUserId(userId).stream()
-                .map(resumeMapper::toResponseDTO)
-                .toList();
+    public Page<ResumeResponseDTO> getAllResumesForUser(UUID userId, Pageable pageable) {
+        return resumeRepository.findAllByUserId(userId, pageable)
+                .map(resumeMapper::toResponseDTO);
     }
 
     @Override

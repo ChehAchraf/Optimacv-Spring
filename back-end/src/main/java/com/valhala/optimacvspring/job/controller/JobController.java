@@ -11,6 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -36,21 +40,25 @@ public class JobController {
     }
 
     @GetMapping
-    public ResponseEntity<List<JobResponseDTO>> getAllJobs(
+    public ResponseEntity<Page<JobResponseDTO>> getAllJobs(
+            @PageableDefault(size = 5, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             @AuthenticationPrincipal UserDetails userDetails) {
 
         UUID userId = iamApi.findUserIdByEmail(userDetails.getUsername());
-        List<JobResponseDTO> jobs = jobTargetService.getAllJobsForUser(userId);
+        Page<JobResponseDTO> jobs = jobTargetService.getAllJobsForUser(userId, pageable);
         return ResponseEntity.ok(jobs);
     }
 
     @GetMapping("/my-jobs")
-    public ResponseEntity<List<JobResponseDTO>> getMyJobs(Principal principal ){
+    public ResponseEntity<Page<JobResponseDTO>> getMyJobs(
+            @RequestParam(required = false) String keyword,
+            @PageableDefault(size = 5, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+            Principal principal ){
 
         String userEmail = principal.getName();
 
 
-        List<JobResponseDTO> myJobs = jobTargetService.getMyJobs(userEmail);
+        Page<JobResponseDTO> myJobs = jobTargetService.getMyJobs(userEmail, keyword, pageable);
 
         return ResponseEntity.ok(myJobs);
     }

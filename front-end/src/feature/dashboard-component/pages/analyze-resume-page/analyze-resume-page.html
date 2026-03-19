@@ -34,7 +34,10 @@
       <app-cv-upload-zone-component></app-cv-upload-zone-component>
       <app-job-target-selector-component
         [jobs]="jobStore.Jobs()"
+        [currentPage]="jobStore.currentPage()"
+        [totalPages]="jobStore.totalPages()"
         (selectJob)="handleJobSelection($event)"
+        (pageChange)="onJobPageChange($event)"
       ></app-job-target-selector-component>
     </section>
 
@@ -126,16 +129,20 @@
         </div>
       </div>
 
-      <!-- Pagination (UI only) -->
+      <!-- Pagination UI -->
       <div class="flex items-center justify-center">
         <div class="join">
-          <button type="button" class="btn btn-sm join-item" aria-label="Previous page">
+          <button type="button" class="btn btn-sm join-item" aria-label="Previous page"
+                  [disabled]="resumeStore.currentPage() === 1"
+                  (click)="onResumePageChange(resumeStore.currentPage() - 1)">
             «
           </button>
           <button type="button" class="btn btn-sm join-item btn-active">
-            Page 1
+            Page {{ resumeStore.currentPage() }} of {{ resumeStore.totalPages() || 1 }}
           </button>
-          <button type="button" class="btn btn-sm join-item" aria-label="Next page">
+          <button type="button" class="btn btn-sm join-item" aria-label="Next page"
+                  [disabled]="resumeStore.currentPage() === resumeStore.totalPages() || resumeStore.totalPages() === 0"
+                  (click)="onResumePageChange(resumeStore.currentPage() + 1)">
             »
           </button>
         </div>

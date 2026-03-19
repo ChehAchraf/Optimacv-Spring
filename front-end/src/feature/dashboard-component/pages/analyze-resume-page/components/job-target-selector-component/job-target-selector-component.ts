@@ -28,11 +28,25 @@ export class JobTargetSelectorComponent {
   readonly BuildingIcon = Building2;
 
   jobs = input.required<IJobResponse[]>();
+  currentPage = input.required<number>();
+  totalPages = input.required<number>();
 
   selectJob = output<string>();
+  pageChange = output<number>();
 
   onJobClick(jobId : string){
     this.selectJob.emit(jobId)
+  }
+
+  onPageChange(newPage: number) {
+    if (newPage >= 1 && newPage <= this.totalPages()) {
+      this.pageChange.emit(newPage);
+    }
+  }
+
+  onSearch(event: Event) {
+    const query = (event.target as HTMLInputElement).value;
+    this.jobStore.updateSearchQuery(query);
   }
 
 

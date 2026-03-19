@@ -4,7 +4,8 @@ import com.valhala.optimacvspring.job.dto.DashboardOverviewResponse;
 import com.valhala.optimacvspring.job.dto.JobRequestDTO;
 import com.valhala.optimacvspring.job.JobResponseDTO;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,9 +14,9 @@ public interface JobTargetService {
 
     JobResponseDTO createJob(JobRequestDTO request, UUID userId);
 
-    List<JobResponseDTO> getMyJobs(String email);
+    Page<JobResponseDTO> getMyJobs(String email, String keyword, Pageable pageable);
 
-    List<JobResponseDTO> getAllJobsForUser(UUID userId);
+    Page<JobResponseDTO> getAllJobsForUser(UUID userId, Pageable pageable);
 
     DashboardOverviewResponse getDashboardOverview(String userEmail);
 

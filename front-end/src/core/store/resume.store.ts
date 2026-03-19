@@ -13,7 +13,10 @@ export type ResumeState = {
   isLoading : boolean,
   error : string | null,
   selectedJob : string | null,
-  selectedResume : string | null
+  selectedResume : string | null,
+  currentPage: number,
+  totalPages: number,
+  totalElements: number
 }
 
 const initialState : ResumeState ={
@@ -21,7 +24,10 @@ const initialState : ResumeState ={
   isLoading : false,
   error : null,
   selectedJob : null,
-  selectedResume : null
+  selectedResume : null,
+  currentPage: 1,
+  totalPages: 0,
+  totalElements: 0
 }
 
 export const resumeStore = signalStore(
@@ -55,16 +61,19 @@ export const resumeStore = signalStore(
         )
       }),
 
-      getMyResumes : rxMethod<void>((response$)=>{
-        return response$.pipe(
-          switchMap((response)=>{
+      getMyResumes : rxMethod<{page: number, size: number}>((request$)=>{
+        return request$.pipe(
+          switchMap(({page, size})=>{
             const resumesId = toast.loading("Resumes are loading...")
-            return resumeService.getMyResumes().pipe(
+            return resumeService.getMyResumes(page - 1, size).pipe(
               tapResponse({
                 next : (response) =>{
                   toast.success("done!",{id:resumesId})
                   patchState(store,{
-                    files : response
+                    files : response.content,
+                    currentPage: response.pageable.pageNumber + 1,
+                    totalPages: response.totalPages,
+                    totalElements: response.totalElements
                   })
                 },
                 error : (error : HttpErrorResponse)=>{

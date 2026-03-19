@@ -11,13 +11,21 @@ import {toast} from 'ngx-sonner';
 export type JobState = {
   Jobs : IJobResponse[],
   isLoading : boolean ,
-  error : string | null
+  error : string | null,
+  currentPage: number,
+  totalPages: number,
+  searchQuery : string,
+  totalElements: number
 }
 
 const initialState : JobState = {
   Jobs : [],
   isLoading : false,
-  error : null
+  error : null,
+  currentPage: 1,
+  totalPages: 0,
+  searchQuery : '',
+  totalElements: 0
 }
 
 
@@ -28,6 +36,12 @@ export const JobStore = signalStore(
   withMethods((store)=>{
     const jobService = inject(JobService)
     return {
+
+      updateSearchQuery(query : string){
+        patchState(store , {searchQuery : query, currentPage: 1})
+        this.getMyJobs({ page: 1, size: 5 })
+      },
+
       createJob : rxMethod<IJobRequest>((data$) => {
         return data$.pipe(
           tap(()=> patchState(store , {isLoading : true , error : null})),
@@ -52,16 +66,20 @@ export const JobStore = signalStore(
         )
       }),
 
-      getMyJobs : rxMethod<void>((data$)=>{
+      getMyJobs : rxMethod<{page: number, size: number}>((data$)=>{
         return data$.pipe(
           tap(()=>patchState(store, {isLoading:true,error:null})),
 
-          switchMap((data)=>{
-            return jobService.loadMyJobs().pipe(
+          switchMap(({page, size})=>{
+            const query = store.searchQuery();
+            return jobService.loadMyJobs(page - 1, size, query).pipe(
               tapResponse({
                 next : (response) => {
                   patchState(store,{
-                    Jobs : response,
+                    Jobs : response.content,
+                    currentPage: response.pageable.pageNumber + 1,
+                    totalPages: response.totalPages,
+                    totalElements: response.totalElements,
                     isLoading:false,
                   })
                 },

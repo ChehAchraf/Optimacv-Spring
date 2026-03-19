@@ -78,7 +78,13 @@ export class JobTargetsPage implements OnInit{
   }
 
   ngOnInit(): void {
-    this.store.getMyJobs()
+    this.store.getMyJobs({ page: 1, size: 5 });
+  }
+
+  onPageChange(newPage: number) {
+    if (newPage >= 1 && newPage <= this.store.totalPages()) {
+      this.store.getMyJobs({ page: newPage, size: 5 });
+    }
   }
 
 

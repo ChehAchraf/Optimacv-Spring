@@ -23,6 +23,8 @@
         type="text"
         class="grow text-sm bg-transparent outline-none"
         placeholder="e.g. Frontend, Designer, Remote..."
+        (input)="onSearch($event)"
+        [value]="jobStore.searchQuery()"
       />
     </label>
   </div>
@@ -63,16 +65,20 @@
     </div>
   </div>
 
-  <!-- Pagination (UI only) -->
+  <!-- Pagination UI -->
   <div class="mt-4 flex items-center justify-center">
     <div class="join">
-      <button type="button" class="btn btn-sm join-item" aria-label="Previous page">
+      <button type="button" class="btn btn-sm join-item" aria-label="Previous page"
+              [disabled]="currentPage() === 1"
+              (click)="onPageChange(currentPage() - 1)">
         «
       </button>
       <button type="button" class="btn btn-sm join-item btn-active">
-        Page 1
+        Page {{ currentPage() }} of {{ totalPages() || 1 }}
       </button>
-      <button type="button" class="btn btn-sm join-item" aria-label="Next page">
+      <button type="button" class="btn btn-sm join-item" aria-label="Next page"
+              [disabled]="currentPage() === totalPages() || totalPages() === 0"
+              (click)="onPageChange(currentPage() + 1)">
         »
       </button>
     </div>
