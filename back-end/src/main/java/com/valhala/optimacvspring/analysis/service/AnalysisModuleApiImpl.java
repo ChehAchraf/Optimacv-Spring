@@ -23,4 +23,5 @@ public class AnalysisModuleApiImpl implements AnalysisModuleApi {
     public double getAverageScoreByUser(UUID userId) {
         return analysisRepository.findAverageScoreByUserId(userId);
     }
+
 }

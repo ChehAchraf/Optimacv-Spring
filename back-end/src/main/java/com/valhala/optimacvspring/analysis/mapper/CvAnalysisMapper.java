@@ -4,9 +4,11 @@ import com.valhala.optimacvspring.analysis.dto.CvAnalysisHistoryDTO;
 import com.valhala.optimacvspring.analysis.dto.CvAnalysisResponseDTO;
 import com.valhala.optimacvspring.analysis.entities.CvAnalysisResult;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface CvAnalysisMapper {
+
 
     CvAnalysisResponseDTO toResponseDTO(CvAnalysisResult result);
 

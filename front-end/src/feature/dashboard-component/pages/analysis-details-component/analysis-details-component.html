@@ -1,67 +1,65 @@
-<div class="min-h-screen bg-base-200 px-4 py-6 sm:px-6 lg:px-8">
-  <header
-    class="mb-8 rounded-2xl bg-base-100 p-5 shadow-sm sm:flex sm:items-start sm:justify-between sm:p-6"
-  >
-    <div class="flex items-start gap-3">
-      <div
-        class="flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary"
-        aria-hidden="true"
-      >
-        <i-lucide [img]="FileTextIcon" class="h-6 w-6"></i-lucide>
+<pre class="bg-black text-green-400 p-4 rounded-xl text-left" dir="ltr">
+  {{ rawAnalysis() | json }}
+</pre>
+@if (rawAnalysis() && parsedDetails()) {
+  <div class="min-h-screen bg-base-200 px-4 py-6 sm:px-6 lg:px-8 animate-fade-in">
+
+    <header class="mb-8 rounded-2xl bg-base-100 p-5 shadow-sm sm:flex sm:items-start sm:justify-between sm:p-6">
+      <div class="flex items-start gap-3">
+        <div class="flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+        </div>
+
+        <div class="space-y-1">
+          <h1 class="text-xl font-semibold tracking-tight sm:text-2xl">Analysis Details</h1>
+          <p class="text-sm text-base-content/60">
+            <span class="font-medium text-base-content">{{ rawAnalysis()?.jobTitle }}</span>
+            • <span class="font-medium text-base-content">{{ rawAnalysis()?.resumeFileName }}</span>
+          </p>
+          <p class="text-xs text-base-content/60">
+            Analyzed {{ rawAnalysis()?.analyzedAt | date : 'mediumDate' }} at {{ rawAnalysis()?.analyzedAt | date : 'shortTime' }}
+          </p>
+        </div>
       </div>
 
-      <div class="space-y-1">
-        <h1 class="text-xl font-semibold tracking-tight sm:text-2xl">Analysis Details</h1>
-        <p class="text-sm text-base-content/60">
-          <span class="font-medium text-base-content">{{ analysis().jobTitle }}</span>
-          • <span class="font-medium text-base-content">{{ analysis().resumeFileName }}</span>
-        </p>
-        <p class="text-xs text-base-content/60">
-          Analyzed
-          {{ analysis().analyzedAt | date : 'mediumDate' }}
-          at
-          {{ analysis().analyzedAt | date : 'shortTime' }}
-        </p>
+      <div class="mt-4 flex flex-wrap items-center gap-2 sm:mt-0 sm:justify-end">
+        @if (score() >= 80) {
+          <span class="badge badge-success badge-sm rounded-full px-3 text-base-100/95 font-semibold py-3 shadow-sm">
+          {{ score() }}% Match
+        </span>
+        } @else if (score() >= 60) {
+          <span class="badge badge-warning badge-sm rounded-full px-3 font-semibold py-3 shadow-sm">
+          {{ score() }}% Match
+        </span>
+        } @else {
+          <span class="badge badge-error badge-sm rounded-full px-3 text-base-100/95 font-semibold py-3 shadow-sm">
+          {{ score() }}% Match
+        </span>
+        }
+
+        <a routerLink="/dashboard/history" class="btn btn-ghost btn-sm rounded-full border border-base-300/60 ml-2">
+          Back to history
+        </a>
       </div>
-    </div>
+    </header>
 
-    <div class="mt-4 flex flex-wrap items-center gap-2 sm:mt-0 sm:justify-end">
-      @if (analysis().fullAnalysis.score >= 80) {
-        <span class="badge badge-success badge-sm rounded-full px-3 text-base-100/95">
-          {{ score() }}% Match
-        </span>
-      } @else if (analysis().fullAnalysis.score >= 60) {
-        <span class="badge badge-warning badge-sm rounded-full px-3">
-          {{ score() }}% Match
-        </span>
-      } @else {
-        <span class="badge badge-error badge-sm rounded-full px-3 text-base-100/95">
-          {{ score() }}% Match
-        </span>
-      }
+    <main class="grid gap-6 lg:grid-cols-3">
+      <section class="space-y-4 lg:col-span-1">
+        <app-score-card [score]="score()" [verdict]="verdict()" />
+        <app-keywords-card
+          [matchingSkills]="matchingSkills()"
+          [missingKeywords]="missingKeywords()"
+        />
+      </section>
 
-      <a
-        routerLink="/dashboard/history"
-        class="btn btn-ghost btn-sm rounded-full border border-base-300/60"
-      >
-        Back to history
-      </a>
-    </div>
-  </header>
-
-  <main class="grid gap-6 lg:grid-cols-3">
-    <section class="space-y-4 space-x-4 lg:col-span-1">
-      <app-score-card [score]="score()" [verdict]="verdict()" />
-      <app-keywords-card
-
-        [matchingSkills]="matchingSkills()"
-        [missingKeywords]="missingKeywords()"
-      />
-    </section>
-
-    <section class="space-y-4 lg:col-span-2">
-      <app-action-plan-card [actionPlan]="actionPlan()" />
-    </section>
-  </main>
-</div>
-
+      <section class="space-y-4 lg:col-span-2">
+        <app-action-plan-card [actionPlan]="actionPlan()" />
+      </section>
+    </main>
+  </div>
+} @else {
+  <div class="flex flex-col justify-center items-center h-[70vh] gap-4">
+    <span class="loading loading-spinner text-primary loading-lg"></span>
+    <p class="text-base-content/60 font-medium animate-pulse">Fetching your detailed report...</p>
+  </div>
+}

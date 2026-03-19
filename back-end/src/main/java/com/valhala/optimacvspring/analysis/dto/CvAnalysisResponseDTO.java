@@ -5,6 +5,8 @@ import java.util.UUID;
 
 public record CvAnalysisResponseDTO(
         UUID id,
+        String resumeName,
+        String jobTitle,
         UUID resumeId,
         String feedback,
         LocalDateTime analyzedAt
