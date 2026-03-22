@@ -7,6 +7,8 @@ export interface ILoginRequest {
 export interface ILoginResponse {
   token: string,
   email: string,
+  firstName: string | null,
+  lastName: string | null,
   role: "ROLE_USER" | "ROLE_ADMIN" | "ROLE_COMPANY",
 }
 

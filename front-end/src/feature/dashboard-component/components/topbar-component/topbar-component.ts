@@ -18,6 +18,9 @@ import {AuthStore} from '../../../../core/store/auth.store';
   styleUrl: './topbar-component.css',
 })
 export class TopbarComponent implements OnDestroy {
+
+
+
   menuClick = output<void>();
   protected authStore = inject(AuthStore)
   readonly MenuIcon = Menu;
@@ -27,6 +30,8 @@ export class TopbarComponent implements OnDestroy {
   readonly ChevronDownIcon = ChevronDown;
 
   isDropdownOpen = false;
+
+
 
   private documentClickHandler = (): void => this.closeDropdown();
 
@@ -54,4 +59,10 @@ export class TopbarComponent implements OnDestroy {
   onMenuClick(): void {
     this.menuClick.emit();
   }
+
+  handleLogOut(){
+    this.closeDropdown()
+    this.authStore.logout()
+  }
+
 }

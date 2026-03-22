@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, effect} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors} from '@angular/forms';
 import {LucideAngularModule, Lock,Mail,Shield,User,Key,CheckCircle} from 'lucide-angular';
 import {AuthStore} from '../../../../core/store/auth.store';
@@ -26,6 +26,22 @@ export class SettingsPage implements OnInit {
   readonly key = Key
   readonly checkCircle = CheckCircle
 
+  constructor() {
+    effect(() => {
+      const email = this.authStore.email();
+      const firstName = this.authStore.firstName();
+      const lastName = this.authStore.lastName();
+
+      if (email || firstName || lastName) {
+        this.accountForm.patchValue({
+          email: email || '',
+          firstName: firstName || '',
+          lastName: lastName || ''
+        }, { emitEvent: false });
+      }
+    });
+  }
+
   accountForm = this.fb.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
@@ -45,11 +61,8 @@ export class SettingsPage implements OnInit {
   }
 
   ngOnInit() {
-    this.accountForm.patchValue({
-      firstName: this.authStore.firstName() || '',
-      lastName: this.authStore.lastName() || '',
-      email: this.authStore.email() || ''
-    });
+    console.log("yes")
+    this.authStore.loadProfile()
   }
 
   onSubmit(){
