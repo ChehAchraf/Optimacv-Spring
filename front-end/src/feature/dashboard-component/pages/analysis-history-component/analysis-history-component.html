@@ -4,13 +4,13 @@
   <main class="space-y-4">
     <app-history-table
       [analyses]="analysisStore.analyses()"
-      (viewDetails)="onViewDetails($event)"
+      (delete)="onDelete($event)"
     ></app-history-table>
 
     <app-history-pagination
-      [totalItems]="totalItems()"
-      [pageSize]="pageSize()"
-      [currentPage]="currentPage()"
+      [totalItems]="analysisStore.totalElements()"
+      [pageSize]="10"
+      [currentPage]="analysisStore.currentPage() + 1"
       (pageChange)="onPageChange($event)"
     ></app-history-pagination>
   </main>

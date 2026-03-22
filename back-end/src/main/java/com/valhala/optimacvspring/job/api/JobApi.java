@@ -11,4 +11,6 @@ public interface JobApi {
     void verifyJobOwnership(UUID jobId, UUID userId);
 
     String getJobTitle(UUID jobId);
+
+    java.util.List<UUID> getJobIdsByUserIdAndKeyword(UUID userId, String keyword);
 }

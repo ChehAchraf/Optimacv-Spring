@@ -1,10 +1,12 @@
-import {Component, effect, inject, OnInit, signal} from '@angular/core';
+import {Component, effect, inject, OnInit, OnDestroy} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HistoryHeaderComponent } from './components/history-header-component/history-header-component';
 import { HistoryTableComponent } from './components/history-table-component/history-table-component';
 import { HistoryPaginationComponent } from './components/history-pagination-component/history-pagination-component';
 import {AnalysisStore} from '../../../../core/store/analysis.store';
 import {Router} from '@angular/router';
+import { FormControl } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-analysis-history-component',
@@ -17,69 +19,41 @@ import {Router} from '@angular/router';
   ],
   templateUrl: './analysis-history-component.html',
 })
-export class AnalysisHistoryComponent implements OnInit{
+export class AnalysisHistoryComponent implements OnInit, OnDestroy {
 
   readonly analysisStore = inject(AnalysisStore)
   private router = inject(Router);
 
-  constructor() {
-    effect(() => {
-      console.log(this.analysisStore.analyses());
+  searchControl = new FormControl('');
+  private destroy$ = new Subject<void>();
+
+  ngOnInit() {
+    this.analysisStore.loadHistory(0);
+
+    this.searchControl.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      takeUntil(this.destroy$)
+    ).subscribe(value => {
+      this.analysisStore.updateSearchQuery(value || '');
     });
   }
 
-  ngOnInit() {
-    this.analysisStore.loadHistory(0)
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
-
-  analyses = signal<any[]>([
-    {
-      id: 'a1',
-      date: 'Mar 18, 2026',
-      time: '2:41 PM',
-      resumeName: 'Frontend_CV_v2.pdf',
-      resumeMeta: 'Library resume',
-      jobTarget: 'Full Stack Java/Angular',
-      jobMeta: 'OptimaCV target',
-      score: 86,
-    },
-    {
-      id: 'a2',
-      date: 'Mar 12, 2026',
-      time: '11:09 AM',
-      resumeName: 'UI_Designer_CV.pdf',
-      resumeMeta: 'Uploaded CV',
-      jobTarget: 'Product Designer',
-      jobMeta: 'Remote-friendly',
-      score: 72,
-    },
-    {
-      id: 'a3',
-      date: 'Feb 27, 2026',
-      time: '6:34 PM',
-      resumeName: 'Junior_Dev_CV.pdf',
-      resumeMeta: 'Library resume',
-      jobTarget: 'Backend Java (Spring)',
-      jobMeta: 'Entry-level',
-      score: 41,
-    },
-  ]);
-
-  searchTerm = signal('');
-  currentPage = signal(1);
-  pageSize = signal(10);
-  totalItems = signal(48);
 
   onSearch(term: string) {
-    this.searchTerm.set(term);
+    this.searchControl.setValue(term);
   }
 
-  onViewDetails(id: string) {
-    // Smart component hook for navigation/dialog later
-    console.log('View details:', id);
+  onDelete(id: string) {
+    this.analysisStore.deleteAnalysis(id);
   }
 
   onPageChange(page: number) {
-    this.currentPage.set(page);
+
+    this.analysisStore.loadHistory(page - 1);
   }
 }

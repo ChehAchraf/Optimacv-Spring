@@ -13,6 +13,7 @@
       </thead>
       <tbody>
         @for (analysis of analyses(); track analysis.id) {
+          {{analysis.id}}
           <tr class="hover">
             <td>
               <div class="text-sm font-medium">{{ analysis.analyzedAt | date:'mediumDate' }}</div>
@@ -36,12 +37,19 @@
             </td>
             <td class="text-right">
               <button
-                [routerLink]="['/dashboard/history/', analysis.analysisId]"
+                [routerLink]="['/dashboard/history/', analysis.id]"
                 type="button"
                 class="btn btn-ghost btn-sm rounded-full"
-                (click)="onViewDetails(analysis.analysisId)"
+                (click)="onViewDetails(analysis.id)"
               >
                 View details
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm rounded-full text-error"
+                (click)="onDelete(analysis.id)"
+              >
+                <i-lucide [img]="TrashIcon" class="size-4"></i-lucide>
               </button>
             </td>
           </tr>
@@ -53,34 +61,42 @@
 
 <!-- Mobile cards -->
 <section class="md:hidden space-y-3">
-  @for (analysis of analyses(); track analysis.id) {
+  @for (analysis of analyses(); track analysis.analysisId) {
     <article class="rounded-2xl bg-base-100 p-5 shadow-sm">
       <div class="flex items-start justify-between gap-3">
         <div class="min-w-0">
           <p class="text-xs text-base-content/60">Date analyzed</p>
-          <p class="text-sm font-semibold">{{ analysis.date }}</p>
+          <p class="text-sm font-semibold">{{ analysis.analyzedAt | date:'mediumDate' }}</p>
         </div>
-        <span class="badge badge-sm" [class]="scoreBadgeClass(analysis.score)">
-          {{ analysis.score }}%
+        <span class="badge badge-sm" [class]="scoreBadgeClass(analysis.parsedScore)">
+          {{ analysis.parsedScore }}%
         </span>
       </div>
 
       <div class="mt-4 grid gap-3">
         <div class="min-w-0">
           <p class="text-xs text-base-content/60">Resume used</p>
-          <p class="truncate text-sm font-medium">{{ analysis.resumeName }}</p>
+          <p class="truncate text-sm font-medium">{{ analysis.resumeFileName || analysis.resumeName }}</p>
         </div>
         <div class="min-w-0">
           <p class="text-xs text-base-content/60">Job target</p>
-          <p class="truncate text-sm font-medium">{{ analysis.jobTarget }}</p>
+          <p class="truncate text-sm font-medium">{{ analysis.jobTitle || analysis.jobTarget }}</p>
         </div>
       </div>
 
-      <div class="mt-5 flex justify-end">
+      <div class="mt-5 flex justify-end gap-2">
+        <button
+          type="button"
+          class="btn btn-ghost btn-sm rounded-full text-error"
+          (click)="onDelete(analysis.id)"
+        >
+          <i-lucide [img]="TrashIcon" class="size-4"></i-lucide>
+        </button>
         <button
           type="button"
           class="btn btn-ghost btn-sm rounded-full"
           (click)="onViewDetails(analysis.id)"
+          [routerLink]="['/analysis', analysis.id]"
         >
           View details
         </button>

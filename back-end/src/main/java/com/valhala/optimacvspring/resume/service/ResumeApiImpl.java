@@ -28,4 +28,9 @@ public class ResumeApiImpl implements ResumeApi {
     public String getResumeFileName(UUID resumeId) {
         return resumeService.getResumeFileName(resumeId);
     }
+
+    @Override
+    public List<UUID> getResumeIdsByUserIdAndKeyword(UUID userId, String keyword) {
+        return resumeService.getResumeIdsByUserIdAndKeyword(userId, keyword);
+    }
 }

@@ -15,3 +15,22 @@ export interface IRegisterRequest {
   password : string,
   role: "ROLE_USER" | "ROLE_COMPANY",
 }
+
+
+export interface IUserProfileResponse {
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
+}
+
+export interface IUpdateProfileRequest {
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
+export interface IChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}

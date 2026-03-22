@@ -146,5 +146,14 @@ public class JobTargetServiceImpl implements JobTargetService {
                 .map(JobTarget::getTitle)
                 .orElse("Unknown Job");
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public java.util.List<UUID> getJobIdsByUserIdAndKeyword(UUID userId, String keyword) {
+        return jobTargetRepository.findAllByUserIdAndTitleContainingIgnoreCase(userId, keyword, org.springframework.data.domain.Pageable.unpaged())
+                .stream()
+                .map(com.valhala.optimacvspring.job.entities.JobTarget::getId)
+                .toList();
+    }
 }
 

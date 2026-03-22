@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record CvAnalysisHistoryDTO(
-        UUID analysisId,
+        UUID id,
         LocalDateTime analyzedAt,
         String resumeFileName,
         String jobTitle,

@@ -1,18 +1,14 @@
-# الإعدادات ديال الإيديتور
 .idea/
 *.iml
 *.iws
 .vscode/
 
-# الباكاند (Spring Boot)
 back-end/target/
 back-end/*.jar
 back-end/*.war
 
-# الفرونت اند (Angular)
 front-end/node_modules/
 front-end/.angular/
 front-end/dist/
 
-# مجلدات أخرى باينة عندك
 uploads/

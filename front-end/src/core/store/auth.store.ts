@@ -2,22 +2,26 @@ import {patchState, signalStore, withComputed, withMethods, withState} from '@ng
 import {computed, inject} from '@angular/core';
 import {AuthService} from '../service/auth/auth-service';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
-import {switchMap} from 'rxjs';
+import {exhaustMap, switchMap, tap} from 'rxjs';
 import {tapResponse} from '@ngrx/operators';
 import {toast} from 'ngx-sonner';
 import {HttpErrorResponse} from '@angular/common/http';
+import {IChangePasswordRequest, IUpdateProfileRequest} from '../model/user.model';
 
 type AuthState = {
   token : string | null;
   role : string | null;
+  firstName : string | null,
+  lastName : string | null,
   email : string | null;
 }
 
 const initalState : AuthState = {
   token: localStorage.getItem('token'),
   role : localStorage.getItem('role'),
+  firstName : null,
+  lastName : null,
   email : localStorage.getItem('email')
-
 }
 
 export const AuthStore = signalStore(
@@ -83,6 +87,47 @@ export const AuthStore = signalStore(
           )
         })
       )
+    }),
+
+    update : rxMethod<IUpdateProfileRequest>((response$ )=>{
+      return response$.pipe(
+        exhaustMap((request)=>{
+          const toastId = toast.loading("the request is being processed")
+          return authService.updateProfile(request).pipe(
+            tapResponse({
+              next : (response)=>{
+                toast.success("the profile has been updated successfully", {id : toastId})
+                patchState(store,{
+                  firstName : response.firstName,
+                  lastName : response.lastName,
+                  email : response.email
+                })
+              },
+              error : (error:HttpErrorResponse)=>{
+                toast.error("there must be an error updating your profile, please try again", {id:toastId})
+              }
+            })
+          )
+        })
+      )
+    }),
+
+    changePassword: rxMethod<IChangePasswordRequest>((request$) => {
+      return request$.pipe(
+        exhaustMap((request) => {
+          const toastId = toast.loading("Processing password change request");
+          return authService.changePassword(request).pipe(
+            tapResponse({
+              next: () => {
+                toast.success("Password changed successfully", {id: toastId});
+              },
+              error: (error: HttpErrorResponse) => {
+                toast.error(error.error?.message || "Error changing password", {id: toastId});
+              }
+            })
+          );
+        })
+      );
     })
   }
   })

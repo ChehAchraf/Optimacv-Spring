@@ -16,6 +16,7 @@ const initialState = {
   currentPage: 0,
   totalPages: 0,
   error: null as string | null,
+  searchQuery: '',
 };
 
 export const AnalysisStore = signalStore(
@@ -49,12 +50,32 @@ export const AnalysisStore = signalStore(
           })
         )
       }),
+      deleteAnalysis: rxMethod<string>((id$) => {
+        return id$.pipe(
+          exhaustMap((id) => {
+            const deleteId = toast.loading("Deleting analysis...");
+            return analysisService.deleteAnalysis(id).pipe(
+              tapResponse({
+                next: () => {
+                  toast.success("Analysis deleted successfully!", { id: deleteId });
+                  patchState(store, (state) => ({
+                    analyses: state.analyses.filter((a) => a.id !== id),
+                    totalElements: state.totalElements - 1
+                  }));
+                },
+                error: () => {
+                  toast.error("Failed to delete analysis", { id: deleteId });
+                }
+              })
+            );
+          })
+        );
+      }),
       loadHistory: rxMethod<number>((page$) => {
         return page$.pipe(
           tap(() => patchState(store, { isLoading: true, error: null })),
-          exhaustMap((page) => {
-            const historyId = toast.loading("data is loading...")
-            return analysisService.getHistory(page, 10).pipe(
+          switchMap((page) => {
+            return analysisService.getHistory(page, 10, store.searchQuery()).pipe(
               tapResponse({
                 next: (response) => {
                   let mappedAnalyses = response.content.map((content)=>{
@@ -81,11 +102,9 @@ export const AnalysisStore = signalStore(
                     totalPages: response.totalPages,
                     isLoading: false,
                   });
-                  toast.success("done!" , {id:historyId})
                 },
                 error: (err) => {
                   patchState(store, { error: 'there must be an error. try again later', isLoading: false });
-                  toast.error("there must be an error, please comeback later", {id:historyId})
                 },
               })
             );
@@ -133,5 +152,15 @@ export const AnalysisStore = signalStore(
         )
       })
     }
-  })
+  }),
+  withMethods((store) => ({
+    updateSearchQuery: rxMethod<string>((query$) => {
+      return query$.pipe(
+        tap((query) => {
+          patchState(store, { searchQuery: query, currentPage: 0 });
+          store.loadHistory(0);
+        })
+      );
+    })
+  }))
 )

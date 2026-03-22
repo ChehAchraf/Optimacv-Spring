@@ -27,5 +27,10 @@ public class JobApiImpl implements JobApi {
     public String getJobTitle(UUID jobId) {
         return jobTargetService.getJobTitle(jobId);
     }
+
+    @Override
+    public java.util.List<UUID> getJobIdsByUserIdAndKeyword(UUID userId, String keyword) {
+        return jobTargetService.getJobIdsByUserIdAndKeyword(userId, keyword);
+    }
 }
 

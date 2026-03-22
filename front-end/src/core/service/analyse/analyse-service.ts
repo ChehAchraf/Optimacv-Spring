@@ -21,15 +21,23 @@ export class AnalyseService {
     return this.http.get<IAnalysisHistory>(`${this.apiUrl}/v1/analysis/${analysisId}`)
   }
 
-  getHistory(page: number = 0, size: number = 10) {
-    const params = new HttpParams()
+  getHistory(page: number = 0, size: number = 10, keyword?: string) {
+    let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
+
+    if (keyword && keyword.trim().length > 0) {
+      params = params.set('keyword', keyword.trim());
+    }
 
     return this.http.get<IPageResponse<IAnalysisHistory>>(
       `${this.apiUrl}/v1/analysis/history`,
       { params }
     );
+  }
+
+  deleteAnalysis(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/v1/analysis/${id}`);
   }
 
 }

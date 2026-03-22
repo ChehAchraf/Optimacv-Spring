@@ -1,1 +1,181 @@
-<p>settings-page works!</p>
+<div class="max-w-4xl mx-auto p-6 space-y-8">
+  <!-- Header -->
+  <div>
+    <h1 class="text-3xl font-bold text-base-content">Settings</h1>
+    <p class="text-base-content/70 mt-2">Manage your account preferences and security.</p>
+  </div>
+
+  <!-- Account Details Section -->
+  <div class="card bg-base-100 shadow-xl border border-base-200">
+    <div class="card-body">
+      <h2 class="card-title text-2xl mb-1">Account Details</h2>
+      <p class="text-base-content/70 mb-6 text-sm">Update your personal profile information.</p>
+
+      <form (ngSubmit)="onSubmit()"   [formGroup]="accountForm" class="space-y-6">
+        <!-- Role Display -->
+        <div class="form-control w-full max-w-md">
+          <label class="label">
+            <span class="label-text font-semibold text-base-content/80">Current Role</span>
+          </label>
+          <div class="flex items-center gap-3 p-3 bg-base-200/50 rounded-xl border border-base-300">
+            <div class="p-2 bg-primary/10 rounded-lg text-primary">
+              <i-lucide [img]="shield" class="size-5"></i-lucide>
+            </div>
+            <span class="text-base-content font-medium flex-1 text-sm">Standard User</span>
+            <div class="badge badge-primary font-medium badge-sm px-3 py-3 rounded-md shadow-sm">Active</div>
+          </div>
+        </div>
+
+        <div class="divider my-0 opacity-50"></div>
+
+        <!-- First Name and Last Name Row -->
+        <div class="flex flex-col md:flex-row gap-6 w-full max-w-2xl">
+          <!-- First Name Input -->
+          <div class="form-control w-full">
+            <label class="label">
+              <span class="label-text font-semibold text-base-content/80">First Name</span>
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-base-content/40">
+                <i-lucide [img]="user" class="size-5"></i-lucide>
+              </div>
+              <input
+                type="text"
+                placeholder="John"
+                class="input input-bordered w-full pl-12 focus:border-primary focus:ring-1 focus:ring-primary transition-shadow bg-base-100"
+                formControlName="firstName"
+              />
+            </div>
+            @if(accountForm.get('firstName')?.invalid && accountForm.get('firstName')?.touched) {
+              <label class="label"><span class="label-text-alt text-error">First name is required</span></label>
+            }
+          </div>
+
+          <!-- Last Name Input -->
+          <div class="form-control w-full">
+            <label class="label">
+              <span class="label-text font-semibold text-base-content/80">Last Name</span>
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-base-content/40">
+                <i-lucide [img]="user" class="size-5"></i-lucide>
+              </div>
+              <input
+                type="text"
+                placeholder="Doe"
+                class="input input-bordered w-full pl-12 focus:border-primary focus:ring-1 focus:ring-primary transition-shadow bg-base-100"
+                formControlName="lastName"
+              />
+            </div>
+            @if(accountForm.get('lastName')?.invalid && accountForm.get('lastName')?.touched) {
+              <label class="label"><span class="label-text-alt text-error">Last name is required</span></label>
+            }
+          </div>
+        </div>
+
+        <!-- Email Input -->
+        <div class="form-control w-full max-w-2xl">
+          <label class="label">
+            <span class="label-text font-semibold text-base-content/80">Email Address</span>
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-base-content/40">
+              <i-lucide [img]="mail" class="size-5"></i-lucide>
+            </div>
+            <input
+              type="email"
+              placeholder="you@example.com"
+              class="input input-bordered w-full pl-12 focus:border-primary focus:ring-1 focus:ring-primary transition-shadow bg-base-100"
+              formControlName="email"
+            />
+          </div>
+          @if(accountForm.get('email')?.invalid && accountForm.get('email')?.touched) {
+            <label class="label"><span class="label-text-alt text-error">Valid email is required</span></label>
+          }
+        </div>
+
+        <!-- Account Actions -->
+        <div class="card-actions justify-end mt-6 pt-6 border-t border-base-200">
+          <button [disabled]="accountForm.invalid" ] type="submit" class="btn btn-primary px-8 rounded-full shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-all">
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Security (Change Password) Section -->
+  <div class="card bg-base-100 shadow-xl border border-base-200">
+    <div class="card-body">
+      <h2 class="card-title text-2xl mb-1">Security</h2>
+      <p class="text-base-content/70 mb-6 text-sm">Ensure your account is using a strong, random password to stay secure.</p>
+
+      <form [formGroup]="securityForm" (ngSubmit)="onChangePassword()" class="space-y-5">
+        <!-- Current Password -->
+        <div class="form-control w-full max-w-md">
+          <label class="label">
+            <span class="label-text font-semibold text-base-content/80">Current Password</span>
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-base-content/40">
+              <i-lucide [img]="lock" class="size-5"></i-lucide>
+            </div>
+            <input
+              type="password"
+              placeholder="••••••••"
+              class="input input-bordered w-full pl-12 focus:border-primary focus:ring-1 focus:ring-primary transition-shadow bg-base-100"
+              formControlName="currentPassword"
+            />
+          </div>
+        </div>
+
+        <!-- New Password -->
+        <div class="form-control w-full max-w-md">
+          <label class="label">
+            <span class="label-text font-semibold text-base-content/80">New Password</span>
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-base-content/40">
+              <i-lucide [img]="key" class="size-5"></i-lucide>
+            </div>
+            <input
+              type="password"
+              placeholder="••••••••"
+              class="input input-bordered w-full pl-12 focus:border-primary focus:ring-1 focus:ring-primary transition-shadow bg-base-100"
+              formControlName="newPassword"
+            />
+          </div>
+        </div>
+
+        <!-- Confirm New Password -->
+        <div class="form-control w-full max-w-md">
+          <label class="label">
+            <span class="label-text font-semibold text-base-content/80">Confirm New Password</span>
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-base-content/40">
+              <i-lucide [img]="checkCircle" class="size-5"></i-lucide>
+            </div>
+            <input
+              type="password"
+              placeholder="••••••••"
+              class="input input-bordered w-full pl-12 focus:border-primary focus:ring-1 focus:ring-primary transition-shadow bg-base-100"
+              formControlName="confirmPassword"
+            />
+          </div>
+          @if(securityForm.hasError('mismatch') && (securityForm.get('confirmPassword')?.touched || securityForm.get('newPassword')?.touched)) {
+            <label class="label"><span class="label-text-alt text-error">Passwords do not match</span></label>
+          }
+        </div>
+
+        <!-- Security Actions -->
+        <div class="card-actions justify-end mt-6 pt-6 border-t border-base-200">
+          <button type="submit" class="btn btn-neutral px-8 rounded-full shadow-md hover:shadow-lg transition-all">
+            Update Password
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>

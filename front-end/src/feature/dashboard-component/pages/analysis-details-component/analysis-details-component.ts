@@ -25,11 +25,11 @@ import {AnalysisStore} from '../../../../core/store/analysis.store';
 })
 export class AnalysisDetailsComponent implements OnInit {
 
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   readonly store = inject(AnalysisStore);
 
-  analysisId = this.route.snapshot.paramMap.get('id');
+  analysisId = this.route.snapshot.paramMap.get('string');
 
   readonly rawAnalysis = computed(() => {
     return this.store.analyses().find((a: any) => a.id === this.analysisId);
@@ -50,7 +50,7 @@ export class AnalysisDetailsComponent implements OnInit {
     if (this.analysisId) {
       this.store.getAnalysisById({ analysisId: this.analysisId });
     } else {
-      this.router.navigate(['/dashboard/history']);
+      this.router.navigate(['history/']);
     }
   }
   constructor() {

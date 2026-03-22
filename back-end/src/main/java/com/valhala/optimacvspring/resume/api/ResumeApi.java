@@ -11,4 +11,6 @@ public interface ResumeApi {
 
     String getResumeFileName(UUID resumeId);
 
+    List<UUID> getResumeIdsByUserIdAndKeyword(UUID userId, String keyword);
+
 }

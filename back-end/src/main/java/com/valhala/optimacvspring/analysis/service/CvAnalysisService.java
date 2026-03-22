@@ -147,19 +147,43 @@ public class CvAnalysisService  {
                 .orElseThrow(() -> new RuntimeException("Analysis not found or access denied: " + analysisId));
     }
 
-    public org.springframework.data.domain.Page<com.valhala.optimacvspring.analysis.dto.CvAnalysisHistoryDTO> getAnalysisHistory(UUID userId, org.springframework.data.domain.Pageable pageable) {
-        return repository.findAllByUserIdOrderByAnalyzedAtDesc(userId, pageable)
-                .map(result -> {
-                    String resumeName = resumeApi.getResumeFileName(result.getResumeId());
-                    String jobTitle = result.getJobId() != null ? jobApi.getJobTitle(result.getJobId()) : "General Analysis";
-                    return new com.valhala.optimacvspring.analysis.dto.CvAnalysisHistoryDTO(
-                            result.getId(),
-                            result.getAnalyzedAt(),
-                            resumeName,
-                            jobTitle,
-                            result.getFeedback()
-                    );
-                });
+    public void deleteAnalysis(UUID analysisId, UUID userId) {
+        CvAnalysisResult result = repository.findByIdAndUserId(analysisId, userId)
+                .orElseThrow(() -> new RuntimeException("Analysis not found or access denied: " + analysisId));
+        repository.delete(result);
+        log.info("Analysis deleted successfully: {} by user: {}", analysisId, userId);
+    }
+
+    public org.springframework.data.domain.Page<com.valhala.optimacvspring.analysis.dto.CvAnalysisHistoryDTO> getAnalysisHistory(UUID userId, String keyword, org.springframework.data.domain.Pageable pageable) {
+        org.springframework.data.domain.Page<CvAnalysisResult> results;
+        
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            java.util.List<UUID> resumeIds = new java.util.ArrayList<>(resumeApi.getResumeIdsByUserIdAndKeyword(userId, keyword));
+            java.util.List<UUID> jobIds = new java.util.ArrayList<>(jobApi.getJobIdsByUserIdAndKeyword(userId, keyword));
+            
+            if (resumeIds.isEmpty() && jobIds.isEmpty()) {
+                return org.springframework.data.domain.Page.empty(pageable);
+            }
+            
+            if (resumeIds.isEmpty()) resumeIds.add(UUID.randomUUID());
+            if (jobIds.isEmpty()) jobIds.add(UUID.randomUUID());
+            
+            results = repository.findByUserIdAndResumeOrJobTarget(userId, resumeIds, jobIds, pageable);
+        } else {
+            results = repository.findAllByUserIdOrderByAnalyzedAtDesc(userId, pageable);
+        }
+
+        return results.map(result -> {
+            String resumeName = resumeApi.getResumeFileName(result.getResumeId());
+            String jobTitle = result.getJobId() != null ? jobApi.getJobTitle(result.getJobId()) : "General Analysis";
+            return new com.valhala.optimacvspring.analysis.dto.CvAnalysisHistoryDTO(
+                    result.getId(),
+                    result.getAnalyzedAt(),
+                    resumeName,
+                    jobTitle,
+                    result.getFeedback()
+            );
+        });
     }
 
     public String rankMultipleResumes(BulkRankingRequestDTO request) {

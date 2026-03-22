@@ -127,4 +127,13 @@ public class ResumeServiceImpl implements ResumeService {
         }
         return resume;
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UUID> getResumeIdsByUserIdAndKeyword(UUID userId, String keyword) {
+        return resumeRepository.findAllByUserIdAndFileNameContainingIgnoreCase(userId, keyword, Pageable.unpaged())
+                .stream()
+                .map(Resume::getId)
+                .toList();
+    }
 }
