@@ -1,0 +1,149 @@
+<div class="min-h-screen bg-base-200 px-4 py-8 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-5xl">
+    <!-- Header -->
+    <header class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <button class="btn btn-ghost btn-sm mb-2 gap-2 pl-0" (click)="goBack()">
+          <i-lucide [img]="ArrowLeftIcon" class="h-4 w-4"></i-lucide>
+          Back to Ranking
+        </button>
+        <h1 class="text-2xl font-bold tracking-tight sm:text-3xl text-base-content">
+          Candidate Analysis
+        </h1>
+        <p *ngIf="candidate()" class="mt-1 text-sm text-base-content/60 flex items-center gap-2">
+          <i-lucide [img]="FileTextIcon" class="h-4 w-4"></i-lucide>
+          {{ candidate().originalFileName }}
+        </p>
+      </div>
+    </header>
+
+    <!-- Loading State -->
+    <div *ngIf="loading()" class="flex min-h-[400px] flex-col items-center justify-center rounded-2xl bg-base-100 p-8 shadow-sm">
+      <span class="loading loading-spinner loading-lg text-primary"></span>
+      <p class="mt-4 font-medium text-base-content/70">Loading detailed AI analysis...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error()" class="flex min-h-[400px] flex-col items-center justify-center rounded-2xl bg-base-100 p-8 shadow-sm text-center">
+      <div class="h-12 w-12 rounded-full bg-error/10 flex items-center justify-center mb-4">
+        <i-lucide [img]="UsersIcon" class="h-6 w-6 text-error"></i-lucide>
+      </div>
+      <h3 class="text-lg font-bold text-base-content">{{ error() }}</h3>
+      <button class="btn btn-primary mt-4 rounded-xl" (click)="goBack()">Go Back</button>
+    </div>
+
+    <!-- Content State -->
+    <div *ngIf="!loading() && !error() && candidate()" class="space-y-6">
+      <!-- Main Stats -->
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <!-- Match Score Card -->
+        <div class="stat rounded-2xl bg-base-100 shadow-sm border border-base-200">
+          <div class="stat-figure text-primary">
+            <i-lucide [img]="BarChartIcon" class="h-8 w-8"></i-lucide>
+          </div>
+          <div class="stat-title text-base-content/70 font-medium whitespace-normal">Overall Match</div>
+          <div class="stat-value text-primary mt-1">
+            {{ candidate().matchScore !== null ? candidate().matchScore + '%' : 'N/A' }}
+          </div>
+          <div class="stat-desc mt-1 text-base-content/60 whitespace-normal">Based on job requirements</div>
+        </div>
+
+        <!-- AI Verdict Card -->
+        <div class="stat md:col-span-2 rounded-2xl bg-base-100 shadow-sm border border-base-200">
+          <div class="stat-title text-base-content/70 font-medium mb-1 flex items-center gap-2 whitespace-normal">
+            <span class="flex h-5 w-5 items-center justify-center rounded-full bg-primary/20 text-primary text-xs font-bold">AI</span>
+            Verdict
+          </div>
+          <div class="text-sm sm:text-base font-semibold text-base-content whitespace-normal leading-relaxed mt-2" *ngIf="parsedInsights()?.verdict; else noVerdict">
+            "{{ parsedInsights().verdict }}"
+          </div>
+          <ng-template #noVerdict>
+            <div class="text-sm italic text-base-content/60 mt-2 whitespace-normal">No verdict provided.</div>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- Detailed Analysis -->
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <!-- Matching Skills (Strengths) -->
+        <div class="rounded-2xl bg-base-100 p-6 shadow-sm border border-base-200 flex flex-col h-full">
+          <div class="mb-4 flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-success/10 text-success">
+              <i-lucide [img]="UsersIcon" class="h-5 w-5"></i-lucide>
+            </div>
+            <h3 class="font-bold text-lg text-base-content">Matching Skills</h3>
+          </div>
+          
+          <div class="flex-grow rounded-xl bg-base-200 p-5 shadow-inner">
+            <div class="flex flex-wrap gap-2">
+              @for (skill of parsedInsights()?.matchingSkills; track $index) {
+                <div class="badge badge-success gap-2 py-3 px-4 font-medium">{{ skill }}</div>
+              } @empty {
+                <span class="text-sm italic text-base-content/50">No specific matching skills found.</span>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Missing Keywords (Gaps) -->
+        <div class="rounded-2xl bg-base-100 p-6 shadow-sm border border-base-200 flex flex-col h-full">
+          <div class="mb-4 flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-error/10 text-error">
+              <i-lucide [img]="BriefcaseIcon" class="h-5 w-5"></i-lucide>
+            </div>
+            <h3 class="font-bold text-lg text-base-content">Missing Skills & Gaps</h3>
+          </div>
+          
+          <div class="flex-grow rounded-xl bg-base-200 p-5 shadow-inner">
+            <div class="flex flex-wrap gap-2">
+              @for (keyword of parsedInsights()?.missingKeywords; track $index) {
+                <div class="badge badge-error gap-2 py-3 px-4 font-medium">{{ keyword }}</div>
+              } @empty {
+                <span class="text-sm italic text-base-content/50">No major gaps identified.</span>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recruiter Interview Guide -->
+      <div class="rounded-2xl bg-base-100 p-6 shadow-sm border border-base-200">
+        <div class="mb-4 flex items-center gap-3">
+          <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-info/10 text-info">
+            <i-lucide [img]="FileTextIcon" class="h-5 w-5"></i-lucide>
+          </div>
+          <h3 class="font-bold text-lg text-base-content">Recruiter Interview Guide</h3>
+        </div>
+        
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          @for (item of parsedInsights()?.interviewGuide; track $index) {
+            <div class="card bg-base-200 shadow-sm border border-base-300">
+              <div class="card-body p-5">
+                <h4 class="font-bold text-primary mb-2 text-sm uppercase tracking-wide">{{ item.topic }}</h4>
+                <blockquote class="text-base sm:text-lg font-semibold text-base-content leading-snug">
+                  "{{ item.suggestedQuestion }}"
+                </blockquote>
+                <p class="text-sm text-base-content/70 mt-3 border-t border-base-300 pt-3">
+                  <span class="font-medium text-base-content/90">Why ask this:</span> {{ item.reason }}
+                </p>
+              </div>
+            </div>
+          } @empty {
+            <div class="col-span-full rounded-xl bg-base-200 p-5 text-sm italic text-base-content/50 shadow-inner">
+              No interview guide provided.
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Raw Feedback Fallback -->
+      <div class="rounded-2xl bg-base-100 p-6 shadow-sm border border-base-200" *ngIf="parsedInsights()?.raw">
+        <h3 class="font-bold text-lg mb-4 text-warning flex items-center gap-2">
+          Unformatted AI Feedback
+        </h3>
+        <pre class="bg-base-200 p-4 rounded-xl text-xs sm:text-sm font-mono overflow-x-auto whitespace-pre-wrap shadow-inner">{{ parsedInsights().raw }}</pre>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -131,6 +131,15 @@
                   </div>
                 </div>
               </div>
+
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm btn-square text-error/60 hover:text-error hover:bg-error/10 shrink-0"
+                aria-label="Delete resume"
+                (click)="onDeleteResume(resume.id, $event)"
+              >
+                <i-lucide [img]="Trash2Icon" class="size-4"></i-lucide>
+              </button>
             </label>
           }
         </div>

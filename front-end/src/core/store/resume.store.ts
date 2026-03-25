@@ -99,6 +99,29 @@ export const resumeStore = signalStore(
       setSelectdResume: (id: string) => {
         patchState(store, { selectedResume: id });
       },
+
+      deleteResume: rxMethod<string>((id$) => {
+        return id$.pipe(
+          exhaustMap((id) => {
+            const deleteId = toast.loading("Deleting resume...");
+            return resumeService.deleteResume(id).pipe(
+              tapResponse({
+                next: () => {
+                  toast.success("Resume deleted successfully!", { id: deleteId });
+                  patchState(store, (state) => ({
+                    files: state.files.filter((f) => f.id !== id),
+                    totalElements: state.totalElements - 1,
+                    selectedResume: state.selectedResume === id ? null : state.selectedResume,
+                  }));
+                },
+                error: () => {
+                  toast.error("Failed to delete resume", { id: deleteId });
+                },
+              })
+            );
+          })
+        );
+      }),
     }
   })
 )

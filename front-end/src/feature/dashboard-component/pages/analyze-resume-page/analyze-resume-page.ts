@@ -2,7 +2,7 @@ import {Component, inject, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { LucideAngularModule, FileText } from 'lucide-angular';
+import { LucideAngularModule, FileText, Trash2 } from 'lucide-angular';
 import { CvUploadZoneComponent } from './components/cv-upload-zone-component/cv-upload-zone-component';
 import { CvCardComponent } from './components/cv-card-component/cv-card-component';
 import { JobTargetSelectorComponent } from './components/job-target-selector-component/job-target-selector-component';
@@ -25,6 +25,7 @@ export class AnalyzeResumePage implements OnInit {
   private readonly analysisStore = inject(AnalysisStore);
 
   readonly FileTextIcon = FileText;
+  readonly Trash2Icon = Trash2;
   searchControl = new FormControl('');
 
   ngOnInit() {
@@ -80,6 +81,13 @@ export class AnalyzeResumePage implements OnInit {
 
   handleResumeSelection(resumeId: string) {
     this.resumeStore.setSelectdResume(resumeId);
+  }
+
+  onDeleteResume(id: string, event: Event) {
+    event.stopPropagation();
+    if (confirm('Are you sure you want to delete this resume?')) {
+      this.resumeStore.deleteResume(id);
+    }
   }
 
 }

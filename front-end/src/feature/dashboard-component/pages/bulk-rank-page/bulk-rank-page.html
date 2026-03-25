@@ -74,17 +74,20 @@
           <select
             class="select select-bordered w-full rounded-2xl"
             [(ngModel)]="selectedJobTargetId"
+            (change)="onJobChange()"
             name="jobTarget"
           >
             <option [ngValue]="null" disabled selected>
               Select a job target
             </option>
-            <option
-              *ngFor="let target of jobTargets"
-              [ngValue]="target.id"
-            >
-              {{ target.name }}
-            </option>
+            @for (job of companyStore.jobs() ; track job.id){
+              <option
+              [value]="job.id"
+              >
+                {{job.title}}
+              </option>
+            }
+
           </select>
         </div>
       </div>
@@ -172,18 +175,17 @@
         <button
           type="button"
           class="btn btn-primary w-full gap-2 rounded-xl"
-          [disabled]="!selectedJobTargetId || !selectedFiles.length || isAnalyzing"
+          [disabled]="!selectedJobTargetId || !selectedFiles.length || companyStore.isUploading()"
           (click)="startAnalysis()"
         >
           <span class="flex items-center gap-2">
             <i-lucide [img]="BarChartIcon" class="h-4 w-4"></i-lucide>
             <span>Run AI Ranking</span>
           </span>
-          <span *ngIf="isAnalyzing" class="loading loading-spinner loading-sm"></span>
+          <span *ngIf="companyStore.isUploading()" class="loading loading-spinner loading-sm"></span>
         </button>
         <p class="mt-2 text-xs text-base-content/60">
-          Ranking is simulated for now so you can validate the flow and layout
-          before connecting your API.
+          We will run AI ranking to dynamically sort these resumes in the leaderboard.
         </p>
       </div>
     </div>
@@ -200,7 +202,7 @@
         </div>
       </div>
 
-      @if (showResults) {
+      @if (showResults || companyStore.candidates().length > 0) {
         <div class="rounded-2xl bg-base-100 p-4 shadow-lg sm:p-5">
           <div class="overflow-x-auto">
             <table class="table table-zebra w-full">
@@ -209,21 +211,21 @@
                   <th class="w-[8%]">Rank</th>
                   <th class="w-[25%]">Candidate</th>
                   <th class="w-[15%]">Match</th>
-                  <th>Missing skills</th>
+                  <th>AI Insights</th>
                   <th class="w-[15%]" aria-label="Actions"></th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let candidate of rankedCandidates">
+                <tr *ngFor="let candidate of companyStore.candidates(); let i = index">
                   <td class="align-middle">
                     <span class="font-semibold text-base-content/80">
-                      #{{ candidate.rank }}
+                      #{{ i + 1 }}
                     </span>
                   </td>
                   <td class="align-middle">
                     <div class="flex flex-col">
                       <span class="text-sm font-medium">
-                        {{ candidate.name }}
+                        {{ candidate.originalFileName }}
                       </span>
                       <span class="text-xs text-base-content/60">
                         From uploaded batch
@@ -231,29 +233,69 @@
                     </div>
                   </td>
                   <td class="align-middle">
-                    <span
-                      class="badge badge-sm font-medium"
-                      [ngClass]="getMatchBadgeClass(candidate.matchScore)"
-                    >
-                      {{ candidate.matchScore }}%
-                    </span>
+                    <ng-container *ngIf="candidate.matchScore !== null; else processingScore">
+                      <span
+                        class="badge badge-sm font-medium"
+                        [ngClass]="getMatchBadgeClass(candidate.matchScore)"
+                      >
+                        {{ candidate.matchScore }}%
+                      </span>
+                    </ng-container>
+                    <ng-template #processingScore>
+                      <span class="loading loading-dots loading-sm text-info"></span>
+                    </ng-template>
                   </td>
                   <td class="align-middle">
                     <p class="text-sm text-base-content/70">
-                      {{ candidate.missingSkills }}
+                      {{ parseVerdict(candidate.aiFeedback) | truncate }}
                     </p>
                   </td>
-                  <td class="align-middle text-right">
+                  <td class="align-middle text-right flex items-center justify-end gap-1">
                     <button
+                      *ngIf="candidate.aiFeedback"
                       type="button"
                       class="btn btn-ghost btn-xs sm:btn-sm rounded-full"
+                      (click)="openCandidateDetails(candidate)"
                     >
                       View details
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-ghost btn-xs sm:btn-sm rounded-full text-error"
+                      (click)="deleteCandidate(candidate)"
+                      title="Delete Candidate"
+                    >
+                      <i-lucide [img]="TrashIcon" class="h-4 w-4"></i-lucide>
                     </button>
                   </td>
                 </tr>
               </tbody>
             </table>
+          </div>
+
+          <!-- Pagination Controls -->
+          <div class="mt-4 flex justify-between items-center" *ngIf="companyStore.totalPages() > 1">
+            <div class="text-sm text-base-content/70">
+              Showing page {{ companyStore.currentPage() + 1 }} of {{ companyStore.totalPages() }}
+              ({{ companyStore.totalElements() }} total candidates)
+            </div>
+            <div class="join">
+              <button 
+                class="join-item btn btn-sm"
+                [disabled]="companyStore.currentPage() === 0"
+                (click)="changePage(companyStore.currentPage() - 1)">
+                « Prev
+              </button>
+              <button class="join-item btn btn-sm cursor-default hover:bg-base-200">
+                Page {{ companyStore.currentPage() + 1 }}
+              </button>
+              <button 
+                class="join-item btn btn-sm"
+                [disabled]="companyStore.currentPage() >= companyStore.totalPages() - 1"
+                (click)="changePage(companyStore.currentPage() + 1)">
+                Next »
+              </button>
+            </div>
           </div>
         </div>
       } @else {
@@ -275,4 +317,69 @@
     </div>
   </section>
 </div>
+
+<!-- AI Feedback Modal -->
+<dialog id="feedback_modal" class="modal">
+  <div class="modal-box w-11/12 max-w-3xl">
+    <h3 class="font-bold text-lg mb-4">Detailed Candidate Analysis</h3>
+    
+    <div *ngIf="selectedCandidateDetails; else loadingDetails" class="space-y-4">
+      <div *ngIf="selectedCandidateDetails.raw; else parsedDetails">
+        <pre class="whitespace-pre-wrap text-sm font-mono bg-base-200 p-4 rounded-lg overflow-x-auto">{{ selectedCandidateDetails.raw }}</pre>
+      </div>
+      
+      <ng-template #parsedDetails>
+        <!-- Formatted View -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="stat bg-base-200 rounded-xl shadow-sm" *ngIf="selectedCandidateDetails.score">
+            <div class="stat-figure text-primary">
+              <i-lucide [img]="BarChartIcon" class="h-8 w-8"></i-lucide>
+            </div>
+            <div class="stat-title whitespace-normal">Match Score</div>
+            <div class="stat-value text-primary">{{ selectedCandidateDetails.score }}%</div>
+          </div>
+          <div class="stat bg-base-200 rounded-xl shadow-sm" *ngIf="selectedCandidateDetails.verdict">
+            <div class="stat-title whitespace-normal text-base-content/80">AI Verdict</div>
+            <div class="text-sm sm:text-base font-medium mt-1 whitespace-normal leading-tight">{{ selectedCandidateDetails.verdict }}</div>
+          </div>
+        </div>
+
+        <div *ngIf="selectedCandidateDetails.missingSkills" class="mt-4">
+          <h4 class="font-semibold text-base-content/80 mb-2 flex items-center gap-2">
+            <i-lucide [img]="BriefcaseIcon" class="h-4 w-4 text-warning"></i-lucide>
+            Missing Skills / Gaps
+          </h4>
+          <p class="text-sm text-base-content/70 bg-base-200 p-3 rounded-xl border border-base-300">{{ selectedCandidateDetails.missingSkills }}</p>
+        </div>
+
+        <div *ngIf="selectedCandidateDetails.summary || selectedCandidateDetails.strengths" class="mt-4">
+          <h4 class="font-semibold text-base-content/80 mb-2 flex items-center gap-2">
+            <i-lucide [img]="UsersIcon" class="h-4 w-4 text-success"></i-lucide>
+            Summary & Strengths
+          </h4>
+          <p class="text-sm text-base-content/70 bg-base-200 p-3 rounded-xl border border-base-300">{{ selectedCandidateDetails.summary || selectedCandidateDetails.strengths }}</p>
+        </div>
+      </ng-template>
+    </div>
+    
+    <ng-template #loadingDetails>
+      <div class="flex justify-center p-8">
+        <span class="loading loading-spinner text-primary loading-lg"></span>
+      </div>
+    </ng-template>
+
+    <div class="modal-action">
+      <form method="dialog">
+        <button class="btn rounded-xl">Close</button>
+      </form>
+      <button 
+        *ngIf="selectedCandidateDetails"
+        class="btn btn-primary rounded-xl ml-2" 
+        (click)="MapsToFullDetails(selectedCandidateDetails.id)">
+        View Full Analysis
+      </button>
+    </div>
+  </div>
+</dialog>
+
 
