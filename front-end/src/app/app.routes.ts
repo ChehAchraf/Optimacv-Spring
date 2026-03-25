@@ -24,7 +24,8 @@ export const routes: Routes = [
       {
         path:'register',
         loadComponent : () => import('../feature/register-page-component/register-page-component')
-          .then((c)=>c.RegisterPageComponent)
+          .then((c)=>c.RegisterPageComponent),
+        canActivate : [guestGuard]
       }
     ]
   },
