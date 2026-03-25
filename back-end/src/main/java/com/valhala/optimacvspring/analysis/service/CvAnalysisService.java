@@ -1,6 +1,7 @@
 package com.valhala.optimacvspring.analysis.service;
 
 import com.valhala.optimacvspring.analysis.dto.BulkRankingRequestDTO;
+import com.valhala.optimacvspring.analysis.dto.CvAnalysisHistoryDTO;
 import com.valhala.optimacvspring.analysis.entities.CvAnalysisResult;
 import com.valhala.optimacvspring.analysis.repository.CvAnalysisResultRepository;
 import com.valhala.optimacvspring.job.api.JobApi;
@@ -12,7 +13,10 @@ import com.valhala.optimacvspring.candidate.events.CandidateUploadedEvent;
 import com.valhala.optimacvspring.candidate.api.CandidateApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.data.domain.Page;
 import org.springframework.modulith.events.ApplicationModuleListener;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,9 +50,9 @@ public class CvAnalysisService  {
             if (event.jobId() != null) {
                 log.info("Targeted analysis requested for Job ID: {}", event.jobId());
                 JobResponseDTO job = jobApi.getJobDetails(event.jobId());
-                analysisResult = analyzeTargetedCv(event.extractedText(), job);
+                analysisResult = analyzeCv(event.extractedText(), job);
             } else {
-                analysisResult = analyzeCv(event.extractedText());
+                analysisResult = analyzeCv(event.extractedText(), null);
             }
 
             CvAnalysisResult result = CvAnalysisResult.builder()
@@ -73,7 +77,6 @@ public class CvAnalysisService  {
         try {
             JobResponseDTO job = jobApi.getJobDetails(event.jobId());
             String analysisResult = analyzeTargetedCv(event.extractedText(), job);
-
             Integer score = null;
             try {
                 com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
@@ -93,10 +96,22 @@ public class CvAnalysisService  {
         }
     }
 
-    public String analyzeCv(String cvText) {
+    public String analyzeCv(String cvText, JobResponseDTO job) {
+        String jobContext = "";
+        if (job != null) {
+            jobContext = """
+
+                    **Target Job:**
+                    - Title: %s
+                    - Company: %s
+                    - Description: %s
+                    """.formatted(job.title(), job.company(), job.description());
+        }
+
         String systemPrompt = """
-                You are an expert ATS (Applicant Tracking System) and Technical Recruiter.
-                Analyze the provided Resume against the Job Target.
+                You are an expert ATS (Applicant Tracking System) and Career Coach.
+                Analyze the provided Resume%s.
+                Your audience is the CANDIDATE themselves. Give them actionable advice to improve their CV.
                \s
                 CRITICAL INSTRUCTION:
                 You MUST return the result EXCLUSIVELY as a valid JSON object. Do not include any Markdown formatting, greetings, or explanations outside the JSON structure.
@@ -120,19 +135,22 @@ public class CvAnalysisService  {
                     }
                   ]
                 }
-           \s""";
-
-        return chatClient.prompt()
+           \s""".formatted(jobContext.isEmpty() ? "" : " against the Job Target" + jobContext);
+        System.out.println("⏳ Sending request to AI...");
+         var cleanResposne = cleanJsonResponse(chatClient.prompt()
                 .system(systemPrompt)
                 .user(cvText)
                 .call()
-                .content();
+                .content());
+        System.out.println("✅ AI Responded!");
+        return cleanResposne;
     }
 
     public String analyzeTargetedCv(String cvText, JobResponseDTO job) {
         String systemPrompt = """
         You are an Elite Tech Recruiter and a state-of-the-art Applicant Tracking System (ATS).
-        Analyze the candidate's resume against the specific job posting.
+        Analyze the candidate's resume against the specific job posting. Your audience is the HR manager.
+        Generate 3-4 highly specific technical or behavioral interview questions to ask this candidate based on their missing skills or weak points. Do NOT give advice to the candidate.
 
         **Target Job:**
         - Title: %s
@@ -140,7 +158,7 @@ public class CvAnalysisService  {
         - Description: %s
 
         CRITICAL INSTRUCTION:
-        You MUST return the result EXCLUSIVELY as a valid JSON object. 
+        You MUST return the result EXCLUSIVELY as a valid JSON object.
         Do not include any Markdown formatting, greetings, or explanations.
 
         Required JSON Structure:
@@ -149,18 +167,20 @@ public class CvAnalysisService  {
           "verdict": "<2-sentence summary of the match>",
           "matchingSkills": ["skill1", "skill2"],
           "missingKeywords": ["keyword1", "keyword2"],
-          "actionPlan": [
-            { "title": "Step title", "description": "Specific advice" }
+          "interviewGuide": [
+            { "topic": "Skill or domain", "suggestedQuestion": "Specific question to ask", "reason": "Why ask this" }
           ]
         }
         """.formatted(job.title(), job.company(), job.description());
 
-        String response = chatClient.prompt()
+        return cleanJsonResponse(chatClient.prompt()
                 .system(systemPrompt)
                 .user(cvText)
                 .call()
-                .content();
+                .content());
+    }
 
+    private String cleanJsonResponse(String response) {
         if (response != null) {
             response = response.trim();
             if (response.startsWith("```json")) {
@@ -169,7 +189,6 @@ public class CvAnalysisService  {
                 response = response.substring(3, response.length() - 3).trim();
             }
         }
-
         return response;
     }
 
@@ -185,7 +204,7 @@ public class CvAnalysisService  {
         log.info("Analysis deleted successfully: {} by user: {}", analysisId, userId);
     }
 
-    public org.springframework.data.domain.Page<com.valhala.optimacvspring.analysis.dto.CvAnalysisHistoryDTO> getAnalysisHistory(UUID userId, String keyword, org.springframework.data.domain.Pageable pageable) {
+    public Page<CvAnalysisHistoryDTO> getAnalysisHistory(UUID userId, String keyword, org.springframework.data.domain.Pageable pageable) {
         org.springframework.data.domain.Page<CvAnalysisResult> results;
         
         if (keyword != null && !keyword.trim().isEmpty()) {
@@ -280,7 +299,11 @@ public class CvAnalysisService  {
         }
         ResumeTextDTO resumeText = resumes.get(0);
         JobResponseDTO job = jobApi.getJobDetails(jobId);
-        String feedback = analyzeTargetedCv(resumeText.extractedText(), job);
+
+        String feedback = isCurrentUserCompany()
+                ? analyzeTargetedCv(resumeText.extractedText(), job)
+                : analyzeCv(resumeText.extractedText(), job);
+
         CvAnalysisResult result = CvAnalysisResult.builder()
                 .resumeId(resumeId)
                 .jobId(jobId)
@@ -289,5 +312,12 @@ public class CvAnalysisService  {
                 .build();
         return repository.save(result);
     }
+
+    private boolean isCurrentUserCompany() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth != null && auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_COMPANY"));
+    }
+
 
 }

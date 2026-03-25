@@ -1,5 +1,6 @@
 package com.valhala.optimacvspring.candidate.service;
 
+import com.valhala.optimacvspring.candidate.dto.CandidateResponseDTO;
 import com.valhala.optimacvspring.candidate.entities.Candidate;
 import com.valhala.optimacvspring.candidate.events.CandidateUploadedEvent;
 import com.valhala.optimacvspring.candidate.repository.CandidateRepository;
@@ -10,13 +11,18 @@ import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +32,7 @@ public class CandidateService {
     private final CandidateRepository candidateRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final JobApi jobApi;
+    private final ObjectMapper objectMapper;
 
     @Transactional
     public void bulkUploadCandidates(UUID companyId, UUID jobId, List<MultipartFile> files) {
@@ -63,4 +70,48 @@ public class CandidateService {
         eventPublisher.publishEvent(new CandidateUploadedEvent(saved.getId(), extractedText.toString(), jobId));
         log.info("Candidate {} saved successfully and event published for AI ranking", saved.getId());
     }
+
+    @Transactional(readOnly = true)
+    public Page<CandidateResponseDTO> getCandidatesForJob(UUID companyId, UUID jobId, org.springframework.data.domain.Pageable pageable) {
+        jobApi.verifyJobOwnership(jobId, companyId);
+        
+        org.springframework.data.domain.Page<Candidate> candidates = candidateRepository.findCandidatesByCompanyIdAndJobId(companyId, jobId, pageable);
+        
+        return candidates.map(c -> new com.valhala.optimacvspring.candidate.dto.CandidateResponseDTO(
+                c.getId(),
+                c.getOriginalFileName(),
+                c.getMatchScore(),
+                c.getAiFeedback(),
+                c.getUploadedAt()
+        ));
+    }
+
+    @Transactional(readOnly = true)
+    public com.valhala.optimacvspring.candidate.dto.CandidateResponseDTO getCandidateByIdForCompany(UUID companyId, UUID candidateId) {
+        Candidate candidate = candidateRepository.findById(candidateId)
+                .orElseThrow(() -> new RuntimeException("Candidate not found with id: " + candidateId));
+        
+        jobApi.verifyJobOwnership(candidate.getJobId(), companyId);
+        
+        return new com.valhala.optimacvspring.candidate.dto.CandidateResponseDTO(
+                candidate.getId(),
+                candidate.getOriginalFileName(),
+                candidate.getMatchScore(),
+                candidate.getAiFeedback(),
+                candidate.getUploadedAt()
+        );
+    }
+
+    @Transactional
+    public void deleteCandidateForCompany(UUID companyId, UUID candidateId) {
+        Candidate candidate = candidateRepository.findById(candidateId)
+                .orElseThrow(() -> new RuntimeException("Candidate not found with id: " + candidateId));
+                
+        // ensure the company owns the job associated with this candidate
+        jobApi.verifyJobOwnership(candidate.getJobId(), companyId);
+        
+        candidateRepository.delete(candidate);
+        log.info("Candidate {} deleted successfully by company {}", candidateId, companyId);
+    }
+
 }
