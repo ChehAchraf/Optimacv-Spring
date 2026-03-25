@@ -3,7 +3,7 @@ import {IAnalyseRequest, IAnalysisHistory} from '../model/analyse.model';
 import {inject} from '@angular/core';
 import {AnalyseService} from '../service/analyse/analyse-service';
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
-import {exhaustMap, switchMap, tap} from 'rxjs';
+import {exhaustMap, switchMap, tap, timeout} from 'rxjs';
 import {tapResponse} from '@ngrx/operators';
 import {toast} from 'ngx-sonner';
 import {Router} from '@angular/router';
@@ -30,9 +30,11 @@ export const AnalysisStore = signalStore(
     return {
       startAnalysis : rxMethod<IAnalyseRequest>((request$)=>{
         return request$.pipe(
+
           exhaustMap((request)=>{
             const analysisId = toast.loading("Our AI is analysing you're resume, please wait...")
             return analysisService.startAnalysis(request).pipe(
+              timeout(60000),
               tapResponse({
                 next : (response)=>{
                   toast.success("the analysis is done, you can now check it!",{id:analysisId})
@@ -40,10 +42,11 @@ export const AnalysisStore = signalStore(
                   patchState(store,(state)=>({
                     analyses : [response,...state.analyses]
                   }))
-                  router.navigate(['/analysis', response.analysisId]);
+                  router.navigate(['/dashboard/history', response.id]);
                 },
-                error : (error)=>{
+                error : (error : HttpErrorResponse)=>{
                   toast.error("error" , {id:analysisId})
+                  console.log(error)
                 }
               })
             )

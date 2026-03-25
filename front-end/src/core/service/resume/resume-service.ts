@@ -36,4 +36,8 @@ export class ResumeService {
     return this.http.get<Page<IResumeResponse>>(`${this.apiUrl}/v1/resumes/my-resumes`, { params });
   }
 
+  deleteResume(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/v1/resumes/${id}`);
+  }
+
 }

@@ -64,6 +64,7 @@ export const AuthStore = signalStore(
                   });
 
                   toast.success("seccessfully loged in")
+                  router.navigate(["/dashboard"])
                 },
                 error: (err: HttpErrorResponse) => {
                   console.error('Login failed', err);
@@ -82,6 +83,7 @@ export const AuthStore = signalStore(
               tapResponse({
                 next: (response) => {
                   toast.success("you have successfully signed up, you can login")
+                  router.navigate(["/login"])
                 },
                 error: (error: HttpErrorResponse) => {
                   console.log("register page error :", error)
@@ -179,7 +181,7 @@ export const AuthStore = signalStore(
 
         router.navigate(['/login'])
       }
-      
+
     }
   })
 

@@ -11,4 +11,3 @@ export interface IResumeResponse {
   statusMessage: string
 }
 
-

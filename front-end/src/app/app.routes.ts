@@ -68,7 +68,12 @@ export const routes: Routes = [
         path : 'history/:string',
         loadComponent : ()=> import('../feature/dashboard-component/pages/analysis-details-component/analysis-details-component')
           .then((c) => c.AnalysisDetailsComponent)
-      }
+      },
+      {
+        path: 'candidates/:id',
+        loadComponent: () => import('../feature/dashboard-component/pages/company-candidate-details/company-candidate-details.component')
+          .then((c) => c.CompanyCandidateDetailsComponent)
+      },
     ]
   }
 ];
