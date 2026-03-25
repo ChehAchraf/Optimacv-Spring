@@ -8,6 +8,8 @@ import com.valhala.optimacvspring.job.JobResponseDTO;
 import com.valhala.optimacvspring.resume.api.ResumeApi;
 import com.valhala.optimacvspring.resume.api.ResumeTextDTO;
 import com.valhala.optimacvspring.resume.events.CvUploadedEvent;
+import com.valhala.optimacvspring.candidate.events.CandidateUploadedEvent;
+import com.valhala.optimacvspring.candidate.api.CandidateApi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.modulith.events.ApplicationModuleListener;
@@ -24,12 +26,14 @@ public class CvAnalysisService  {
     private final CvAnalysisResultRepository repository;
     private final JobApi jobApi;
     private final ResumeApi resumeApi;
+    private final CandidateApi candidateApi;
 
-    public CvAnalysisService(ChatClient.Builder chatClientBuilder, CvAnalysisResultRepository repository, JobApi jobApi, ResumeApi resumeApi) {
+    public CvAnalysisService(ChatClient.Builder chatClientBuilder, CvAnalysisResultRepository repository, JobApi jobApi, ResumeApi resumeApi, CandidateApi candidateApi) {
         this.chatClient = chatClientBuilder.build();
         this.repository = repository;
         this.jobApi = jobApi;
         this.resumeApi = resumeApi;
+        this.candidateApi = candidateApi;
     }
 
     @ApplicationModuleListener
@@ -59,6 +63,33 @@ public class CvAnalysisService  {
 
         } catch (Exception e) {
             log.error("Failed to analyze CV for Resume ID: {}", event.resumeId(), e);
+        }
+    }
+
+    @ApplicationModuleListener
+    public void onCandidateUploaded(CandidateUploadedEvent event) {
+        log.info("Received AI Analysis event for Candidate ID: {}", event.candidateId());
+
+        try {
+            JobResponseDTO job = jobApi.getJobDetails(event.jobId());
+            String analysisResult = analyzeTargetedCv(event.extractedText(), job);
+
+            Integer score = null;
+            try {
+                com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+                com.fasterxml.jackson.databind.JsonNode root = mapper.readTree(analysisResult);
+                if (root.has("score")) {
+                    score = root.get("score").asInt();
+                }
+            } catch (Exception e) {
+                log.warn("Could not parse score from LLM response for Candidate {}", event.candidateId());
+            }
+
+            candidateApi.updateCandidateAnalysis(event.candidateId(), score, analysisResult);
+            log.info("Candidate {} analysis completed and saved successfully", event.candidateId());
+
+        } catch (Exception e) {
+            log.error("Failed to analyze CV for Candidate ID: {}", event.candidateId(), e);
         }
     }
 

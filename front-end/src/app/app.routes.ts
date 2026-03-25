@@ -30,6 +30,7 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     loadComponent: () => import('../feature/dashboard-component/dashboard-component').then(c => c.DashboardComponent),
+    canActivate : [authGuard],
     children: [
 
       {

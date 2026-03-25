@@ -11,17 +11,11 @@ import {NgxSpinner, NgxSpinnerComponent, NgxSpinnerService} from 'ngx-spinner';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App implements OnInit{
+export class App {
 
   protected readonly title = signal('front-end');
   private spinner = inject(NgxSpinnerService)
 
-  ngOnInit(): void {
-    this.spinner.show()
 
-    setInterval(()=>{
-      this.spinner.hide()
-    },3000)
-  }
 
 }

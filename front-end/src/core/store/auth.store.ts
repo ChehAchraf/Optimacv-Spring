@@ -179,6 +179,7 @@ export const AuthStore = signalStore(
 
         router.navigate(['/login'])
       }
+      
     }
   })
 
