@@ -30,4 +30,8 @@ public interface ResumeService {
     String getResumeFileName(UUID resumeId);
 
     List<UUID> getResumeIdsByUserIdAndKeyword(UUID userId, String keyword);
+
+    // for test
+
+
 }

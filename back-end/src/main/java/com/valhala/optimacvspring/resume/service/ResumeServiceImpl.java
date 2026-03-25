@@ -136,4 +136,7 @@ public class ResumeServiceImpl implements ResumeService {
                 .map(Resume::getId)
                 .toList();
     }
+
+    // for test
+
 }
