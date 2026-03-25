@@ -144,7 +144,7 @@ public class JobTargetServiceImpl implements JobTargetService {
     public String getJobTitle(UUID jobId) {
         return jobTargetRepository.findById(jobId)
                 .map(JobTarget::getTitle)
-                .orElse("Unknown Job");
+                .orElse("Deleted Job");
     }
 
     @Override
@@ -154,6 +154,19 @@ public class JobTargetServiceImpl implements JobTargetService {
                 .stream()
                 .map(com.valhala.optimacvspring.job.entities.JobTarget::getId)
                 .toList();
+    }
+
+    @Override
+    public JobTarget updateJobTarget(UUID id, JobTarget newData) {
+        JobTarget existingJob = jobTargetRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Job not found"));
+
+        if (existingJob.isDeleted()) {
+            throw new RuntimeException("Ce poste est déjà supprimé, modification impossible");
+        }
+
+        existingJob.setTitle(newData.getTitle());
+        return jobTargetRepository.save(existingJob);
     }
 }
 

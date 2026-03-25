@@ -4,6 +4,7 @@ import com.valhala.optimacvspring.job.dto.DashboardOverviewResponse;
 import com.valhala.optimacvspring.job.dto.JobRequestDTO;
 import com.valhala.optimacvspring.job.JobResponseDTO;
 
+import com.valhala.optimacvspring.job.entities.JobTarget;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -33,4 +34,6 @@ public interface JobTargetService {
     String getJobTitle(UUID jobId);
 
     java.util.List<UUID> getJobIdsByUserIdAndKeyword(UUID userId, String keyword);
+
+    JobTarget updateJobTarget(UUID id, JobTarget newData);
 }
