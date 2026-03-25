@@ -13,7 +13,6 @@
       </thead>
       <tbody>
         @for (analysis of analyses(); track analysis.id) {
-          {{analysis.id}}
           <tr class="hover">
             <td>
               <div class="text-sm font-medium">{{ analysis.analyzedAt | date:'mediumDate' }}</div>

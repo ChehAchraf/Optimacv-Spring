@@ -1,4 +1,4 @@
-import {Component, effect, inject, OnInit} from '@angular/core';
+import {Component, effect, ElementRef, inject, model, OnInit, ViewChild} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   LucideAngularModule,
@@ -29,6 +29,9 @@ export class JobTargetsPage implements OnInit{
   protected readonly authStore = inject(AuthStore);
   protected readonly store = inject(JobStore);
   private readonly fb = inject(FormBuilder);
+
+
+  @ViewChild('jobModal') jobModal!: ElementRef<HTMLDialogElement>;
 
   constructor() {
     effect(() => {
@@ -89,8 +92,11 @@ export class JobTargetsPage implements OnInit{
       };
       if (this.editJobId) {
         this.store.updateJob({ id: this.editJobId, request });
+        this.jobModal.nativeElement.close();
+        
       } else {
         this.store.createJob(request);
+        this.jobModal.nativeElement.close();
       }
     }
   }

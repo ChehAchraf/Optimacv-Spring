@@ -26,14 +26,6 @@
     </div>
 
     <div class="flex flex-wrap items-center gap-3">
-      <button
-        type="button"
-        class="btn btn-outline btn-sm gap-2 rounded-full sm:btn-md"
-      >
-        <i-lucide [img]="TargetIcon" class="size-4"></i-lucide>
-        <span class="hidden sm:inline">Focus mode</span>
-        <span class="sm:hidden">Focus</span>
-      </button>
 
       <button
         type="button"
@@ -288,7 +280,7 @@
       </div>
 
       <!-- Modal actions -->
-      <div class="mt-6 flex flex-col gap-3 border-t border-base-200 pt-4 sm:flex-row sm:items-center sm:justify-between">
+      <div #jobModal class="mt-6 flex flex-col gap-3 border-t border-base-200 pt-4 sm:flex-row sm:items-center sm:justify-between">
         <div class="flex items-center gap-2 text-xs text-base-content/60">
           <span class="size-1.5 rounded-full bg-success"></span>
           <span>Changes are saved instantly after you create the target.</span>

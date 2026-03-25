@@ -1,0 +1,52 @@
+services:
+
+  postgres_db:
+    image: postgres:16-alpine
+    container_name: optimacv-db
+    environment:
+      POSTGRES_DB: optimacv
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-ashraf2025}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d optimacv" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./back-end
+      dockerfile: Dockerfile
+    container_name: optimacv-backend
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_db:5432/optimacv
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-ashraf2025}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_AI_GOOGLE_GENAI_API_KEY: ${GEMINI_API_KEY:-AIzaSyAltXwEKA73945kSbATDaq_-RegJF3qo08}
+      JWT_SECRET: ${JWT_SECRET:-OptimaCV-S3cur3-JWT-Sign1ng-K3y!}
+    ports:
+      - "8080:8080"
+    volumes:
+      - uploads:/app/uploads
+
+  frontend:
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile
+    container_name: optimacv-frontend
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+volumes:
+  pgdata:
+  uploads:
